@@ -21,13 +21,13 @@
                 From: <input disabled class="form-control" value="{{ request.user.email }}">
             </div>
             <div class="form-group">
-                To: <input id="compose-recipients" class="form-control">
+                To: <input class="form-control" id="compose-recipients" placeholder="name@example.com" required>
             </div>
             <div class="form-group">
-                <input class="form-control" id="compose-subject" placeholder="Subject">
+                <input class="form-control" id="compose-subject" placeholder="Subject" required>
             </div>
             <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
-            <input type="submit" class="btn btn-primary"/>
+            <input id="submit" type="submit" class="btn btn-primary"/ required>
         </form>
     </div>
 {% endblock %}
