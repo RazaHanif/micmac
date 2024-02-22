@@ -24,14 +24,34 @@ function compose_email() {
   // Add Submit functionailty
   document.querySelector('#compose-form').addEventListener('submit', function(event) {
     event.preventDefault()
-    let recipients = document.querySelector('#compose-recipients').value
-    let subject = document.querySelector('#compose-subject').value
-    let body = document.querySelector('#compose-body').value
-    console.log(recipients)
-    console.log(subject)
-    console.log(body)
 
-    load_mailbox('inbox')
+    // POST email to send to server
+    fetch("/emails", {
+      method: "POST",
+      body: JSON.stringify({
+          recipients: document.querySelector('#compose-recipients').value,
+          subject: document.querySelector('#compose-subject').value,
+          body: document.querySelector('#compose-body').value
+        })
+      })
+    .then(response => {
+      switch(response.status) {
+        case 500:
+          console.log("Server Error")
+          console.log(response.json())
+          break;
+        case 201:
+          console.log("GOOD")
+          console.log(response.json())
+          break;
+        case 400:
+          console.log("Input Error")
+          console.log(response.json())
+          break
+        default:
+          console.log("IDEK TBH")
+      }
+    })
   });
 
 }
