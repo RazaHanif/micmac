@@ -17,6 +17,7 @@ function compose_email() {
   document.querySelector('#compose-view').style.display = 'block';
 
   // Clear out composition fields
+  document.querySelector('#recipients-error').style.opacity = 0;
   document.querySelector('#compose-recipients').value = '';
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
@@ -38,11 +39,16 @@ function compose_email() {
     .then(data => {
       if ("message" in data){
         console.log('OK: ', data)
+        // Delete this line in prod
+        alert(data.message) 
+        load_mailbox('inbox')
       } else {
         console.log('Error: ', data.error)
+        document.querySelector('#recipients-error').innerHTML = data.error
+        document.querySelector('#recipients-error').style.color = "red"
+        document.querySelector('#recipients-error').style.opacity = 100
       }
     })
-    .catch(error => console.log("Error: ", error))
   });
 
 }

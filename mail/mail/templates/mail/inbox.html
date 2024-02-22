@@ -21,7 +21,9 @@
                 From: <input disabled class="form-control" value="{{ request.user.email }}">
             </div>
             <div class="form-group">
-                To: <input class="form-control" id="compose-recipients" placeholder="name@example.com" required>
+                <p>To:</p>
+                <p id="recipients-error">Error</p> 
+                <input class="form-control" id="compose-recipients" placeholder="name@example.com" required>
             </div>
             <div class="form-group">
                 <input class="form-control" id="compose-subject" placeholder="Subject" required>
