@@ -1,0 +1,42 @@
+{% extends "auctions/layout.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Item - Add
+{% endblock %}
+
+{% block body %}
+    <h1>Add Item</h1>
+
+    <form id="add_form" action="{% url 'add' %}" method="post">
+        <div id="add_form_items">
+            {% csrf_token %}
+            <div id="title">
+                <label for="{{ form.title.name }}">{{ form.title.label }}</label>
+                <input type="text" name="{{ form.title.name }}" value="{{ form.title.value | default_if_none:'' }}" required>
+            </div>
+            <div id="desc">
+                <label for="{{ form.desc.name }}">{{ form.desc.label }}</label>
+                <textarea name="{{ form.desc.name }}" cols="40" rows="10" required></textarea>
+            </div>
+            <div id="bid">
+                <label for="{{ form.bid.name }}">{{ form.bid.label }}</label>
+                <input type="number" name="{{ form.bid.name }}" required>
+            </div>
+            <div id="url">
+                <label for="{{ form.img_link.name }}">{{ form.img_link.label }}</label>
+                <input type="url" name="{{ form.img_link.name }}" required>
+            </div>
+            <div id="cat">
+                <label for="{{ form.category.name }}">{{ form.category.label }}</label>
+                <select name="{{ form.category.name }}" required multiple>
+                    {% for value, display in form.category.field.choices %}
+                        <option value="{{ value }}">{{ display }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="submit">
+        </div>
+    </form>
+{% endblock %}

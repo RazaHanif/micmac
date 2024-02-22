@@ -1,0 +1,27 @@
+UX/UI
+
+Single page applications
+    having the webpage stay static without multiple routes,
+    but using js adding/removing from the DOM
+
+Window/Document
+    Document is the whole webpage
+    Window is the users current view of the webpage
+
+    Get size of the window
+        window.innerHeight
+        window.innerWidth
+    
+    Get info about of scroll
+        window.scrollY - returns pixels from top
+        document.body.offsetHeight - returns total pixels of page
+
+    You can use these to findout if the user is at the bottom of the page
+
+    if (document.body.offsetHeight >= 
+        window.innerHeight + window.scrollY)
+        User is at the bottom of the page
+
+    good use of this is to add infinite scroll to website
+    once you start to near the end of the page async load new content
+    to add to the bottom of the page
