@@ -30,11 +30,11 @@ function compose_email() {
     fetch("/emails", {
       method: "POST",
       body: JSON.stringify({
-          recipients: document.querySelector('#compose-recipients').value,
-          subject: document.querySelector('#compose-subject').value,
-          body: document.querySelector('#compose-body').value
-        })
+        recipients: document.querySelector('#compose-recipients').value,
+        subject: document.querySelector('#compose-subject').value,
+        body: document.querySelector('#compose-body').value
       })
+    })
     .then(response => response.json())
     .then(data => {
       if ("message" in data){
@@ -49,8 +49,10 @@ function compose_email() {
         document.querySelector('#recipients-error').style.opacity = 100
       }
     })
+    .catch(error => {
+      console.log("oops")
+    })
   });
-
 }
 
 function load_mailbox(mailbox) {
@@ -61,4 +63,48 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+	console.log(mailbox)
+  fetch(`/emails/${mailbox}`)
+  .then(response => response.json())
+  .then(emails => {
+    emails.forEach(email => {
+			switch(mailbox) {
+				case "inbox":
+					console.log("inbox")
+					add_to_page(`<p>From: ${email.sender}</p>
+											<p>Subject: ${email.subject}</p>
+											<p>Time: ${email.timestamp}`)
+					break;
+				case "sent":
+					console.log("sent")
+					add_to_page(`<p>To: ${email.recipients}</p>
+											<p>Subject: ${email.subject}</p>
+											<p>Time: ${email.timestamp}`)
+					// code block
+					break;
+				case "archive":
+					console.log("archive")
+					if (email.archived === true) {
+						add_to_page(`<p>From: ${email.sender}</p>
+											<p>Subject: ${email.subject}</p>
+											<p>Time: ${email.timestamp}`)
+					}
+					break
+				default:
+					console.log("how did you get here?", mailbox)
+			}
+    });
+  })
+}
+
+
+function add_to_page(obj) {
+	const element = document.createElement('div');
+	element.innerHTML = obj
+	element.style.border = "1px solid black"
+	element.style.margin = "5px"
+	element.addEventListener('click', function() {
+		console.log('This element has been clicked!')
+	});
+	document.querySelector('#emails-view').append(element);
 }
