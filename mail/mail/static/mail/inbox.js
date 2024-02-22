@@ -34,24 +34,15 @@ function compose_email() {
           body: document.querySelector('#compose-body').value
         })
       })
-    .then(response => {
-      switch(response.status) {
-        case 500:
-          console.log("Server Error")
-          console.log(response.json())
-          break;
-        case 201:
-          console.log("GOOD")
-          console.log(response.json())
-          break;
-        case 400:
-          console.log("Input Error")
-          console.log(response.json())
-          break
-        default:
-          console.log("IDEK TBH")
+    .then(response => response.json())
+    .then(data => {
+      if ("message" in data){
+        console.log('OK: ', data)
+      } else {
+        console.log('Error: ', data.error)
       }
     })
+    .catch(error => console.log("Error: ", error))
   });
 
 }
