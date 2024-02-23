@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
-  document.querySelector('#compose').addEventListener('click', compose_email);
+  document.querySelector('#compose').addEventListener('click', () => compose_email());
 	document.querySelector('#email-button').addEventListener('click', close_popup);
 
   // By default, load the inbox
@@ -82,21 +82,23 @@ function open_popup(email_id) {
 		})
 
 		// Eventlisteners for the toggle buttons
-		// 
+		// Done this way to make removeEventListener function properly on close
 		readToggle = () => read_toggle(email.id)
 		document.querySelector('#read-toggle').addEventListener('click', readToggle);
+		archiveToggle = () => archive_toggle(email.id)
+		document.querySelector('#archive-toggle').addEventListener('click', archiveToggle);
+
+		// Update button css
 		if (email.read) {
 			document.querySelector('#read-toggle').className = 'toggle-btn clicked'
 		}
-		
-		archiveToggle = () => archive_toggle(email.id)
-		document.querySelector('#archive-toggle').addEventListener('click', archiveToggle);
 		if (email.archived) {
 			document.querySelector('#archive-toggle').className = 'toggle-btn clicked'
 		}
-
 		console.log(email)
 	})
+
+	// Run animation to display the popup
 	let fill = document.querySelector('#fill-layer')
 	fill.addEventListener('animationend', () => {
 		fill.style.visibility = 'visible'
@@ -107,19 +109,22 @@ function open_popup(email_id) {
 	console.log("Open", id)
 }
 
+// Close the popup when the 'x' button is clicked
 function close_popup() {
+	// Reset all the values for next email
 	document.querySelector('#email-subject').innerHTML = ''
 	document.querySelector('#email-sender').innerHTML = ''
 	document.querySelector('#email-recipients').innerHTML = ''
 	document.querySelector('#email-time').innerHTML = ''
 	document.querySelector('#email-body').innerHTML = ''
 
+	// Remove eventlisteners and reset css styling
 	document.querySelector('#read-toggle').removeEventListener('click', readToggle)
 	document.querySelector('#read-toggle').className = 'toggle-btn'
-
 	document.querySelector('#archive-toggle').removeEventListener('click', archiveToggle)
 	document.querySelector('#archive-toggle').className = 'toggle-btn'
 
+	// Run animation to close the popup
 	let fill = document.querySelector('#fill-layer')
 	fill.addEventListener('animationend', () => {
 		fill.style.visibility = 'hidden'
@@ -130,17 +135,28 @@ function close_popup() {
 	console.log("Close")
 }
 
-function compose_email() {
+
+function compose_email(email_id=0) {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
-
-  // Clear out composition fields
-  document.querySelector('#recipients-error').style.opacity = 0;
-  document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';
-  document.querySelector('#compose-body').value = '';
+	
+	document.querySelector('#recipients-error').style.opacity = 0;
+	if (email_id === 0) {
+		// Clear out composition fields
+		document.querySelector('#compose-recipients').value = '';
+		document.querySelector('#compose-subject').value = '';
+		document.querySelector('#compose-body').value = '';
+	} else {
+		fetch(`/emails/${email_id}`)
+		.then(response => response.json())
+		.then(email => {
+			document.querySelector('#compose-recipients').value = email.sender
+			document.querySelector('#compose-subject').value = `RE: ${email.subject}`
+			document.querySelector('#compose-body').value = `On ${timestamp} ${sender} wrote: ${body}`
+		})
+	}
 
   // Add Submit functionailty
   document.querySelector('#compose-form').addEventListener('submit', function(event) {
