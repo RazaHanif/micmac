@@ -68,43 +68,43 @@ function load_mailbox(mailbox) {
   .then(response => response.json())
   .then(emails => {
     emails.forEach(email => {
+			let output
 			switch(mailbox) {
 				case "inbox":
 					console.log("inbox")
-					add_to_page(`<p>From: ${email.sender}</p>
+					output = `<p>From: ${email.sender}</p>
 											<p>Subject: ${email.subject}</p>
-											<p>Time: ${email.timestamp}`)
+											<p>Time: ${email.timestamp}`
 					break;
 				case "sent":
 					console.log("sent")
-					add_to_page(`<p>To: ${email.recipients}</p>
+					output = `<p>To: ${email.recipients}</p>
 											<p>Subject: ${email.subject}</p>
-											<p>Time: ${email.timestamp}`)
-					// code block
+											<p>Time: ${email.timestamp}`
 					break;
 				case "archive":
 					console.log("archive")
 					if (email.archived === true) {
-						add_to_page(`<p>From: ${email.sender}</p>
+						output = `<p>From: ${email.sender}</p>
 											<p>Subject: ${email.subject}</p>
-											<p>Time: ${email.timestamp}`)
+											<p>Time: ${email.timestamp}`
 					}
 					break
 				default:
 					console.log("how did you get here?", mailbox)
 			}
+
+			const element = document.createElement('div')
+			element.innerHTML = output
+			element.className = 'email_div'
+			if (email.read && mailbox === 'inbox') {
+				element.className += ' read'
+			}
+			element.addEventListener('click', () => {
+				console.log("CLICK")
+			})
+
+			document.querySelector('#emails-view').append(element)
     });
   })
-}
-
-
-function add_to_page(obj) {
-	const element = document.createElement('div');
-	element.innerHTML = obj
-	element.style.border = "1px solid black"
-	element.style.margin = "5px"
-	element.addEventListener('click', function() {
-		console.log('This element has been clicked!')
-	});
-	document.querySelector('#emails-view').append(element);
 }

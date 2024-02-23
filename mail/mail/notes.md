@@ -9,22 +9,11 @@
 
 ### 3 Mailboxes:
 ~~- using GET /emails/<str:mailbox> display all mail from given mailbox~~
-- each email displayed in its own clickable <div> with border with
-    - Sender, Subject, Timestamp
-    - unread email - white background
-    - read email - grey background
+~~- each email displayed in its own clickable <div> with border with~~
+~~    - Sender, Subject, Timestamp~~
+~~    - unread email - white background~~
+~~    - read email - grey background~~
 
-##### Clickable new divs 
-```js 
-    {
-        const element = document.createElement('div');
-        element.innerHTML = 'This is the content of the div.';
-        element.addEventListener('click', function() {
-            console.log('This element has been clicked!')
-        });
-        document.querySelector('#container').append(element);
-    }
-```                
 
 ### View Emails:
 - using GET /emails/<int:email_id> display email user has clicked on
@@ -44,6 +33,21 @@
             - subject = RE: {subject}
             - body = "On {timestamp} {sender} wrote: {body}
 
+
+### Styling
+- Fix form field styling (remove bootstrap)
+- Fix color pallete, stop with the shit darkmode grey
+    Primary: White
+    Secondary: Green
+    Text: Grey
+- Add animation
+    - Popup:
+        grow should start from where click originated
+        shrink should end at center of that div
+    - Form:
+        shake submit button if there is an error
+    - Archive:
+        on archive it should shrink the popup to the archive tab location
 
 
 
