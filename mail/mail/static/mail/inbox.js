@@ -13,9 +13,11 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
+
+// Toggle read status of email, updates db & css
 function read_toggle() {
 	let btn = document.querySelector('#read-toggle')
-
+	
 	if (btn.classList.contains('clicked')) {
 		btn.className = 'toggle-btn'
 	} else {
@@ -23,6 +25,7 @@ function read_toggle() {
 	}
 }
 
+// Toggle archive status of email, updates db & css
 function archive_toggle() {
 	let btn = document.querySelector('#archive-toggle')
 
@@ -35,6 +38,14 @@ function archive_toggle() {
 
 
 function close_popup() {
+	document.querySelector('#email-subject').innerHTML = ''
+	document.querySelector('#email-sender').innerHTML = ''
+	document.querySelector('#email-recipients').innerHTML = ''
+	document.querySelector('#email-time').innerHTML = ''
+	document.querySelector('#email-body').innerHTML = ''
+	document.querySelector('#read-toggle').className = 'toggle-btn'
+	document.querySelector('#archive-toggle').className = 'toggle-btn'
+
 	let fill = document.querySelector('#fill-layer')
 	fill.addEventListener('animationend', () => {
 		fill.style.visibility = 'hidden'
@@ -45,7 +56,27 @@ function close_popup() {
 	console.log("Close")
 }
 
-function open_popup() {
+// email_id passed as arg
+function open_popup(id) {
+	fetch(`/emails/${id}`)
+	.then(response => response.json())
+	.then(email => {
+		document.querySelector('#email-subject').innerHTML = email.subject
+		document.querySelector('#email-sender').innerHTML = email.sender
+		email.recipients.forEach((user) => {
+			document.querySelector('#email-recipients').innerHTML += `${user} `
+		})
+		document.querySelector('#email-time').innerHTML = email.timestamp
+		document.querySelector('#email-body').innerHTML = email.body
+		if (email.read) {
+			document.querySelector('#read-toggle').className = 'toggle-btn clicked'
+		}
+		if (email.archived) {
+			document.querySelector('#archive-toggle').className = 'toggle-btn clicked'
+		}
+			// Print emails
+			console.log(email)
+	})
 	let fill = document.querySelector('#fill-layer')
 	fill.addEventListener('animationend', () => {
 		fill.style.visibility = 'visible'
@@ -53,7 +84,7 @@ function open_popup() {
 	fill.style.animationName = 'softOpen'
 	fill.style.animationPlayState = 'running'
 	
-	console.log("Open")
+	console.log("Open", id)
 }
 
 function compose_email() {
@@ -147,8 +178,7 @@ function load_mailbox(mailbox) {
 				element.className += ' read'
 			}
 			element.addEventListener('click', () => {
-				open_popup()
-				console.log("CLICK")
+				open_popup(email.id)
 			})
 
 			document.querySelector('#emails-view').append(element)
