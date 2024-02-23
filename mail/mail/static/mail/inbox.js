@@ -11,71 +11,78 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
+// declaring variables to use later for add/remove event listeners
+let readToggle
+let archiveToggle
+
+// read_toggle & archive_toggle is the same shit but different buttons/db values
 
 // Toggle read status of email, updates db & css
-function read_toggle(emailId) {
+function read_toggle(email_id) {
 	let btn = document.querySelector('#read-toggle')
-	fetch(`/emails/${emailId}`)
+
+	// Get current email.read value
+	// Toggle read value as !email.read
+	// After all that close the popup and redirect to inbox
+	fetch(`/emails/${email_id}`)
 	.then(response => response.json())
 	.then(email => {
-		fetch(`/emails/${emailId}`, {
+		fetch(`/emails/${email_id}`, {
 			method: 'PUT',
 			body: JSON.stringify({
 				read: !email.read
 			})
 		})
+		.then(() => {
+			close_popup()
+			load_mailbox('inbox')
+		})
 	})
-
-	if (btn.classList.contains('clicked')) {
-		btn.className = 'toggle-btn'
-	} else {
-		btn.className = 'toggle-btn clicked'
-	}
-
-
-	console.log(`Read ${emailId}`)
 }
 
 // Toggle archive status of email, updates db & css
-function archive_toggle(emailId) {
+function archive_toggle(email_id) {
 	let btn = document.querySelector('#archive-toggle')
-	fetch(`/emails/${emailId}`)
+
+		// Get current email.archive value
+	// Toggle archive value as !email.archive
+	// After all that close the popup and redirect to inbox
+	fetch(`/emails/${email_id}`)
 	.then(response => response.json())
 	.then(email => {
-		fetch(`/emails/${emailId}`, {
+		fetch(`/emails/${email_id}`, {
 			method: 'PUT',
 			body: JSON.stringify({
 				archived: !email.archived
 			})
 		})
+		.then(() => {
+			close_popup()
+			load_mailbox('inbox')
+		})
 	})
-
-	if (btn.classList.contains('clicked')) {
-		btn.className = 'toggle-btn'
-	} else {
-		btn.className = 'toggle-btn clicked'
-	}
-
-
-	console.log(`Archive ${emailId}`)
 }
 
-let readToggle
-let archiveToggle
-
 // email_id passed as arg
-function open_popup(id) {
-	fetch(`/emails/${id}`)
+function open_popup(email_id) {
+
+	// Get JSON for the email and fill in the values before opening popup
+	fetch(`/emails/${email_id}`)
 	.then(response => response.json())
 	.then(email => {
+		// Update all values in popup
 		document.querySelector('#email-subject').innerHTML = email.subject
 		document.querySelector('#email-sender').innerHTML = email.sender
-		email.recipients.forEach((user) => {
-			document.querySelector('#email-recipients').innerHTML += `${user} `
-		})
 		document.querySelector('#email-time').innerHTML = email.timestamp
 		document.querySelector('#email-body').innerHTML = email.body
 		
+		// Display multiple emails
+		email.recipients.forEach((user) => {
+			document.querySelector('#email-recipients').innerHTML += `${user} `
+		})
+
+		// Eventlisteners for the toggle buttons
+		// 
 		readToggle = () => read_toggle(email.id)
 		document.querySelector('#read-toggle').addEventListener('click', readToggle);
 		if (email.read) {
