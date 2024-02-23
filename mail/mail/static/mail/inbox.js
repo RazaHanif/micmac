@@ -13,29 +13,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Toggle read status of email, updates db & css
-function read_toggle(id) {
+function read_toggle(emailId) {
 	let btn = document.querySelector('#read-toggle')
-	
+	fetch(`/emails/${emailId}`)
+	.then(response => response.json())
+	.then(email => {
+		fetch(`/emails/${emailId}`, {
+			method: 'PUT',
+			body: JSON.stringify({
+				read: !email.read
+			})
+		})
+	})
+
 	if (btn.classList.contains('clicked')) {
 		btn.className = 'toggle-btn'
 	} else {
 		btn.className = 'toggle-btn clicked'
 	}
 
-	console.log(`Read ${id}`)
+
+	console.log(`Read ${emailId}`)
 }
 
 // Toggle archive status of email, updates db & css
-function archive_toggle(id) {
+function archive_toggle(emailId) {
 	let btn = document.querySelector('#archive-toggle')
-	
+	fetch(`/emails/${emailId}`)
+	.then(response => response.json())
+	.then(email => {
+		fetch(`/emails/${emailId}`, {
+			method: 'PUT',
+			body: JSON.stringify({
+				archived: !email.archived
+			})
+		})
+	})
+
 	if (btn.classList.contains('clicked')) {
 		btn.className = 'toggle-btn'
 	} else {
 		btn.className = 'toggle-btn clicked'
 	}
 
-	console.log(`Archive ${id}`)
+
+	console.log(`Archive ${emailId}`)
 }
 
 let readToggle
