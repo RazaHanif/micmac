@@ -5,10 +5,56 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
+	document.querySelector('#email-button').addEventListener('click', close_popup);
+	document.querySelector('#read-toggle').addEventListener('click', read_toggle);
+	document.querySelector('#archive-toggle').addEventListener('click', archive_toggle);
 
   // By default, load the inbox
   load_mailbox('inbox');
 });
+
+function read_toggle() {
+	let btn = document.querySelector('#read-toggle')
+
+	if (btn.classList.contains('clicked')) {
+		btn.className = 'toggle-btn'
+	} else {
+		btn.className = 'toggle-btn clicked'
+	}
+}
+
+function archive_toggle() {
+	let btn = document.querySelector('#archive-toggle')
+
+	if (btn.classList.contains('clicked')) {
+		btn.className = 'toggle-btn'
+	} else {
+		btn.className = 'toggle-btn clicked'
+	}
+}
+
+
+function close_popup() {
+	let fill = document.querySelector('#fill-layer')
+	fill.addEventListener('animationend', () => {
+		fill.style.visibility = 'hidden'
+	})
+	fill.style.animationName = 'softClose'
+	fill.style.animationPlayState = 'running'
+
+	console.log("Close")
+}
+
+function open_popup() {
+	let fill = document.querySelector('#fill-layer')
+	fill.addEventListener('animationend', () => {
+		fill.style.visibility = 'visible'
+	})
+	fill.style.animationName = 'softOpen'
+	fill.style.animationPlayState = 'running'
+	
+	console.log("Open")
+}
 
 function compose_email() {
 
@@ -101,6 +147,7 @@ function load_mailbox(mailbox) {
 				element.className += ' read'
 			}
 			element.addEventListener('click', () => {
+				open_popup()
 				console.log("CLICK")
 			})
 

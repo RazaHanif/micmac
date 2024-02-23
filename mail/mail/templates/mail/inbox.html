@@ -11,6 +11,30 @@
     <a class="btn btn-sm btn-outline-secondary" href="{% url 'logout' %}">Log Out</a>
     <hr>
 
+    <div id="fill-layer">
+        <div id="popup-email">
+            <div id="email-header">
+                <div id="email-subject">Subject: Meeting Time</div> 
+                <div id="email-button">X</div>
+            </div>
+            <div id="email-main">
+                <div id='email-info'>
+                    <div id="email-sender">From: Joe</div> 
+                    <div id="email-time">Time: idek today</div> 
+                    <div id="email-recipients">To: Smith</div> 
+                </div>
+                <div id="email-body">Body: This is a reminder that our meeting is going to be at a given time</div> 
+                <div id="email-toggles">
+                    <hr>
+                    <div class="toggle">
+                        <div id="read-toggle" class="toggle-btn">Read</div>
+                        <div id="archive-toggle" class="toggle-btn">Archive</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="emails-view">
     </div>
 
