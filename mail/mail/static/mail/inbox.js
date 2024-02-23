@@ -6,8 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
 	document.querySelector('#email-button').addEventListener('click', close_popup);
-	document.querySelector('#read-toggle').addEventListener('click', read_toggle);
-	document.querySelector('#archive-toggle').addEventListener('click', archive_toggle);
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -15,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Toggle read status of email, updates db & css
-function read_toggle() {
+function read_toggle(id) {
 	let btn = document.querySelector('#read-toggle')
 	
 	if (btn.classList.contains('clicked')) {
@@ -23,38 +21,25 @@ function read_toggle() {
 	} else {
 		btn.className = 'toggle-btn clicked'
 	}
+
+	console.log(`Read ${id}`)
 }
 
 // Toggle archive status of email, updates db & css
-function archive_toggle() {
+function archive_toggle(id) {
 	let btn = document.querySelector('#archive-toggle')
-
+	
 	if (btn.classList.contains('clicked')) {
 		btn.className = 'toggle-btn'
 	} else {
 		btn.className = 'toggle-btn clicked'
 	}
+
+	console.log(`Archive ${id}`)
 }
 
-
-function close_popup() {
-	document.querySelector('#email-subject').innerHTML = ''
-	document.querySelector('#email-sender').innerHTML = ''
-	document.querySelector('#email-recipients').innerHTML = ''
-	document.querySelector('#email-time').innerHTML = ''
-	document.querySelector('#email-body').innerHTML = ''
-	document.querySelector('#read-toggle').className = 'toggle-btn'
-	document.querySelector('#archive-toggle').className = 'toggle-btn'
-
-	let fill = document.querySelector('#fill-layer')
-	fill.addEventListener('animationend', () => {
-		fill.style.visibility = 'hidden'
-	})
-	fill.style.animationName = 'softClose'
-	fill.style.animationPlayState = 'running'
-
-	console.log("Close")
-}
+let readToggle
+let archiveToggle
 
 // email_id passed as arg
 function open_popup(id) {
@@ -68,14 +53,20 @@ function open_popup(id) {
 		})
 		document.querySelector('#email-time').innerHTML = email.timestamp
 		document.querySelector('#email-body').innerHTML = email.body
+		
+		readToggle = () => read_toggle(email.id)
+		document.querySelector('#read-toggle').addEventListener('click', readToggle);
 		if (email.read) {
 			document.querySelector('#read-toggle').className = 'toggle-btn clicked'
 		}
+		
+		archiveToggle = () => archive_toggle(email.id)
+		document.querySelector('#archive-toggle').addEventListener('click', archiveToggle);
 		if (email.archived) {
 			document.querySelector('#archive-toggle').className = 'toggle-btn clicked'
 		}
-			// Print emails
-			console.log(email)
+
+		console.log(email)
 	})
 	let fill = document.querySelector('#fill-layer')
 	fill.addEventListener('animationend', () => {
@@ -85,6 +76,29 @@ function open_popup(id) {
 	fill.style.animationPlayState = 'running'
 	
 	console.log("Open", id)
+}
+
+function close_popup() {
+	document.querySelector('#email-subject').innerHTML = ''
+	document.querySelector('#email-sender').innerHTML = ''
+	document.querySelector('#email-recipients').innerHTML = ''
+	document.querySelector('#email-time').innerHTML = ''
+	document.querySelector('#email-body').innerHTML = ''
+
+	document.querySelector('#read-toggle').removeEventListener('click', readToggle)
+	document.querySelector('#read-toggle').className = 'toggle-btn'
+
+	document.querySelector('#archive-toggle').removeEventListener('click', archiveToggle)
+	document.querySelector('#archive-toggle').className = 'toggle-btn'
+
+	let fill = document.querySelector('#fill-layer')
+	fill.addEventListener('animationend', () => {
+		fill.style.visibility = 'hidden'
+	})
+	fill.style.animationName = 'softClose'
+	fill.style.animationPlayState = 'running'
+
+	console.log("Close")
 }
 
 function compose_email() {
