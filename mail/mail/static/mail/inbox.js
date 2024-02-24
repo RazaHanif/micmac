@@ -12,8 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // declaring variables to use later for add/remove event listeners
-let readToggle
-let archiveToggle
+let readToggleFunction
+let archiveToggleFunction
+let replyFunction
 
 // read_toggle & archive_toggle is the same shit but different buttons/db values
 
@@ -83,10 +84,15 @@ function open_popup(email_id) {
 
 		// Eventlisteners for the toggle buttons
 		// Done this way to make removeEventListener function properly on close
-		readToggle = () => read_toggle(email.id)
-		document.querySelector('#read-toggle').addEventListener('click', readToggle);
-		archiveToggle = () => archive_toggle(email.id)
-		document.querySelector('#archive-toggle').addEventListener('click', archiveToggle);
+		readToggleFunction = () => read_toggle(email.id)
+		document.querySelector('#read-toggle').addEventListener('click', readToggleFunction);
+		archiveToggleFunction = () => archive_toggle(email.id)
+		document.querySelector('#archive-toggle').addEventListener('click', archiveToggleFunction);
+		replyFunction = () => {
+			close_popup()
+			compose_email(email.id)
+		}
+		document.querySelector('#reply').addEventListener('click', replyFunction)
 
 		// Update button css
 		if (email.read) {
@@ -119,10 +125,11 @@ function close_popup() {
 	document.querySelector('#email-body').innerHTML = ''
 
 	// Remove eventlisteners and reset css styling
-	document.querySelector('#read-toggle').removeEventListener('click', readToggle)
+	document.querySelector('#read-toggle').removeEventListener('click', readToggleFunction)
 	document.querySelector('#read-toggle').className = 'toggle-btn'
-	document.querySelector('#archive-toggle').removeEventListener('click', archiveToggle)
+	document.querySelector('#archive-toggle').removeEventListener('click', archiveToggleFunction)
 	document.querySelector('#archive-toggle').className = 'toggle-btn'
+	document.querySelector('#reply').removeEventListener('click', replyFunction)
 
 	// Run animation to close the popup
 	let fill = document.querySelector('#fill-layer')
@@ -154,7 +161,7 @@ function compose_email(email_id=0) {
 		.then(email => {
 			document.querySelector('#compose-recipients').value = email.sender
 			document.querySelector('#compose-subject').value = `RE: ${email.subject}`
-			document.querySelector('#compose-body').value = `On ${timestamp} ${sender} wrote: ${body}`
+			document.querySelector('#compose-body').value = `On ${email.timestamp} ${email.sender} wrote: ${email.body}\n\n`
 		})
 	}
 
