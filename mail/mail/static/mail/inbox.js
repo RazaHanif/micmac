@@ -17,11 +17,8 @@ let archiveToggleFunction
 let replyFunction
 
 // read_toggle & archive_toggle is the same shit but different buttons/db values
-
 // Toggle read status of email, updates db & css
 function read_toggle(email_id) {
-	let btn = document.querySelector('#read-toggle')
-
 	// Get current email.read value
 	// Toggle read value as !email.read
 	// After all that close the popup and redirect to inbox
@@ -43,9 +40,7 @@ function read_toggle(email_id) {
 
 // Toggle archive status of email, updates db & css
 function archive_toggle(email_id) {
-	let btn = document.querySelector('#archive-toggle')
-
-		// Get current email.archive value
+	// Get current email.archive value
 	// Toggle archive value as !email.archive
 	// After all that close the popup and redirect to inbox
 	fetch(`/emails/${email_id}`)
@@ -64,45 +59,52 @@ function archive_toggle(email_id) {
 	})
 }
 
-// email_id passed as arg
+// Opens email view popup
 function open_popup(email_id) {
-
-	// Get JSON for the email and fill in the values before opening popup
-	fetch(`/emails/${email_id}`)
-	.then(response => response.json())
-	.then(email => {
-		// Update all values in popup
-		document.querySelector('#email-subject').innerHTML = email.subject
-		document.querySelector('#email-sender').innerHTML = email.sender
-		document.querySelector('#email-time').innerHTML = email.timestamp
-		document.querySelector('#email-body').innerHTML = email.body
-		
-		// Display multiple emails
-		email.recipients.forEach((user) => {
-			document.querySelector('#email-recipients').innerHTML += `${user} `
+	// Set read to true on email open
+	fetch(`/emails/${email_id}`, {
+		method: 'PUT',
+		body: JSON.stringify({
+			read: true
 		})
-
-		// Eventlisteners for the toggle buttons
-		// Done this way to make removeEventListener function properly on close
-		readToggleFunction = () => read_toggle(email.id)
-		document.querySelector('#read-toggle').addEventListener('click', readToggleFunction);
-		archiveToggleFunction = () => archive_toggle(email.id)
-		document.querySelector('#archive-toggle').addEventListener('click', archiveToggleFunction);
-		replyFunction = () => {
-			close_popup()
-			compose_email(email.id)
-		}
-		document.querySelector('#reply').addEventListener('click', replyFunction)
-
-		// Update button css
-		if (email.read) {
-			document.querySelector('#read-toggle').className = 'toggle-btn clicked'
-		}
-		if (email.archived) {
-			document.querySelector('#archive-toggle').className = 'toggle-btn clicked'
-		}
-		console.log(email)
 	})
+	.then(
+		// Get JSON for the email and fill in the values before opening popup
+		fetch(`/emails/${email_id}`)
+		.then(response => response.json())
+		.then(email => {
+			// Update all values in popup
+			document.querySelector('#email-subject').innerHTML = email.subject
+			document.querySelector('#email-sender').innerHTML = email.sender
+			document.querySelector('#email-time').innerHTML = email.timestamp
+			document.querySelector('#email-body').innerHTML = email.body
+			
+			// Display multiple emails
+			email.recipients.forEach((user) => {
+				document.querySelector('#email-recipients').innerHTML += `${user} `
+			})
+	
+			// Eventlisteners for the toggle buttons
+			// Done this way to make removeEventListener function properly on close
+			readToggleFunction = () => read_toggle(email.id)
+			document.querySelector('#read-toggle').addEventListener('click', readToggleFunction);
+			archiveToggleFunction = () => archive_toggle(email.id)
+			document.querySelector('#archive-toggle').addEventListener('click', archiveToggleFunction);
+			replyFunction = () => {
+				close_popup()
+				compose_email(email.id)
+			}
+			document.querySelector('#reply').addEventListener('click', replyFunction)
+	
+			// Update button css
+			if (email.read) {
+				document.querySelector('#read-toggle').className = 'toggle-btn clicked'
+			}
+			if (email.archived) {
+				document.querySelector('#archive-toggle').className = 'toggle-btn clicked'
+			}
+		})
+	)
 
 	// Run animation to display the popup
 	let fill = document.querySelector('#fill-layer')
@@ -111,11 +113,9 @@ function open_popup(email_id) {
 	})
 	fill.style.animationName = 'softOpen'
 	fill.style.animationPlayState = 'running'
-	
-	console.log("Open", id)
 }
 
-// Close the popup when the 'x' button is clicked
+// Close the popup
 function close_popup() {
 	// Reset all the values for next email
 	document.querySelector('#email-subject').innerHTML = ''
@@ -138,24 +138,22 @@ function close_popup() {
 	})
 	fill.style.animationName = 'softClose'
 	fill.style.animationPlayState = 'running'
-
-	console.log("Close")
 }
 
 
 function compose_email(email_id=0) {
-
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
-	
 	document.querySelector('#recipients-error').style.opacity = 0;
+
 	if (email_id === 0) {
 		// Clear out composition fields
 		document.querySelector('#compose-recipients').value = '';
 		document.querySelector('#compose-subject').value = '';
 		document.querySelector('#compose-body').value = '';
 	} else {
+		// If function being called from a reply button prefills the fields
 		fetch(`/emails/${email_id}`)
 		.then(response => response.json())
 		.then(email => {
@@ -165,7 +163,7 @@ function compose_email(email_id=0) {
 		})
 	}
 
-  // Add Submit functionailty
+  // Submit functionailty
   document.querySelector('#compose-form').addEventListener('submit', function(event) {
     event.preventDefault()
 
@@ -181,19 +179,13 @@ function compose_email(email_id=0) {
     .then(response => response.json())
     .then(data => {
       if ("message" in data){
-        console.log('OK: ', data)
-        // Delete this line in prod
-        alert(data.message) 
         load_mailbox('inbox')
       } else {
-        console.log('Error: ', data.error)
+				// Error handling
         document.querySelector('#recipients-error').innerHTML = data.error
         document.querySelector('#recipients-error').style.color = "red"
         document.querySelector('#recipients-error').style.opacity = 100
       }
-    })
-    .catch(error => {
-      console.log("oops")
     })
   });
 }
@@ -206,7 +198,7 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-	console.log(mailbox)
+	
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
@@ -214,27 +206,18 @@ function load_mailbox(mailbox) {
 			let output
 			switch(mailbox) {
 				case "inbox":
-					console.log("inbox")
-					output = `<p>From: ${email.sender}</p>
-											<p>Subject: ${email.subject}</p>
-											<p>Time: ${email.timestamp}`
+					output = `<p>From: ${email.sender}</p> <p>Subject: ${email.subject}</p> <p>Time: ${email.timestamp}`
 					break;
 				case "sent":
-					console.log("sent")
-					output = `<p>To: ${email.recipients}</p>
-											<p>Subject: ${email.subject}</p>
-											<p>Time: ${email.timestamp}`
+					output = `<p>To: ${email.recipients}</p> <p>Subject: ${email.subject}</p> <p>Time: ${email.timestamp}`
 					break;
 				case "archive":
-					console.log("archive")
 					if (email.archived === true) {
-						output = `<p>From: ${email.sender}</p>
-											<p>Subject: ${email.subject}</p>
-											<p>Time: ${email.timestamp}`
+						output = `<p>From: ${email.sender}</p> <p>Subject: ${email.subject}</p> <p>Time: ${email.timestamp}`
 					}
 					break
 				default:
-					console.log("how did you get here?", mailbox)
+					console.log('what, how did you get here?')
 			}
 
 			const element = document.createElement('div')

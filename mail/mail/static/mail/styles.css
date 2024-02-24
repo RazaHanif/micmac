@@ -1,9 +1,28 @@
+/* I wanted to keep the styling minimal */
+/* Greyscale */
+
 body {
     background-color: whitesmoke;
 }
 
 textarea {
     min-height: 400px;
+}
+
+/* Animation for popup window to open/close */
+@keyframes softOpen {
+    0% {
+        opacity: 0%;
+        visibility: visible;
+    }
+    75% {
+        opacity: 100%;
+        visibility: visible;
+    }
+    100% {
+        opacity: 100%;
+        visibility: visible;
+    }
 }
 
 @keyframes softClose {
@@ -21,22 +40,7 @@ textarea {
     }
 }
 
-@keyframes softOpen {
-    0% {
-        opacity: 0%;
-        visibility: visible;
-    }
-    75% {
-        opacity: 100%;
-        visibility: visible;
-    }
-    100% {
-        opacity: 100%;
-        visibility: visible;
-    }
-    
-}
-
+/* Popup Hidden on start */
 #fill-layer {
     display: flex;
     justify-content: center;
@@ -110,10 +114,6 @@ textarea {
     gap: 1vw;
 }
 
-#email-info {
-    border: none;
-}
-
 #email-sender {
     font-weight: bolder;
 }
@@ -129,7 +129,6 @@ textarea {
     font-size: small;
     overflow: scroll;
 }
-
 
 #email-toggles {
     display: flex;
@@ -193,6 +192,6 @@ hr {
 }
 
 .read {
-    opacity: 75%;
+    opacity: 50%;
     background-color: grey;
 }

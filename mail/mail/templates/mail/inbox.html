@@ -4,6 +4,10 @@
 {% block body %}
     <h2>{{ request.user.email }}</h2>
 
+    <!-- 
+        Would prefer to remove bootstrap and implement it myself 
+        but too lazy to figure out how to style the <a> the same as the <button>
+    -->
     <button class="btn btn-sm btn-outline-secondary" id="inbox">Inbox</button>
     <button class="btn btn-sm btn-outline-secondary" id="compose">Compose</button>
     <button class="btn btn-sm btn-outline-secondary" id="sent">Sent</button>
@@ -11,6 +15,8 @@
     <a class="btn btn-sm btn-outline-secondary" href="{% url 'logout' %}">Log Out</a>
     <hr>
 
+    <!-- NestedDivHell -->
+    <!-- Email View Popup -->
     <div id="fill-layer">
         <div id="popup-email">
             <div id="email-header">
@@ -36,9 +42,11 @@
         </div>
     </div>
 
+    <!-- Div for all emails to load -->
     <div id="emails-view">
     </div>
 
+    <!-- Prebuilt form for new emails -->
     <div id="compose-view">
         <h3>New Email</h3>
         <form id="compose-form">
