@@ -7,7 +7,7 @@
 ~~- send the composed mail (if all fields are valid)~~
 ~~- redirect to sent mailbox~~
 
-### 3 Mailboxes:
+~~### 3 Mailboxes:~~
 ~~- using GET /emails/<str:mailbox> display all mail from given mailbox~~
 ~~- each email displayed in its own clickable <div> with border with~~
 ~~    - Sender, Subject, Timestamp~~
