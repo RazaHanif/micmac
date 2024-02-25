@@ -26,5 +26,9 @@ CI/CD
         written in YAML
         file format written in key: value (like JSON)
 
-        
+
+    Docker 
+        cross configure containers for your project/team
+        stops errors of "it works on my computer not yours"
+
 
