@@ -8,6 +8,9 @@
 
     Django testing in week4 airlines project
 
+    Learn the selenium and webdriver thing to test front end in the browser
+    
+
 
 
 
