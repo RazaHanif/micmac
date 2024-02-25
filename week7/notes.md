@@ -4,6 +4,8 @@
     test functions in python 
         assert(args) - the args should be true
 
+    unittest - python library to better test
+
 
 
 
