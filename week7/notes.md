@@ -31,4 +31,7 @@ CI/CD
         cross configure containers for your project/team
         stops errors of "it works on my computer not yours"
 
+        "docker-compose up" doesnt work on my computer
+        i think cuz i dont have it pip installed
+
 
