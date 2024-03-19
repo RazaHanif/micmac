@@ -16,7 +16,18 @@ class NewPostForm(forms.Form):
 # Just to get rid of pylance error
 REG = "network/register.html"
 
-# 
+'''
+Make this server side act more like an api with json responses
+
+    OK:
+    emails = emails.order_by("-timestamp").all()
+    return JsonResponse([email.serialize() for email in emails], safe=False)
+    
+    NOT OK:
+    return JsonResponse({"error": "Email not found."}, status=404)
+    
+and then all render everything on client side with js 
+'''
 
 def index(request):
     return render(request, "network/index.html")
