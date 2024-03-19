@@ -13,7 +13,8 @@ class User(AbstractUser):
 
 # Posts contain content, date created, who created it, and if it has been edited or not
 class Post(models.Model):
-    content = models.TextField()
+    # max len 280 to match twitter
+    content = models.TextField(max_length=280)
     date = models.DateField()
     edited = models.BooleanField(default=False)
     user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="poster")
@@ -40,7 +41,7 @@ class Comment(models.Model):
     
 
 # follower user points to following user (follower:foo, following:bar)
-class Followerss(models.Model):
+class Followers(models.Model):
     follower = models.ForeignKey("User", on_delete=models.CASCADE, related_name="follower")
     following = models.ForeignKey("User", on_delete=models.CASCADE, related_name="following")
     
