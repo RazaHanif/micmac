@@ -150,7 +150,7 @@ def register(request):
     else:
         return render(request, REG)
 
-# Error handling logic for testing
+# This is not needed, do error handling in each function
 def error(message, status_code):
     return JsonResponse({
             "error": message
