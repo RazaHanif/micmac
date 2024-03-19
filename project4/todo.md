@@ -1,7 +1,7 @@
 # TODO:
 
-Models:
-    Posts
+## Models:
+### Posts:
         Id
         User
         Content
@@ -10,29 +10,21 @@ Models:
         Likes
         Comment
 
-    Users
+### Users:
         Id
         Name
         Followers
         Following
         Posts
     
-    Comments
+### Comments:
         Id
         Posts
         Content
     
-    Likes
+### Likes:
         Id
         Post
-
-
-    Functionailty
-
-Create - Post/Put
-Read - Get
-Update - Put/Post/Patch
-Delete - Delete
 
 ## Server Side: API ROUTES
 ### newPost(current_user_id, content): POST
@@ -300,5 +292,25 @@ Delete - Delete
 
         Like btn should be a heart or thumbs up that fills in when when the liked status is true    
 
+
+# Random Notes:
+    Create - Post/Put
+    Read - Get
+    Update - Put/Post/Patch
+    Delete - Delete
+
+```py
+    urlpatterns = [
+        path("", views.index, name="index"),
+        path("login", views.login_view, name="login"),
+        path("logout", views.logout_view, name="logout"),
+        path("register", views.register, name="register"),
+
+        # API Routes
+        path("emails", views.compose, name="compose"),
+        path("emails/<int:email_id>", views.email, name="email"),
+        path("emails/<str:mailbox>", views.mailbox, name="mailbox"),
+    ]
+```
 
     
