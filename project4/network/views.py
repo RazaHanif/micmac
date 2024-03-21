@@ -8,7 +8,7 @@ from django.urls import reverse
 from datetime import datetime
 from time import sleep
 
-from .models import User, Post, Likes, Comment, Followers
+from .models import User, Post, Comment
 
 
 # See todo.md for server side docs
