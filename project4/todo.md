@@ -197,7 +197,8 @@
 ### unlike(user_id, post_id):
         same as likes but delete the entry if it exists
 
-## Server Side: Internal
+
+## Server Side: Internal **DONT NEED ANYMORE**
 
 ### userLike(user_id, post_id):
     Checks if user likes this post
