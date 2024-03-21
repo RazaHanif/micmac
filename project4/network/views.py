@@ -5,66 +5,59 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from datetime import datetime
+from time import sleep
 
 from .models import User, Post, Likes, Comment, Followers
 
-import datetime
 
-class NewPostForm(forms.Form):
-    content=forms.CharField(label="Tweet", widget=forms.Textarea, max_length=280, min_length=4)
+# See todo.md for server side docs
+# consistent style, snake_case & 'single quotes' & space = around
 
-# Just to get rid of pylance error
-REG = "network/register.html"
+REG = 'network/register.html'
+TWEET_MAX = 280
+TWEET_MIN = 4
 
-'''
-Make this server side act more like an api with json responses
-
-    OK:
-    emails = emails.order_by("-timestamp").all()
-    return JsonResponse([email.serialize() for email in emails], safe=False)
-    
-    NOT OK:
-    return JsonResponse({"error": "Email not found."}, status=404)
-    
-and then all render everything on client side with js 
-'''
 
 def index(request):
-    return render(request, "network/index.html")
+    return render(request, 'network/index.html')
 
-'''
-New Post:
-        Open popup (similar to email view)
-        empty text area, on submit auto fill id, User, Date, Comment
-        refresh on submit
-'''
 
 @login_required
-def new_post(request):
-    if request.method == "POST":
-        form = NewPostForm(request.POST)
+def new_post(request, tweet):
+    if request.method == 'POST':
         
-        # Serverside check
-        if form.is_valid():
-            
+        if len(tweet) > TWEET_MAX:
+            return JsonResponse({
+                'error': 'Tweet exceeds max length'
+            }, status = 400)
+        
+        # This error should never happen
+        # @login_required and getting the user id from request should
+        # prevent it but just incase some hackermans get in
+        try:
             current_user = User.objects.get(pk=request.user.id)
-            post = Post.objects.create(
-                content = form.changed_data['tweet'],
-                date = datetime.datetime.now(),
-                edited = False,
-                user = current_user,
-            )
-            post.save()
-            
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            return render(request, "network/add.html", {
-                "form": form
-            })
-            
-    return render(request, "network/add.html", {
-        "form": NewPostForm()
-    })
+        except User.DoesNotExist:
+            return JsonResponse({
+                'error': 'user does not exist'
+            }, status = 404)
+
+        post = Post.objects.create(
+            content = tweet,
+            date = datetime.now(),
+            edited = False,
+            user = current_user,
+        )
+        post.save()
+        
+        # fake delay, just wanna see what happens in js
+        sleep(3)
+        
+        return JsonResponse({
+            'message': 'Tweet Created'
+        }, status = 201)
+    
+    return JsonResponse({"error": "GET Method not Allowed"}, status=405)
     
 @login_required
 def edit_post(request, post_id):
