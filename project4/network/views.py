@@ -40,7 +40,7 @@ def new_post(request, tweet):
             
         # This error should never happen
         # @login_required and getting the user id from request should
-        # prevent it but just incase some hackermans get in
+        # prevent it but just incase some hacker mans get in
         try:
             current_user = User.objects.get(pk = request.user.id)
         except User.DoesNotExist:
@@ -65,7 +65,7 @@ def new_post(request, tweet):
     
     # GET
     return JsonResponse({
-        'error': 'GET Method not Allowed'
+        'error': 'POST request required'
     }, status = 405)
 
 
@@ -81,7 +81,8 @@ def edit_post(request, post_id, tweet):
             return JsonResponse({
                 'error': 'Tweet does not meet min length'
             }, status = 400)
-        
+
+        # Again should never run into this but just incase
         try:
             current_user = User.objects.get(pk = request.user.id)
         except User.DoesNotExist:
@@ -94,7 +95,7 @@ def edit_post(request, post_id, tweet):
         except Post.DoesNotExist:
             return JsonResponse({
                 'error': 'Post does not exist'
-            }, status = 404)    
+            }, status = 404)
 
         if post.user != current_user:
             return JsonResponse({
@@ -110,16 +111,26 @@ def edit_post(request, post_id, tweet):
         return JsonResponse({
             'message': 'Success'
         }, status = 200)
-            
+        
     # GET
     return JsonResponse({
-        'error': 'GET Method not Allowed'
+        'error': 'POST request required'
     }, status = 405)
 
 
+def get_all_post():    
+    posts = Post.objects.all().order_by('-date')
 
-
-
+    if not posts.exists():
+        return JsonResponse({
+            'error': 'No Posts Found'
+        }, status = 404)
+    
+    return JsonResponse(
+        [post.as_dict() for post in posts],
+        safe = False,
+        status = 200
+    )
 
 
 # Default Functions for login/logout/register
@@ -173,3 +184,12 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, REG)
+
+def user_like(user_id, post_id):
+    pass
+
+def num_of_likes(post_id):
+    pass
+
+def num_of_follow(user_id):
+    pass

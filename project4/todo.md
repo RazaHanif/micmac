@@ -7,16 +7,15 @@
         Content
         Date
         Edited
-        Likes
-        Comment
 
 ### Users:
         Id
         Name
+    
+### Followers:
         Followers
         Following
-        Posts
-    
+
 ### Comments:
         Id
         Posts
@@ -313,4 +312,72 @@
     ]
 ```
 
-    
+# Oh shit
+    Might need to reconfigure the models to include likes/comments right in the Posts instead of pushing it out to its own category, and same for adding followers/following into users
+
+    from ddb: Likes
+        A ManyToManyField in Django is a field that allows for a many-to-many relationship between two models. 
+        This means that an instance of one model can be related to multiple instances of another model, and vice versa.
+
+        For example, in the context of a social media application, 
+        a Post model might have a ManyToManyField to a User model for likes. 
+        This would mean that a post can be liked by many users, and a user can like many posts.
+
+        Here's a simplified example:
+
+            class User(models.Model):
+                name = models.CharField(max_length=100)
+
+            class Post(models.Model):
+                content = models.TextField()
+                likes = models.ManyToManyField(User, related_name='liked_posts')
+        
+        In this example, you can access all the users who liked a post with post.likes.all()
+        and you can access all the posts a user liked with user.liked_posts.all().
+
+        Remember, when you're dealing with a ManyToManyField,
+        you're dealing with a set of objects, not just one object.
+        So you'll often use methods like .all(), .filter(), .count(), etc. to work with the related objects.
+
+    from ddb: Comments
+        Yes, you can use a similar approach to store comments on a given post. 
+        However, instead of a ManyToManyField, you would typically use a ForeignKey field in your Comment model to establish a many-to-one relationship. 
+        This is because each comment is usually associated with one post and one user, 
+        but a post can have many comments, and a user can make many comments.
+
+        Here's a simplified example:
+
+            class User(models.Model):
+                name = models.CharField(max_length=100)
+
+            class Post(models.Model):
+                content = models.TextField()
+                author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+            class Comment(models.Model):
+                content = models.TextField()
+                post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+                author = models.ForeignKey(User, on_delete=models.CASCADE)
+        
+        In this example, you can access all the comments on a post with post.comments.all(), 
+        and you can access all the comments a user made with user.comment_set.all(). 
+        Note the use of related_name in the ForeignKey field, 
+        which allows you to use a more intuitive name to access the related objects.
+
+    from ddb: Followers
+        Yes, you're correct! You can use a ManyToManyField in the User model to implement a followers and following system. 
+        This is because a user can follow many other users, and a user can be followed by many other users.
+
+        Here's a simplified example:
+
+            class User(models.Model):
+                name = models.CharField(max_length=100)
+                following = models.ManyToManyField('self', symmetrical=False, related_name='followers')
+
+        In this example, the 'self' keyword is used to create a ManyToManyField to the same model.
+        The symmetrical=False argument is used because if user A is following user B, 
+        it doesn't necessarily mean that user B is following user A. 
+        
+        In the example, followers is the related_name for the following field. 
+        You can access all the users that a user is following with user.following.all(), 
+        and you can access all the users that are following a user with user.followers.all().

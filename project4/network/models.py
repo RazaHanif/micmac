@@ -22,6 +22,15 @@ class Post(models.Model):
     def __str__(self):
         return f"{self.user}: {self.content} @ {self.date} | {self.edited}"
     
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "date": self.date.strftime("%b %d %Y, %I:%M %p"),
+            "edited": self.edited,
+            "user": self.user.username
+        }
+    
 # Which user likes which post
 class Likes(models.Model):
     post = models.ForeignKey("Posts", on_delete=models.CASCADE, related_name="post")
