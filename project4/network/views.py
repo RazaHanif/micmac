@@ -31,12 +31,17 @@ def new_post(request, tweet):
             return JsonResponse({
                 'error': 'Tweet exceeds max length'
             }, status = 400)
-        
+            
+        if len(tweet) < TWEET_MIN:
+            return JsonResponse({
+                'error': 'Tweet does not meet min length'
+            }, status = 400)
+            
         # This error should never happen
         # @login_required and getting the user id from request should
         # prevent it but just incase some hackermans get in
         try:
-            current_user = User.objects.get(pk=request.user.id)
+            current_user = User.objects.get(pk = request.user.id)
         except User.DoesNotExist:
             return JsonResponse({
                 'error': 'user does not exist'
@@ -57,33 +62,55 @@ def new_post(request, tweet):
             'message': 'Tweet Created'
         }, status = 201)
     
-    return JsonResponse({"error": "GET Method not Allowed"}, status=405)
-    
+    # GET
+    return JsonResponse({
+        'error': 'GET Method not Allowed'
+    }, status = 405)
+
+
 @login_required
-def edit_post(request, post_id):
-    current_user = User.objects.get(pk=request.user.id)
-    post = Post.objects.get(pk=post_id)
-    
-    # Serverside check if user is same as poster
-    if post.user != current_user:
-        return error('edit_post: Post User != Current User', 500)
-    
+def edit_post(request, post_id, tweet):
     if request.method == 'PUT':
-        form = NewPostForm(request.PUT)        
+        if len(tweet) > TWEET_MAX:
+            return JsonResponse({
+                'error': 'Tweet exceeds max length'
+            }, status = 400)
+            
+        if len(tweet) < TWEET_MIN:
+            return JsonResponse({
+                'error': 'Tweet does not meet min length'
+            }, status = 400)
         
-        # Serverside check, update and su
-        if form.is_valid():            
-            post.content = form.cleaned_data['tweet']
-            post.save()
-            return HttpResponseRedirect(reverse('index'))
-        else:
-            error('edit_post: Form is not Valid', 400)
+        try:
+            current_user = User.objects.get(pk = request.user.id)
+        except User.DoesNotExist:
+            return JsonResponse({
+                'error': 'User does not exist'
+            }, status = 404)
+        
+        try:
+            post = Post.objects.get(pk = post_id)
+        except Post.DoesNotExist:
+            return JsonResponse({
+                'error': 'Post does not exist'
+            }, status = 404)    
+
+        if post.user != current_user:
+            return JsonResponse({
+                'error': 'Current User is not Post Creator'
+            }, status = 403)
+        
+        post.content = tweet
+        post.save()
+        
+        return JsonResponse({
+            'message': 'Success'
+        }, status = 200)
             
     # GET
-    return render(request, 'network/edit.html', {
-        'form': NewPostForm(),
-        'post': post,
-    })
+    return JsonResponse({
+        'error': 'GET Method not Allowed'
+    }, status = 405)
     
 
 
