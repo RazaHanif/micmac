@@ -54,6 +54,26 @@
             message: success
         } code: 200
 
+### editPost(post_id): PUT
+        Used to update the tweet with updated content
+        required input from client is user, content & post id
+
+        get post with id
+
+        if content exceeds max_length output error
+        if post doesnt exist output error
+        if current user != post user output error
+
+        update entry in db {
+            content: new content
+            edited: True
+        }
+
+        if all good output
+            return json response {
+                message: all good
+            }code: 200
+
 **ALL GET POST ROUTES** 
     implement django paginator
     run numOfLikes function and add it for each post
@@ -137,26 +157,6 @@
             return json response{
                 posts: posts
             } code: 200
-
-### editPost(post_id): PUT
-        Used to update the tweet with updated content
-        required input from client is user, content & post id
-
-        get post with id
-
-        if content exceeds max_length output error
-        if post doesnt exist output error
-        if current user != post user output error
-
-        update entry in db {
-            content: new content
-            edited: True
-        }
-
-        if all good output
-            return json response {
-                message: all good
-            }code: 200
 
 <!-- Could combine this with unfollow with a flag -->
 <!-- follow(current_user_id, follow_user_id, unfollow=False) -->

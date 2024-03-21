@@ -18,7 +18,8 @@ REG = 'network/register.html'
 TWEET_MAX = 280
 TWEET_MIN = 4
 
-
+# Redo this maybe and add a logged in and logged out view 
+# redirect to log in screen
 def index(request):
     return render(request, 'network/index.html')
 
@@ -103,6 +104,9 @@ def edit_post(request, post_id, tweet):
         post.content = tweet
         post.save()
         
+        # fake delay, just wanna see what happens in js
+        sleep(3)
+        
         return JsonResponse({
             'message': 'Success'
         }, status = 200)
@@ -111,7 +115,7 @@ def edit_post(request, post_id, tweet):
     return JsonResponse({
         'error': 'GET Method not Allowed'
     }, status = 405)
-    
+
 
 
 
@@ -169,9 +173,3 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, REG)
-
-# This is not needed, do error handling in each function
-def error(message, status_code):
-    return JsonResponse({
-            "error": message
-        }, status=status_code)
