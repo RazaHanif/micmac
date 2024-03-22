@@ -1,4 +1,4 @@
-from django import forms
+from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -24,6 +24,8 @@ def index(request):
     return render(request, 'network/index.html')
 
 
+# Creates new post in db
+# POST
 @login_required
 def new_post(request, tweet):
     if request.method == 'POST':
@@ -69,6 +71,8 @@ def new_post(request, tweet):
     }, status=405)
 
 
+# Updates contents of a given post in db
+# PUT 
 @login_required
 def edit_post(request, post_id, tweet):
     if request.method == 'PUT':
@@ -103,6 +107,7 @@ def edit_post(request, post_id, tweet):
             }, status=403)
         
         post.content = tweet
+        post.edited = True
         post.save()
         
         # fake delay, just wanna see what happens in js
@@ -117,22 +122,32 @@ def edit_post(request, post_id, tweet):
         'error': 'POST request required'
     }, status=405)
 
-
-def get_all_posts():
-    posts = Post.objects.all().order_by('-date')
+# Returns all posts from db in reveres chrono order
+# GET
+def all_posts(request):
+    posts = Post.objects.all().order_by('-date') 
 
     if not posts.exists():
         return JsonResponse({
             'error': 'No Posts Found'
         }, status=404)
+        
+    paginator_posts = Paginator(posts, 10)
+    total_pages = paginator_posts.num_pages
+    
+    page_num = request.GET.get('page')
+    
+    page_obj = paginator_posts.get_page(page_num)
     
     return JsonResponse(
         [post.as_dict() for post in posts],
         safe=False,
         status=200
     )
-    
-def get_this_post(post_id):
+
+# Returns a given post from the db
+# GET
+def this_post(post_id):
     try:
         post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
@@ -145,8 +160,10 @@ def get_this_post(post_id):
         safe=False,
         status=200
     )
-    
-def get_all_post_user(user_id):
+
+# Returns all posts from a given user
+# GET
+def their_posts(user_id):
     try:
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
@@ -166,10 +183,12 @@ def get_all_post_user(user_id):
         safe=False,
         status=200
     )
-    
-def get_all_post_following(user_id):
-    following = User.objects.get(pk=user_id).following.all()
-    
+
+# Returns all posts from users being followed by a given user
+# GET
+@login_required
+def following_post(request):
+    following = User.objects.get(pk=request.user.id).following.all()
     posts = Post.objects.filter(creater__in=following)
     
     if not posts.exists():
@@ -183,63 +202,58 @@ def get_all_post_following(user_id):
         status=200
     )
 
-# Find a way to combine these with an unfollow flag
+# Updates current user follows that user
+# PUT
+@login_required
 def follow(request, follow_id):
     if request.method == 'PUT':
-        try:
-            user = User.objects.get(pk=request.user.id)
-        except User.DoesNotExist:
-            return JsonResponse({
-            'error': 'User does not exist'
-            }, status=404)
-        try:
-            user_to_follow = User.objects.get(pk=follow_id)
-        except User.DoesNotExist:
-            return JsonResponse({
-            'error': 'User to follow does not exist'
-            }, status=404)
-
-        user.following.add(user_to_follow)
-        user.save()
-        
-        return JsonResponse({
-            'message': 'Success'
-        }, status=200)
-        
+        return toggle_follow(request, follow_id, False)
     # GET
     return JsonResponse({
         'error': 'PUT request required'
     }, status=405)
-    
+
+# Updates current user unfollows that user
+# PUT
+@login_required
 def unfollow(request, follow_id):
     if request.method == 'PUT':
-        try:
-            user = User.objects.get(pk=request.user.id)
-        except User.DoesNotExist:
-            return JsonResponse({
-            'error': 'User does not exist'
-            }, status=404)
-        try:
-            user_to_follow = User.objects.get(pk=follow_id)
-        except User.DoesNotExist:
-            return JsonResponse({
-            'error': 'User to follow does not exist'
-            }, status=404)
-
-        user.following.remove(user_to_follow)
-        user.save()
-        
-        return JsonResponse({
-            'message': 'Success'
-        }, status=200)
-        
+        return toggle_follow(request, follow_id, True)
     # GET
     return JsonResponse({
         'error': 'PUT request required'
     }, status=405)
-    
 
-# Default Functions for login/logout/register
+# Handles logic to change following status
+# Internal
+def toggle_follow(request, follow_id, unfollow):
+    try:
+        user = User.objects.get(pk=request.user.id)
+    except User.DoesNotExist:
+        return JsonResponse({
+        'error': 'User does not exist'
+        }, status=404)
+    try:
+        user_to_follow = User.objects.get(pk=follow_id)
+    except User.DoesNotExist:
+        return JsonResponse({
+        'error': 'User to follow does not exist'
+        }, status=404)
+
+    if unfollow:
+        user.following.remove(user_to_follow)
+    else:
+        user.following.add(user_to_follow)
+        
+    user.save()
+    
+    return JsonResponse({
+        'message': 'Success'
+    }, status=200)
+        
+
+
+# Logs user in
 def login_view(request):
     if request.method == "POST":
 
@@ -259,12 +273,12 @@ def login_view(request):
     else:
         return render(request, "network/login.html")
 
-
+# Logs user out
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
-
+# Creates new User
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
