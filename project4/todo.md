@@ -319,3 +319,6 @@ user.comment_set.all() -- all comments made by a given user
 
 user.following.all() -- all users that user is following
 user.followers.all() -- all users that are following user
+
+Client side paginator 
+    https://docs.djangoproject.com/en/5.0/topics/pagination/

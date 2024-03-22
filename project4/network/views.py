@@ -1,8 +1,9 @@
-from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.core.serializers import serialize
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from datetime import datetime
@@ -10,9 +11,7 @@ from time import sleep
 
 from .models import User, Post, Comment
 
-
 # See todo.md for server side docs
-# consistent style, snake_case & 'single quotes'
 
 REG = 'network/register.html'
 TWEET_MAX = 280
@@ -122,6 +121,7 @@ def edit_post(request, post_id, tweet):
         'error': 'POST request required'
     }, status=405)
 
+
 # Returns all posts from db in reveres chrono order
 # GET
 def all_posts(request):
@@ -129,21 +129,21 @@ def all_posts(request):
 
     if not posts.exists():
         return JsonResponse({
-            'error': 'No Posts Found'
+            'error': 'Post does not exist'
         }, status=404)
-        
-    paginator_posts = Paginator(posts, 10)
-    total_pages = paginator_posts.num_pages
     
     page_num = request.GET.get('page')
+    p = Paginator(posts, 10)
+    page_obj = p.get_page(page_num)
     
-    page_obj = paginator_posts.get_page(page_num)
-    
-    return JsonResponse(
-        [post.as_dict() for post in posts],
-        safe=False,
-        status=200
-    )
+    data = {
+        'objects': serialize('json', list(page_obj.object_list)),
+        'prev': page_obj.has_previous,
+        'next': page_obj.has_next
+    } 
+
+    return JsonResponse(data, safe=False, status=200)
+
 
 # Returns a given post from the db
 # GET
@@ -161,9 +161,10 @@ def this_post(post_id):
         status=200
     )
 
+
 # Returns all posts from a given user
 # GET
-def their_posts(user_id):
+def their_posts(request, user_id):
     try:
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
@@ -171,36 +172,50 @@ def their_posts(user_id):
             'error': 'User does not exist'
         }, status=404)
     
-    posts = Post.objects.filter(creater=user)
+    posts = Post.objects.filter(creater=user).order_by('-date')
     
     if not posts.exists():
        return JsonResponse({
-            'error': 'No Posts Found'
+            'error': 'Post does not exist'
         }, status=404)
 
-    return JsonResponse(
-        [post.as_dict() for post in posts],
-        safe=False,
-        status=200
-    )
+    page_num = request.GET.get('page')
+    p = Paginator(posts, 10)
+    page_obj = p.get_page(page_num)
+    
+    data = {
+        'objects': serialize('json', list(page_obj.object_list)),
+        'prev': page_obj.has_previous,
+        'next': page_obj.has_next
+    } 
+
+    return JsonResponse(data, safe=False, status=200)
+
 
 # Returns all posts from users being followed by a given user
 # GET
 @login_required
 def following_post(request):
     following = User.objects.get(pk=request.user.id).following.all()
-    posts = Post.objects.filter(creater__in=following)
+    posts = Post.objects.filter(creater__in=following).order_by('-date')
     
     if not posts.exists():
        return JsonResponse({
-            'error': 'No Posts Found'
+            'error': 'Post does not exist'
         }, status=404)
 
-    return JsonResponse(
-        [post.as_dict() for post in posts],
-        safe=False,
-        status=200
-    )
+    page_num = request.GET.get('page')
+    p = Paginator(posts, 10)
+    page_obj = p.get_page(page_num)
+    
+    data = {
+        'objects': serialize('json', list(page_obj.object_list)),
+        'prev': page_obj.has_previous,
+        'next': page_obj.has_next
+    } 
+
+    return JsonResponse(data, safe=False, status=200)
+
 
 # Updates current user follows that user
 # PUT
@@ -213,6 +228,7 @@ def follow(request, follow_id):
         'error': 'PUT request required'
     }, status=405)
 
+
 # Updates current user unfollows that user
 # PUT
 @login_required
@@ -223,6 +239,7 @@ def unfollow(request, follow_id):
     return JsonResponse({
         'error': 'PUT request required'
     }, status=405)
+
 
 # Handles logic to change following status
 # Internal
@@ -251,7 +268,10 @@ def toggle_follow(request, follow_id, unfollow):
         'message': 'Success'
     }, status=200)
         
-
+# Idk if i need this, wasnt in my inital server side docs
+# Will complete if needed else will delete
+def create_comment(request, comment):
+    pass
 
 # Logs user in
 def login_view(request):
@@ -273,10 +293,12 @@ def login_view(request):
     else:
         return render(request, "network/login.html")
 
+
 # Logs user out
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
+
 
 # Creates new User
 def register(request):
