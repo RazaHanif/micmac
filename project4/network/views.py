@@ -14,6 +14,8 @@ from .models import User, Post, Comment
 # See todo.md for server side docs
 
 REG = 'network/register.html'
+ERROR_USER = 'Users does not exist'
+ERROR_POST = 'Posts does not exist'
 TWEET_MAX = 280
 TWEET_MIN = 4
 
@@ -46,7 +48,7 @@ def new_post(request, tweet):
             current_user = User.objects.get(pk=request.user.id)
         except User.DoesNotExist:
             return JsonResponse({
-                'error': 'user does not exist'
+                'error': ERROR_USER
             }, status=404)
 
         post = Post.objects.create(
@@ -90,14 +92,14 @@ def edit_post(request, post_id, tweet):
             current_user = User.objects.get(pk=request.user.id)
         except User.DoesNotExist:
             return JsonResponse({
-                'error': 'User does not exist'
+                'error': ERROR_USER
             }, status=404)
         
         try:
             post = Post.objects.get(pk=post_id)
         except Post.DoesNotExist:
             return JsonResponse({
-                'error': 'Post does not exist'
+                'error': ERROR_POST
             }, status=404)
 
         if post.user != current_user:
@@ -129,7 +131,7 @@ def all_posts(request):
 
     if not posts.exists():
         return JsonResponse({
-            'error': 'Post does not exist'
+            'error': ERROR_POST
         }, status=404)
     
     page_num = request.GET.get('page')
@@ -152,7 +154,7 @@ def this_post(post_id):
         post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
         return JsonResponse({
-            'error': 'Post does not exist'
+            'error': ERROR_POST
         }, status=404)
     
     return JsonResponse(
@@ -169,14 +171,14 @@ def their_posts(request, user_id):
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
         return JsonResponse({
-            'error': 'User does not exist'
+            'error': ERROR_USER
         }, status=404)
     
     posts = Post.objects.filter(creater=user).order_by('-date')
     
     if not posts.exists():
        return JsonResponse({
-            'error': 'Post does not exist'
+            'error': ERROR_POST
         }, status=404)
 
     page_num = request.GET.get('page')
@@ -201,7 +203,7 @@ def following_post(request):
     
     if not posts.exists():
        return JsonResponse({
-            'error': 'Post does not exist'
+            'error': ERROR_POST
         }, status=404)
 
     page_num = request.GET.get('page')
@@ -248,13 +250,13 @@ def toggle_follow(request, follow_id, unfollow):
         user = User.objects.get(pk=request.user.id)
     except User.DoesNotExist:
         return JsonResponse({
-        'error': 'User does not exist'
+        'error': ERROR_USER
         }, status=404)
     try:
         user_to_follow = User.objects.get(pk=follow_id)
     except User.DoesNotExist:
         return JsonResponse({
-        'error': 'User to follow does not exist'
+        'error': ERROR_USER
         }, status=404)
 
     if unfollow:

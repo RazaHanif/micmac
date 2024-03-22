@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import User, Email
 
+REG = "mail/register.html"
 
 def index(request):
 
@@ -160,7 +161,7 @@ def register(request):
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            return render(request, "mail/register.html", {
+            return render(request, REG, {
                 "message": "Passwords must match."
             })
 
@@ -170,10 +171,10 @@ def register(request):
             user.save()
         except IntegrityError as e:
             print(e)
-            return render(request, "mail/register.html", {
+            return render(request, REG, {
                 "message": "Email address already taken."
             })
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
-        return render(request, "mail/register.html")
+        return render(request, REG)
