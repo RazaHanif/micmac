@@ -86,7 +86,7 @@ def register(request):
 
 
 ''' API ROUTES '''
-''' see todo.md '''
+''' see notes.md '''
 
 # will probably need to add in @csrf_exempts here
 
