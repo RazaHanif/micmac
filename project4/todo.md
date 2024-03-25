@@ -25,13 +25,11 @@
     
 ## Server Side: API ROUTES
 ### newPost(current_user_id, content): POST
-        required input from client, current user id & content
-
+        Used to create a new post by current user
         json {
-            user: current user
-            content: the content
+            post: <str:content>
         }
-
+        
         check if current user exists
         check if content is within max_length constraint
         if either fail output
