@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -7,12 +8,9 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-from datetime import datetime
 from time import sleep
 
 from .models import User, Post, Comment
-
-# See todo.md for server side docs
 
 # Constants just to avoid the sonarlint errors
 REG = 'network/register.html'
@@ -22,17 +20,17 @@ INPUT_ERROR = 'Method Inputs are Invalid'
 ERROR_POST = 'POST request required'
 ERROR_PUT = 'PUT request requireds'
 ERROR_GET = 'GET request required'
-
 TWEET_MAX = 280
 TWEET_MIN = 4
 
 ''' Default paths '''
-# Home page
+# Prewritten - Default Route
 def index(request):
+    # Renders Homepage
     return render(request, 'network/index.html')
 
 
-# Logs user in
+# Prewritten - Logs user in
 def login_view(request):
     if request.method == 'POST':
 
@@ -53,13 +51,13 @@ def login_view(request):
         return render(request, 'network/login.html')
 
 
-# Logs user out
+# Prewritten - Logs user out
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
 
 
-# Creates new User
+# Prewritten - Creates new User
 def register(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -87,7 +85,8 @@ def register(request):
         return render(request, REG)
 
 
-''' API ROUTES -- see todo.md '''
+''' API ROUTES '''
+''' see todo.md '''
 
 # Creates new post in db
 # POST
