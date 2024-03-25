@@ -85,8 +85,10 @@ def register(request):
         return render(request, REG)
 
 
-''' API ROUTES '''
-''' see notes.md '''
+''' 
+    API ROUTES
+    see notes.md for usage 
+'''
 
 # will probably need to add in @csrf_exempts here
 
