@@ -139,7 +139,6 @@ def new_post(request):
     }, status=201)
 
 
-
 # Updates contents of a given post in db
 # PUT 
 @login_required
@@ -202,7 +201,6 @@ def edit_post(request):
     }, status=200)
         
 
-
 # Returns all posts from db in reveres chrono order
 # GET
 def all_posts(request):
@@ -261,7 +259,7 @@ def this_post(request):
 
 # Returns all posts from a given user
 # GET
-def their_posts(request):
+def user_posts(request):
     if request.method != 'GET':
         return JsonResponse({
             'error': ERROR_GET
