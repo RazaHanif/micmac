@@ -88,22 +88,27 @@ def register(request):
 ''' API ROUTES '''
 ''' see todo.md '''
 
+# will probably need to add in @csrf_exempts here
+
+
 # Creates new post in db
 # POST
 @login_required
 def new_post(request):
+    # Error if request method is not correct
     if request.method != 'POST':
         return JsonResponse({
             'error': ERROR_POST
         }, status=405)
     
+    # Gets/Checks data from client
     data = json.loads(request.body)
     if not (tweet := data.get("post", "")):
         return JsonResponse({
             'error': INPUT_ERROR
         }, status=400)
     
-    
+    # Server side validation of data
     if len(tweet) > TWEET_MAX:
         return JsonResponse({
             'error': 'Post exceeds max length'
@@ -113,8 +118,8 @@ def new_post(request):
         return JsonResponse({
             'error': 'Tweet does not meet min length'
         }, status=400)
-        
-    # Not required but just incase
+    
+    # Should not be an issue but just incase hackermans get in
     try:
         current_user = User.objects.get(pk=request.user.id)
     except User.DoesNotExist:
@@ -122,6 +127,7 @@ def new_post(request):
             'error': NO_USER_ERROR
         }, status=404)
 
+    # Create & Save post
     post = Post.objects.create(
         content=tweet,
         date=datetime.now(),
@@ -130,9 +136,10 @@ def new_post(request):
     )
     post.save()
     
-    # fake delay, just wanna see what happens in js
-    sleep(3)
+    # fake delay, just wanna see what happens on client side
+    sleep(2)
     
+    # All good message
     return JsonResponse({
         'message': 'Tweet Created'
     }, status=201)
@@ -142,22 +149,24 @@ def new_post(request):
 # PUT 
 @login_required
 def edit_post(request):
+    # Error if request method is not correct
     if request.method != 'PUT':
         return JsonResponse({
             'error': ERROR_PUT
         }, status=405)
         
-    # Get data from POST request
+    # Get/Check data from client
     data = json.loads(request.body)
     if not (tweet := data.get("post", "")):
         return JsonResponse({
             'error': INPUT_ERROR
         }, status=400)
-    if not (post := data.get("post_id", "")):
+    if not (post_id := data.get("post_id", "")):
         return JsonResponse({
             'error': INPUT_ERROR
         }, status=400)
         
+    # Server side validation of data
     if len(tweet) > TWEET_MAX:
         return JsonResponse({
             'error': 'Tweet exceeds max length'
@@ -175,26 +184,27 @@ def edit_post(request):
         return JsonResponse({
             'error': NO_USER_ERROR
         }, status=404)
-    
+        
     try:
         post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
         return JsonResponse({
             'error': NO_POST_ERROR
         }, status=404)
-
     if post.user != current_user:
         return JsonResponse({
             'error': 'Current User is not Post Creator'
         }, status=403)
     
+    # Update content
     post.content = tweet
     post.edited = True
     post.save()
     
     # fake delay, just wanna see what happens in js
-    sleep(3)
+    sleep(2)
     
+    # All good message
     return JsonResponse({
         'message': 'Success'
     }, status=200)
@@ -203,18 +213,21 @@ def edit_post(request):
 # Returns all posts from db in reveres chrono order
 # GET
 def all_posts(request):
+    # Error if request method is not correct
     if request.method != 'GET':
         return JsonResponse({
             'error': ERROR_GET
         }, status=405)
     
+    # Gets all posts from db in reverse chrono order
+    # If no posts returns error - might get rid of this
     posts = Post.objects.all().order_by('-date') 
-
     if not posts.exists():
         return JsonResponse({
             'error': NO_POST_ERROR
         }, status=404)
     
+    # Django Paginator implementation
     page_num = request.GET.get('page')
     p = Paginator(posts, 10)
     page_obj = p.get_page(page_num)
@@ -225,23 +238,27 @@ def all_posts(request):
         'next': page_obj.has_next
     } 
 
+    # All good response message
     return JsonResponse(data, safe=False, status=200)
 
 
 # Returns a given post from the db
 # GET
 def this_post(request):
+    # Error if request method is not correct
     if request.method != 'GET':
         return JsonResponse({
             'error': ERROR_GET
         }, status=405)
         
+    # Get/Check data from client
     data = json.loads(request.body)
     if not (post_id := data.get("post_id", "")):
         return JsonResponse({
             'error': INPUT_ERROR
         }, status=400)
     
+    # Server side data validation
     try:
         post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
@@ -249,6 +266,7 @@ def this_post(request):
             'error': NO_POST_ERROR
         }, status=404)
     
+    # All good response
     return JsonResponse(
         post.as_dict(),
         safe=False,
@@ -259,17 +277,20 @@ def this_post(request):
 # Returns all posts from a given user
 # GET
 def user_posts(request):
+    # Checks if request method is not correct
     if request.method != 'GET':
         return JsonResponse({
             'error': ERROR_GET
         }, status=405)
 
+    # Get/Check data from client
     data = json.loads(request.body)
     if not (user_id := data.get("user_id", "")):
         return JsonResponse({
             'error': INPUT_ERROR
         }, status=400)
 
+    # Server side data validation
     try:
         user = User.objects.get(pk=user_id)
     except User.DoesNotExist:
@@ -277,13 +298,15 @@ def user_posts(request):
             'error': NO_USER_ERROR
         }, status=404)
     
+    # Gets all posts from user in reverse chrono order
+    # if no posts error -- might delete
     posts = Post.objects.filter(creater=user).order_by('-date')
-    
     if not posts.exists():
        return JsonResponse({
             'error': NO_POST_ERROR
         }, status=404)
 
+    # Django Paginator implementation
     page_num = request.GET.get('page')
     p = Paginator(posts, 10)
     page_obj = p.get_page(page_num)
@@ -294,6 +317,7 @@ def user_posts(request):
         'next': page_obj.has_next
     } 
 
+    # All good response
     return JsonResponse(data, safe=False, status=200)
 
 
@@ -301,19 +325,22 @@ def user_posts(request):
 # GET
 @login_required
 def following_posts(request):
+    # Error if request method is not correct
     if request.method != 'GET':
         return JsonResponse({
             'error': ERROR_GET
         }, status=405)
 
+    # Get user and posts from db
+    # If no posts return error -- might delete
     following = User.objects.get(pk=request.user.id).following.all()
     posts = Post.objects.filter(creater__in=following).order_by('-date')
-    
     if not posts.exists():
        return JsonResponse({
             'error': NO_POST_ERROR
         }, status=404)
 
+    # Django Paginator Implementation
     page_num = request.GET.get('page')
     p = Paginator(posts, 10)
     page_obj = p.get_page(page_num)
@@ -324,6 +351,7 @@ def following_posts(request):
         'next': page_obj.has_next
     } 
 
+    # All good response
     return JsonResponse(data, safe=False, status=200)
 
 
@@ -331,11 +359,13 @@ def following_posts(request):
 # PUT
 @login_required
 def follow(request):
+    # Error if request method is not correct
     if request.method != 'PUT':
         return JsonResponse({
             'error': ERROR_PUT
         }, status=405)
         
+    # Call internal toggle method
     return toggle_follow(request, False)
 
 
@@ -343,24 +373,28 @@ def follow(request):
 # PUT
 @login_required
 def unfollow(request):
+    # Error if request method is not correct
     if request.method == 'PUT':
         return JsonResponse({
             'error': ERROR_PUT
         }, status=405)
 
+    # Call internal toggle method
     return toggle_follow(request, True)
 
 
 # Handles logic to change following status
 # Internal
 def toggle_follow(request, unfollow):
-    data = json.loads(request.body)
     
+    # Get/Check data from client
+    data = json.loads(request.body)
     if not (user_to_follow_id := data.get("follow_id", "")):
         return JsonResponse({
             'error': INPUT_ERROR
         }, status=400)
-        
+
+    # Server side validation of data
     try:
         user = User.objects.get(pk=request.user.id)
     except User.DoesNotExist:
@@ -374,6 +408,7 @@ def toggle_follow(request, unfollow):
         'error': NO_USER_ERROR
         }, status=404)
 
+    # Update db
     if unfollow:
         user.following.remove(user_to_follow)
     else:
@@ -381,6 +416,7 @@ def toggle_follow(request, unfollow):
         
     user.save()
     
+    # All good response
     return JsonResponse({
         'message': 'Success'
     }, status=200)
@@ -390,11 +426,13 @@ def toggle_follow(request, unfollow):
 # PUT
 @login_required
 def like(request):
+    # Error if request method is not correct
     if request.method != 'PUT':
         return JsonResponse({
             'error': ERROR_PUT
         }, status=405)
     
+    # Call internal method
     return toggle_like(request, False)
 
 
@@ -402,31 +440,33 @@ def like(request):
 # PUT
 @login_required
 def unlike(request):
+    # Error if request method is not correct
     if request.method != 'PUT':
         return JsonResponse({
             'error': ERROR_PUT
         }, status=405)
         
+    # Call internal method
     return toggle_like(request, True)
 
 
 # Handles logic to change like staus
 # Internal
 def toggle_like(request, unlike):
+    # Get/Check data from client
     data = json.loads(request.body)
-    
     if not (post_id := data.get("post_id", "")):
         return JsonResponse({
             'error': INPUT_ERROR
         }, status=400)
     
+    # Server side validation of data
     try:
         post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
         return JsonResponse({
             'error': NO_POST_ERROR
         }, status=404)
-    
     try:
         user = User.objects.get(pk=request.user.id)
     except User.DoesNotExist:
@@ -434,11 +474,15 @@ def toggle_like(request, unlike):
             'error': NO_USER_ERROR
         }, status=404)
     
+    # Update db
     if unlike:
         post.likes.remove(user)
     else:
         post.likes.add(user)
-        
+    
+    post.save()
+    
+    # All good response 
     return JsonResponse({
         'message': 'Success'
     }, status=200)
@@ -447,11 +491,13 @@ def toggle_like(request, unlike):
 # Allows current user to create a comment on a given post
 # POST
 def create_comment(request):
+    # Error if request method is not correct
     if request.method != "POST":
         return JsonResponse({
             'error': ERROR_POST
         }, status=405)
     
+    # Get/Check data from client
     data = json.loads(request.body)
     if not (post_id := data.get("post_id", "")):
         return JsonResponse({
@@ -462,19 +508,17 @@ def create_comment(request):
             'error': INPUT_ERROR
         }, status=400)
     
-    
+    # Server side validation
     if len(comment) > TWEET_MAX:
         return JsonResponse({
             'error': 'Tweet exceeds max length'
         }, status=400)
-        
     try:
         post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
         return JsonResponse({
             'error': NO_POST_ERROR
         }, status=404)
-    
     try:
         user = User.objects.get(pk=request.user.id)
     except Post.DoesNotExist:
@@ -482,6 +526,7 @@ def create_comment(request):
             'error': NO_USER_ERROR
         }, status=404)
     
+    # Create new comment in db
     comment = Comment.objects.create(
         comment=comment,
         post=post,
@@ -490,10 +535,9 @@ def create_comment(request):
     comment.save()
     
     # fake delay, just wanna see what happens in js
-    sleep(3)
+    sleep(2)
     
+    # All good response
     return JsonResponse({
         'message': 'Comment Created'
     }, status=201)
-            
-
