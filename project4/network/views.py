@@ -20,6 +20,8 @@ INPUT_ERROR = 'Method Inputs are Invalid'
 ERROR_POST = 'POST request required'
 ERROR_PUT = 'PUT request requireds'
 ERROR_GET = 'GET request required'
+
+# Min max that can be altered later
 TWEET_MAX = 280
 TWEET_MIN = 4
 
