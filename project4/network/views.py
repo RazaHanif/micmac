@@ -22,8 +22,8 @@ ERROR_PUT = 'PUT request requireds'
 ERROR_GET = 'GET request required'
 
 # Min max that can be altered later
-TWEET_MAX = 280
-TWEET_MIN = 4
+POST_MAX = 280
+POST_MIN = 4
 
 ''' Default paths '''
 # Prewritten - Default Route
@@ -107,18 +107,18 @@ def new_post(request):
     
     # Gets/Checks data from client
     data = json.loads(request.body)
-    if not (tweet := data.get("post", "")):
+    if not (post := data.get("post", "")):
         return JsonResponse({
             'error': INPUT_ERROR
         }, status=400)
     
     # Server side validation of data
-    if len(tweet) > TWEET_MAX:
+    if len(post) > POST_MAX:
         return JsonResponse({
             'error': 'Post exceeds max length'
         }, status=400)
         
-    if len(tweet) < TWEET_MIN:
+    if len(post) < POST_MIN:
         return JsonResponse({
             'error': 'Tweet does not meet min length'
         }, status=400)
@@ -133,7 +133,7 @@ def new_post(request):
 
     # Create & Save post
     post = Post.objects.create(
-        content=tweet,
+        content=post,
         date=datetime.now(),
         edited=False,
         user=current_user,
@@ -161,7 +161,7 @@ def edit_post(request):
         
     # Get/Check data from client
     data = json.loads(request.body)
-    if not (tweet := data.get("post", "")):
+    if not (post := data.get("post", "")):
         return JsonResponse({
             'error': INPUT_ERROR
         }, status=400)
@@ -171,12 +171,12 @@ def edit_post(request):
         }, status=400)
         
     # Server side validation of data
-    if len(tweet) > TWEET_MAX:
+    if len(post) > POST_MAX:
         return JsonResponse({
             'error': 'Tweet exceeds max length'
         }, status = 400)
         
-    if len(tweet) < TWEET_MIN:
+    if len(post) < POST_MIN:
         return JsonResponse({
             'error': 'Tweet does not meet min length'
         }, status=400)
@@ -201,7 +201,7 @@ def edit_post(request):
         }, status=403)
     
     # Update content
-    post.content = tweet
+    post.content = post
     post.edited = True
     post.save()
     
@@ -513,7 +513,7 @@ def create_comment(request):
         }, status=400)
     
     # Server side validation
-    if len(comment) > TWEET_MAX:
+    if len(comment) > POST_MAX:
         return JsonResponse({
             'error': 'Tweet exceeds max length'
         }, status=400)

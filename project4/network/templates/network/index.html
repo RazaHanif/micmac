@@ -1,5 +1,44 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+<div id="main">
+
+    <div id="sidebar-left">
+        <div class="nav-list">
+            <p>Following</p>
+            <p>Profile</p>
+            <p>Explore</p>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="post-container">
+            <div class="post-top">
+                <p class="username text-info">Username</p>
+                <p class="date">March 8, 2024</p>
+            </div>
+            <div class="post-upper-middle">
+                <div class="post-content">This Twitter stuff is annoying!</div>
+            </div>
+            <div class="post-lower-middle">
+                <p class="edited">edited</p>
+            </div>
+            <div class="post-bottom">
+                <div class="bottom-left">
+                    <div class="like-btn">&lt;3</div>
+                    <p class="like-count">123</p>
+                </div>
+                <div class="bottom-center">
+                    <div class="comments">Comments go here!</div>
+                </div>
+                <div class="bottom-right">
+                    <div class="edit-btn text-muted">Edit</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="sidebar-right">
+
+    </div>
+</div>
 {% endblock %}
