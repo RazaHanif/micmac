@@ -1,9 +1,4 @@
-/* 
-    Copy func to toggle popup from email project
-    Use this to create functionality to create new post
-        push to correct api route
-*/
-
+// do all the basic on load stuff up here first
 
 // Create new post -- still need to add this in html
 function open_new_popup() {
