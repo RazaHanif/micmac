@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', () => compose_email());
-	document.querySelector('#email-button').addEventListener('click', close_popup);
+  document.querySelector('#email-button').addEventListener('click', close_popup);
 
   // By default, load the inbox
   load_mailbox('inbox');
