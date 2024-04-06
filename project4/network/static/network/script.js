@@ -1,20 +1,23 @@
-// do all the basic on load stuff up here first
+// Basic stuff to initialize onload
+document.addEventListener('DOMContentLoaded', function() {
+
+    // Use buttons to toggle between views
+    document.querySelector('#new-btn').addEventListener('click', open_new_popup);
+    // document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
+  
+    // By default, load all posts
+    load_posts('all');
+});
+
+how = 'How did you get here?'
 
 // Create new post -- still need to add this in html
 function open_new_popup() {
-    /* 
-        New email popup should have
-            P - User name
-            Form Text Input - Post
-            Btn - Create New Post
-    */
-
     // Load all info into new post popup
     document.querySelector('#new-user').value = username
     document.querySelector('#new-post').value = ''
     document.querySelector('#new-submit-btn').addEventListener('click', create_new_post)
     document.querySelector('#new-close-btn').addEventListener('click', close_new_popup)
-
 
     // Run animation to display the popup
 	let fill = document.querySelector('#fill-layer')
@@ -27,11 +30,11 @@ function open_new_popup() {
 
 // Close the new post popup
 function close_new_popup() {
-	// Reset all the values for next email
+	// Reset all the values for next post (redundent but just incase)
     document.querySelector('#new-user').value = ''
     document.querySelector('#new-post').value = ''
 
-    // Remove eventlisteners
+    // Remove eventlisteners (redundent but just incase) 
     document.querySelector('#new-submit-btn').removeEventListener('click', create_new_post)
     document.querySelector('#new-close-btn').removeEventListener('click', close_new_popup)
 
@@ -46,9 +49,8 @@ function close_new_popup() {
 }
 
 function create_new_post() {
-
     // Create some second fill layer that has a loading gif
-    // Until the route returns something
+    // Create the post in the db
     fetch('/add', {
         method: 'POST',
         body: JSON.stringify({
@@ -81,6 +83,47 @@ function create_new_post() {
     or make it so that you can choose what data is displayed
     instead of creating a different func for each "Page"
 */
+
+// type = all | user | following
+function load_posts(type) {
+    let url;
+    switch(type) {
+        case "all":
+            url = '/posts'
+            break;
+        case "user":
+            url = '/user_posts'
+            break;
+        case "following":
+            url = '/following_posts'
+            break
+        default:
+            console.log(how)
+            return how
+    }
+
+    fetch(url)
+    .then(response => response.json())
+    /* 
+        Finish the implementation of how posts with the right info
+    */
+    .then(posts => {
+      posts.forEach(post => {  
+              const element = document.createElement('div')
+              element.className = 'post-container'
+              element.innerHTML = output
+              element.className = 'email_div'
+              if (email.read && mailbox === 'inbox') {
+                  element.className += ' read'
+              }
+              element.addEventListener('click', () => {
+                  open_popup(email.id)
+              })
+  
+              document.querySelector('#emails-view').append(element)
+      });
+    })
+}
 
 /* 
     For the posts use the hierarchy layed out in the index.html

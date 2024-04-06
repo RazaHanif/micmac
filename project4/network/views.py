@@ -237,7 +237,7 @@ def all_posts(request):
     page_obj = p.get_page(page_num)
     
     data = {
-        'objects': serialize('json', list(page_obj.object_list)),
+        'posts': serialize('json', list(page_obj.object_list)),
         'prev': page_obj.has_previous,
         'next': page_obj.has_next
     } 
@@ -316,7 +316,7 @@ def user_posts(request):
     page_obj = p.get_page(page_num)
     
     data = {
-        'objects': serialize('json', list(page_obj.object_list)),
+        'posts': serialize('json', list(page_obj.object_list)),
         'prev': page_obj.has_previous,
         'next': page_obj.has_next
     } 
@@ -350,7 +350,7 @@ def following_posts(request):
     page_obj = p.get_page(page_num)
     
     data = {
-        'objects': serialize('json', list(page_obj.object_list)),
+        'posts': serialize('json', list(page_obj.object_list)),
         'prev': page_obj.has_previous,
         'next': page_obj.has_next
     } 
