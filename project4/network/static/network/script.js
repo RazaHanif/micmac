@@ -2,22 +2,22 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     // Use buttons to toggle between views
-    document.querySelector('#new-btn').addEventListener('click', open_new_popup);
+    document.querySelector('#new-btn').addEventListener('click', openNewPopup);
     // document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   
     // By default, load all posts
-    load_posts('all');
+    loadPosts('all');
 });
 
 how = 'How did you get here?'
 
 // Create new post -- still need to add this in html
-function open_new_popup() {
+function openNewPopup() {
     // Load all info into new post popup
     document.querySelector('#new-user').value = username
     document.querySelector('#new-post').value = ''
-    document.querySelector('#new-submit-btn').addEventListener('click', create_new_post)
-    document.querySelector('#new-close-btn').addEventListener('click', close_new_popup)
+    document.querySelector('#new-submit-btn').addEventListener('click', createNewPost)
+    document.querySelector('#new-close-btn').addEventListener('click', closeNewPopup)
 
     // Run animation to display the popup
 	let fill = document.querySelector('#fill-layer')
@@ -29,14 +29,14 @@ function open_new_popup() {
 }
 
 // Close the new post popup
-function close_new_popup() {
+function closeNewPopup() {
 	// Reset all the values for next post (redundent but just incase)
     document.querySelector('#new-user').value = ''
     document.querySelector('#new-post').value = ''
 
     // Remove eventlisteners (redundent but just incase) 
-    document.querySelector('#new-submit-btn').removeEventListener('click', create_new_post)
-    document.querySelector('#new-close-btn').removeEventListener('click', close_new_popup)
+    document.querySelector('#new-submit-btn').removeEventListener('click', createNewPost)
+    document.querySelector('#new-close-btn').removeEventListener('click', closeNewPopup)
 
 
 	// Run animation to close the popup
@@ -48,7 +48,7 @@ function close_new_popup() {
 	fill.style.animationPlayState = 'running'
 }
 
-function create_new_post() {
+function createNewPost() {
     // Create some second fill layer that has a loading gif
     // Create the post in the db
     fetch('/add', {
@@ -61,7 +61,7 @@ function create_new_post() {
     .then(data => {
         if ("message" in data){
             // Stop loading animation or turn it into a check
-            close_new_popup()
+            closeNewPopup()
         }
         else {
             // Error handling
@@ -85,7 +85,7 @@ function create_new_post() {
 */
 
 // type = all | user | following
-function load_posts(type) {
+function loadPosts(type) {
     let url;
     switch(type) {
         case "all":
@@ -108,39 +108,91 @@ function load_posts(type) {
         Finish the implementation of how posts with the right info
     */
     .then(posts => {
-      posts.forEach(post => {
-            const post_username = document.createElement('p')
-            post_username.className = 'username text-info'
-            post_username.innerHTML = post.user
-
-
-
-            const top = document.createElement('div')    
-        
-        
-        
-        
-        
-        const container = document.createElement('div')
+        posts.forEach(post => {
+            const container = document.createElement('div')
             container.className = 'post-container'
 
+            const top = document.createElement('div')
+            top.className = 'post-top'
 
+            const postUsername = document.createElement('p')
+            postUsername.className = 'username text-info'
+            postUsername.innerHTML = post.creator
+            
+            const postDate = document.createElement('p')
+            postDate.className = 'date'
+            postDate.innerHTML = post.date
 
+            top.append(postUsername, postDate)
+            container.append(top)
 
+            const upper = document.createElement('div')
+            upper.className = 'post-upper-middle'
 
+            const content = document.createElement('div')
+            content.className = 'post-content'
+            content.innerHTML = post.content
 
-              const element = document.createElement('div')
-              element.innerHTML = output
-              element.className = 'email_div'
-              if (email.read && mailbox === 'inbox') {
-                  element.className += ' read'
-              }
-              element.addEventListener('click', () => {
-                  open_popup(email.id)
-              })
-  
-              document.querySelector('#content').append(element)
-      });
+            upper.append(content)
+            container.append(upper)
+
+            const lower = document.createElement('div')
+            lower.className = 'post-lower-middle'
+
+            const editedFlag = document.createElement('p')
+            editedFlag.className = 'edited'
+            editedFlag.innerHTML = 'Edited'
+            if (post.edited) {
+                editedFlag.style.opacity = 100
+            } else {
+                editedFlag.style.opacity = 0
+            }
+
+            lower.append(editedFlag)
+            container.append(upper)
+
+            const bottom = document.createElement('div')
+            bottom.className = 'post-bottom'
+
+            const bottomLeft = document.createElement('div')
+            bottomLeft.className = 'bottom-left'
+
+            const likeBtn = document.createElement('div')
+            likeBtn.className = 'like-btn'
+            likeBtn.addEventListener('click', () => toggleLike(post.id))
+            likeBtn.innerHTML = '&lt;3'
+            const likeCount = document.createElement('p')
+            likeCount.className = 'like-count'
+            // Figure this part out, will need to add somthing in the api to calculate the count
+            likeCount.innerHTML = '...'
+
+            bottomLeft.append(likeBtn, likeCount)
+            bottom.append(bottomLeft)
+
+            const bottomCenter = document.createElement('div')
+            bottomCenter.className = 'bottom-center'
+
+            const comments = document.createElement('div')
+            comments.className = 'post-comments'
+            // Forgot to create an api route for this. Create a way to get all comments for a given post
+            comments.innerHTML = 'comments go here.....'
+
+            bottomCenter.append(comments)
+            bottom.append(bottomCenter)
+
+            const bottomRight = document.createElement('div')
+            bottomRight.className = 'bottom-right'
+
+            const editBtn = document.createElement('div')
+            editBtn.className = 'edit-btn text-muted'
+            editBtn.innerHTML = 'EditThisShit'
+            editBtn.addEventListener('click', () => editPost(post.id))
+
+            bottomRight.append(editBtn)
+            bottom.append(bottomRight)
+
+            container.append(bottom)
+        })
     })
 }
 
