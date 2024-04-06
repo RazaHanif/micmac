@@ -108,9 +108,28 @@ function load_posts(type) {
         Finish the implementation of how posts with the right info
     */
     .then(posts => {
-      posts.forEach(post => {  
+      posts.forEach(post => {
+            const post_username = document.createElement('p')
+            post_username.className = 'username text-info'
+            post_username.innerHTML = post.user
+
+
+
+            const top = document.createElement('div')    
+        
+        
+        
+        
+        
+        const container = document.createElement('div')
+            container.className = 'post-container'
+
+
+
+
+
+
               const element = document.createElement('div')
-              element.className = 'post-container'
               element.innerHTML = output
               element.className = 'email_div'
               if (email.read && mailbox === 'inbox') {
@@ -120,7 +139,7 @@ function load_posts(type) {
                   open_popup(email.id)
               })
   
-              document.querySelector('#emails-view').append(element)
+              document.querySelector('#content').append(element)
       });
     })
 }
