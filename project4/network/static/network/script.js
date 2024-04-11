@@ -87,6 +87,9 @@ function createNewPost() {
 // type = all | user | following
 function loadPosts(type) {
     let url;
+
+    // Just realized this wont work cuz user_posts needs a body: JSON.stringfy({user_id:num})
+    // Maybe create 3 seperate functions then use this fucntion to render posts
     switch(type) {
         case "all":
             url = '/posts'
@@ -195,10 +198,3 @@ function loadPosts(type) {
         })
     })
 }
-
-/* 
-    For the posts use the hierarchy layed out in the index.html
-    create dynamically obvs
-
-    idk maybe avoid react for this project and update it with that later??
-*/
