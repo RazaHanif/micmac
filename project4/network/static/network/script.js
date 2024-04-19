@@ -1,3 +1,11 @@
+/* 
+    Populate all posts onto home page
+    Use django fixtures to create some fake posts? 
+    https://docs.djangoproject.com/en/stable/howto/initial-data/
+
+    Still need to add popup to html, try to make 1 popup for both new & edit
+*/
+
 // Basic stuff to initialize onload
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -9,11 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
     loadAllPosts();
 });
 
-how = 'How did you get here?'
-
 // New posts 
-// -- still need to add this in html
-// Try to make 1 popup for both new & edit
+
+// Open popup initalized for new post
 function openNewPopup() {
     // Load all info into new post popup
     document.querySelector('#popup-user').value = username
@@ -50,6 +56,7 @@ function closeNewPopup() {
 	fill.style.animationPlayState = 'running'
 }
 
+// Send the post to the db
 function createNewPost() {
     // Create some second fill layer that has a loading gif
     // Create the post in the db
@@ -75,15 +82,15 @@ function createNewPost() {
     })
 }
 
-// Edit posts 
-// -- still need to add this in html
-// Try to make 1 popup for both new & edit
-function openEditPopup(postId) {
-    // Get the info for the post to edit
 
+// Edit posts 
+
+// Open popup initalized for editing this post
+function openEditPopup(postId) {
     let currentPost
     let post_id
-
+    
+    // Get the info for the post to edit
     fetch('/post', {
         method: 'GET',
         body: JSON.stringify({
@@ -91,15 +98,16 @@ function openEditPopup(postId) {
         })
     })
     .then(response => response.json())
+    // Just incase post doesn't exist
     .then(response => {
         if (response.status != 200){
             const error = new Error(response.error)
             error.name = "LoadingThisPostError"
         }
     })
-    .then(posts => {
-        currentPost = content
-        post_id = id
+    .then(data => {
+        currentPost = data.content
+        post_id = data.id
     })
     .catch(error => {
         if (error?.name == "LoadingThisPostError") {
@@ -110,7 +118,7 @@ function openEditPopup(postId) {
     // Load all info into new post popup
     document.querySelector('#popup-user').value = username
     document.querySelector('#popup-post').value = currentPost
-    document.querySelector('#popup-submit-btn').addEventListener('click', () => editPost(post_id))
+    document.querySelector('#popup-submit-btn').addEventListener('click', () => editThisPost(post_id))
     document.querySelector('#popup-close-btn').addEventListener('click', closeEditPopup)
 
     // Run animation to display the popup
@@ -124,12 +132,12 @@ function openEditPopup(postId) {
 
 // Close the edit post popup
 function closeEditPopup() {
-	// Reset all the values for next post (redundent but just incase)
+	// Reset all the values for next post (just incase)
     document.querySelector('#popup-user').value = ''
     document.querySelector('#popup-post').value = ''
 
-    // Remove eventlisteners (redundent but just incase) 
-    document.querySelector('#popup-submit-btn').removeEventListener('click', () => editPost(post_id))
+    // Remove eventlisteners (just incase) 
+    document.querySelector('#popup-submit-btn').removeEventListener('click', () => editThisPost(post_id))
     document.querySelector('#popup-close-btn').removeEventListener('click', closeEditPopup)
 
 
@@ -142,13 +150,14 @@ function closeEditPopup() {
 	fill.style.animationPlayState = 'running'
 }
 
-function editPost(postId) {
+// Should send the edited post to the db
+function editThisPost(postId) {
     // Create some second fill layer that has a loading gif
-    // Create the post in the db
+    // Edit the post in the db
     fetch('/add', {
         method: 'PUT',
         body: JSON.stringify({
-            post: document.querySelector('#new-post').value,
+            post: document.querySelector('#popup-post').value,
             post_id: postId,
         })
     })
@@ -169,21 +178,14 @@ function editPost(postId) {
 }
 
 
-/* 
-    Populate all posts onto home page
-    Use django fixtures to create some fake posts? 
-    https://docs.djangoproject.com/en/stable/howto/initial-data/
 
-    Make this a reusable function that can be called from within other routes
-    or make it so that you can choose what data is displayed
-    instead of creating a different func for each "Page"
-*/
 
-// Routes to get posts (all, user, following)
+// Routes to get posts (All, User, Following)
 // All use the renderPosts method to display posts on page
 // Kinda built in error check that will just console log error (can make this better)
-
 // Will need to add functionality to display which route is selected
+
+// Loads all posts
 function loadAllPosts() {
     fetch('/posts')
     .then(response => response.json())
@@ -201,6 +203,7 @@ function loadAllPosts() {
     })
 }
 
+// Loads only this users posts
 function loadUserPosts(userId) {
     fetch('/user_posts', {
         method: 'GET',
@@ -223,6 +226,7 @@ function loadUserPosts(userId) {
     })
 }
 
+// Loads all posts from users that current user follows
 function loadFollowingPosts() {
     fetch('/following_posts')
     .then(response => response.json())
@@ -240,6 +244,8 @@ function loadFollowingPosts() {
     })
 }
 
+// IDK if this is needed
+// this post is really only to get post info to edit it
 function loadThisPost(postId) {
     fetch('/post', {
         method: 'GET',
@@ -350,7 +356,7 @@ function renderPosts(posts) {
         const editBtn = document.createElement('div')
         editBtn.className = 'edit-btn text-muted'
         editBtn.innerHTML = 'EditThisShit'
-        editBtn.addEventListener('click', () => editPost(post.id))
+        editBtn.addEventListener('click', () => editThisPost(post.id))
 
         bottomRight.append(editBtn)
         bottom.append(bottomRight)
