@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   
     // By default, load all posts
-    loadPosts('all');
+    loadAllPosts();
 });
 
 how = 'How did you get here?'
@@ -84,117 +84,183 @@ function createNewPost() {
     instead of creating a different func for each "Page"
 */
 
-// type = all | user | following
-function loadPosts(type) {
-    let url;
+// Routes to get posts (all, user, following)
+// All use the renderPosts method to display posts on page
+// Kinda built in error check that will just console log error (can make this better)
 
-    // Just realized this wont work cuz user_posts needs a body: JSON.stringfy({user_id:num})
-    // Maybe create 3 seperate functions then use this fucntion to render posts
-    switch(type) {
-        case "all":
-            url = '/posts'
-            break;
-        case "user":
-            url = '/user_posts'
-            break;
-        case "following":
-            url = '/following_posts'
-            break
-        default:
-            console.log(how)
-            return how
-    }
-
-    fetch(url)
+// Will need to add functionality to display which route is selected
+function loadAllPosts() {
+    fetch('/posts')
     .then(response => response.json())
-    /* 
-        Finish the implementation of how posts with the right info
-    */
-    .then(posts => {
-        posts.forEach(post => {
-            const container = document.createElement('div')
-            container.className = 'post-container'
+    .then(response => {
+        if (response.status != 200){
+            const error = new Error(response.message)
+            error.name = "LoadingAllPostsError"
+        }
+    })
+    .then(renderPosts(posts))
+    .catch(error => {
+        if (error?.name == "LoadingAllPostsError") {
+            console.log(error)
+        }
+    })
+}
 
-            const top = document.createElement('div')
-            top.className = 'post-top'
-
-            const postUsername = document.createElement('p')
-            postUsername.className = 'username text-info'
-            postUsername.innerHTML = post.creator
-            
-            const postDate = document.createElement('p')
-            postDate.className = 'date'
-            postDate.innerHTML = post.date
-
-            top.append(postUsername, postDate)
-            container.append(top)
-
-            const upper = document.createElement('div')
-            upper.className = 'post-upper-middle'
-
-            const content = document.createElement('div')
-            content.className = 'post-content'
-            content.innerHTML = post.content
-
-            upper.append(content)
-            container.append(upper)
-
-            const lower = document.createElement('div')
-            lower.className = 'post-lower-middle'
-
-            const editedFlag = document.createElement('p')
-            editedFlag.className = 'edited'
-            editedFlag.innerHTML = 'Edited'
-            if (post.edited) {
-                editedFlag.style.opacity = 100
-            } else {
-                editedFlag.style.opacity = 0
-            }
-
-            lower.append(editedFlag)
-            container.append(upper)
-
-            const bottom = document.createElement('div')
-            bottom.className = 'post-bottom'
-
-            const bottomLeft = document.createElement('div')
-            bottomLeft.className = 'bottom-left'
-
-            const likeBtn = document.createElement('div')
-            likeBtn.className = 'like-btn'
-            likeBtn.addEventListener('click', () => toggleLike(post.id))
-            likeBtn.innerHTML = '&lt;3'
-            const likeCount = document.createElement('p')
-            likeCount.className = 'like-count'
-            // Figure this part out, will need to add somthing in the api to calculate the count
-            likeCount.innerHTML = '...'
-
-            bottomLeft.append(likeBtn, likeCount)
-            bottom.append(bottomLeft)
-
-            const bottomCenter = document.createElement('div')
-            bottomCenter.className = 'bottom-center'
-
-            const comments = document.createElement('div')
-            comments.className = 'post-comments'
-            // Forgot to create an api route for this. Create a way to get all comments for a given post
-            comments.innerHTML = 'comments go here.....'
-
-            bottomCenter.append(comments)
-            bottom.append(bottomCenter)
-
-            const bottomRight = document.createElement('div')
-            bottomRight.className = 'bottom-right'
-
-            const editBtn = document.createElement('div')
-            editBtn.className = 'edit-btn text-muted'
-            editBtn.innerHTML = 'EditThisShit'
-            editBtn.addEventListener('click', () => editPost(post.id))
-
-            bottomRight.append(editBtn)
-            bottom.append(bottomRight)
-
-            container.append(bottom)
+function loadUserPosts(userId) {
+    fetch('/user_posts', {
+        method: 'GET',
+        body: JSON.stringify({
+            user_id: userId,
         })
+    })
+    .then(response => response.json())
+    .then(response => {
+        if (response.status != 200){
+            const error = new Error(response.message)
+            error.name = "LoadingUserPostsError"
+        }
+    })
+    .then(renderPosts(posts))
+    .catch(error => {
+        if (error?.name == "LoadingUserPostsError") {
+            console.log(error)
+        }
+    })
+}
+
+function loadFollowingPosts() {
+    fetch('/following_posts')
+    .then(response => response.json())
+    .then(response => {
+        if (response.status != 200){
+            const error = new Error(response.message)
+            error.name = "LoadingFollowingPostsError"
+        }
+    })
+    .then(renderPosts(posts))
+    .catch(error => {
+        if (error?.name == "LoadingFollowingPostsError") {
+            console.log(error)
+        }
+    })
+}
+
+function loadThisPost(postId) {
+    fetch('/post', {
+        method: 'GET',
+        body: JSON.stringify({
+            post_id: postId,
+        })
+    })
+    .then(response => response.json())
+    .then(response => {
+        if (response.status != 200){
+            const error = new Error(response.message)
+            error.name = "LoadingThisPostError"
+        }
+    })
+    .then(renderPosts(posts))
+    .catch(error => {
+        if (error?.name == "LoadingThisPostError") {
+            console.log(error)
+        }
+    })
+}
+
+
+// Create and display posts on page
+function renderPosts(posts) {
+
+    // Clear 'main' div 
+    const main = document.querySelector('content')
+    main.innerHTML = ''
+
+    // Create and add each post to the 'main' div
+    posts.forEach(post => {
+        const container = document.createElement('div')
+        container.className = 'post-container'
+
+        const top = document.createElement('div')
+        top.className = 'post-top'
+
+        const postUsername = document.createElement('p')
+        postUsername.className = 'username text-info'
+        postUsername.innerHTML = post.creator
+        
+        const postDate = document.createElement('p')
+        postDate.className = 'date'
+        postDate.innerHTML = post.date
+
+        top.append(postUsername, postDate)
+        container.append(top)
+
+        const upper = document.createElement('div')
+        upper.className = 'post-upper-middle'
+
+        const content = document.createElement('div')
+        content.className = 'post-content'
+        content.innerHTML = post.content
+
+        upper.append(content)
+        container.append(upper)
+
+        const lower = document.createElement('div')
+        lower.className = 'post-lower-middle'
+
+        const editedFlag = document.createElement('p')
+        editedFlag.className = 'edited'
+        editedFlag.innerHTML = 'Edited'
+        if (post.edited) {
+            editedFlag.style.opacity = 100
+        } else {
+            editedFlag.style.opacity = 0
+        }
+
+        lower.append(editedFlag)
+        container.append(upper)
+
+        const bottom = document.createElement('div')
+        bottom.className = 'post-bottom'
+
+        const bottomLeft = document.createElement('div')
+        bottomLeft.className = 'bottom-left'
+
+        const likeBtn = document.createElement('div')
+        likeBtn.className = 'like-btn'
+        likeBtn.addEventListener('click', () => toggleLike(post.id))
+        likeBtn.innerHTML = '&lt;3'
+        const likeCount = document.createElement('p')
+        likeCount.className = 'like-count'
+        // Figure this part out, will need to add somthing in the api to calculate the count
+        likeCount.innerHTML = '...'
+
+        bottomLeft.append(likeBtn, likeCount)
+        bottom.append(bottomLeft)
+
+        const bottomCenter = document.createElement('div')
+        bottomCenter.className = 'bottom-center'
+
+        const comments = document.createElement('div')
+        comments.className = 'post-comments'
+        // Forgot to create an api route for this. Create a way to get all comments for a given post
+        comments.innerHTML = 'comments go here.....'
+
+        bottomCenter.append(comments)
+        bottom.append(bottomCenter)
+
+        const bottomRight = document.createElement('div')
+        bottomRight.className = 'bottom-right'
+
+        const editBtn = document.createElement('div')
+        editBtn.className = 'edit-btn text-muted'
+        editBtn.innerHTML = 'EditThisShit'
+        editBtn.addEventListener('click', () => editPost(post.id))
+
+        bottomRight.append(editBtn)
+        bottom.append(bottomRight)
+
+        container.append(bottom)
+
+        main.append(container)
     })
 }
