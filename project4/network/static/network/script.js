@@ -366,3 +366,12 @@ function renderPosts(posts) {
         main.append(container)
     })
 }
+
+// Create funcs for Home, User, Following, Profile btns/pages
+// Home page should be same signed in or not
+// User page should have 'Follow' or 'Following' Btn - if user signed in else blank
+// Folloing page should only be for signed in users, should be able to go to User page by poster name
+
+// Create func to like/unlike posts
+
+// Create func to follow/unfollow users
