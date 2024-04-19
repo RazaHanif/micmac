@@ -24,7 +24,7 @@
 ### PUT /edit - edit_post():
         Used to update a post with new content and changes edited flag
 
-        fetch('/add', {
+        fetch('/edit', {
             method: 'PUT',
             body: JSON.stringfy({
                 post: 'Editing docs sucks too!',

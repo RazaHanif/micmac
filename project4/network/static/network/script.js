@@ -11,13 +11,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 how = 'How did you get here?'
 
-// Create new post -- still need to add this in html
+// New posts 
+// -- still need to add this in html
+// Try to make 1 popup for both new & edit
 function openNewPopup() {
     // Load all info into new post popup
-    document.querySelector('#new-user').value = username
-    document.querySelector('#new-post').value = ''
-    document.querySelector('#new-submit-btn').addEventListener('click', createNewPost)
-    document.querySelector('#new-close-btn').addEventListener('click', closeNewPopup)
+    document.querySelector('#popup-user').value = username
+    document.querySelector('#popup-post').value = ''
+    document.querySelector('#popup-submit-btn').addEventListener('click', createNewPost)
+    document.querySelector('#popup-close-btn').addEventListener('click', closeNewPopup)
 
     // Run animation to display the popup
 	let fill = document.querySelector('#fill-layer')
@@ -31,12 +33,12 @@ function openNewPopup() {
 // Close the new post popup
 function closeNewPopup() {
 	// Reset all the values for next post (redundent but just incase)
-    document.querySelector('#new-user').value = ''
-    document.querySelector('#new-post').value = ''
+    document.querySelector('#popup-user').value = ''
+    document.querySelector('#popup-post').value = ''
 
     // Remove eventlisteners (redundent but just incase) 
-    document.querySelector('#new-submit-btn').removeEventListener('click', createNewPost)
-    document.querySelector('#new-close-btn').removeEventListener('click', closeNewPopup)
+    document.querySelector('#popup-submit-btn').removeEventListener('click', createNewPost)
+    document.querySelector('#popup-close-btn').removeEventListener('click', closeNewPopup)
 
 
 	// Run animation to close the popup
@@ -54,7 +56,7 @@ function createNewPost() {
     fetch('/add', {
         method: 'POST',
         body: JSON.stringify({
-            post: document.querySelector('#new-post').value
+            post: document.querySelector('#popup-post').value
         })
     })
     .then(response => response.json())
@@ -66,9 +68,102 @@ function createNewPost() {
         else {
             // Error handling
             // Stop loading animation or turn into a x
-            document.querySelector('#new-error').value = data.error
-            document.querySelector('#new-error').style.color = 'red'
-            document.querySelector('#new-error').style.opacity = 100
+            document.querySelector('#popup-error').value = data.error
+            document.querySelector('#popup-error').style.color = 'red'
+            document.querySelector('#popup-error').style.opacity = 100
+        }
+    })
+}
+
+// Edit posts 
+// -- still need to add this in html
+// Try to make 1 popup for both new & edit
+function openEditPopup(postId) {
+    // Get the info for the post to edit
+
+    let currentPost
+    let post_id
+
+    fetch('/post', {
+        method: 'GET',
+        body: JSON.stringify({
+            post_id: postId,
+        })
+    })
+    .then(response => response.json())
+    .then(response => {
+        if (response.status != 200){
+            const error = new Error(response.error)
+            error.name = "LoadingThisPostError"
+        }
+    })
+    .then(posts => {
+        currentPost = content
+        post_id = id
+    })
+    .catch(error => {
+        if (error?.name == "LoadingThisPostError") {
+            console.log(error)
+        }
+    })
+
+    // Load all info into new post popup
+    document.querySelector('#popup-user').value = username
+    document.querySelector('#popup-post').value = currentPost
+    document.querySelector('#popup-submit-btn').addEventListener('click', () => editPost(post_id))
+    document.querySelector('#popup-close-btn').addEventListener('click', closeEditPopup)
+
+    // Run animation to display the popup
+	let fill = document.querySelector('#fill-layer')
+	fill.addEventListener('animationend', () => {
+		fill.style.visibility = 'visible'
+	})
+	fill.style.animationName = 'softOpen'
+	fill.style.animationPlayState = 'running'
+}
+
+// Close the edit post popup
+function closeEditPopup() {
+	// Reset all the values for next post (redundent but just incase)
+    document.querySelector('#popup-user').value = ''
+    document.querySelector('#popup-post').value = ''
+
+    // Remove eventlisteners (redundent but just incase) 
+    document.querySelector('#popup-submit-btn').removeEventListener('click', () => editPost(post_id))
+    document.querySelector('#popup-close-btn').removeEventListener('click', closeEditPopup)
+
+
+	// Run animation to close the popup
+	let fill = document.querySelector('#fill-layer')
+	fill.addEventListener('animationend', () => {
+		fill.style.visibility = 'hidden'
+	})
+	fill.style.animationName = 'softClose'
+	fill.style.animationPlayState = 'running'
+}
+
+function editPost(postId) {
+    // Create some second fill layer that has a loading gif
+    // Create the post in the db
+    fetch('/add', {
+        method: 'PUT',
+        body: JSON.stringify({
+            post: document.querySelector('#new-post').value,
+            post_id: postId,
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if ("message" in data){
+            // Stop loading animation or turn it into a check
+            closeNewPopup()
+        }
+        else {
+            // Error handling
+            // Stop loading animation or turn into a x
+            document.querySelector('#popup-error').value = data.error
+            document.querySelector('#popup-error').style.color = 'red'
+            document.querySelector('#popup-error').style.opacity = 100
         }
     })
 }
@@ -94,7 +189,7 @@ function loadAllPosts() {
     .then(response => response.json())
     .then(response => {
         if (response.status != 200){
-            const error = new Error(response.message)
+            const error = new Error(response.error)
             error.name = "LoadingAllPostsError"
         }
     })
@@ -116,7 +211,7 @@ function loadUserPosts(userId) {
     .then(response => response.json())
     .then(response => {
         if (response.status != 200){
-            const error = new Error(response.message)
+            const error = new Error(response.error)
             error.name = "LoadingUserPostsError"
         }
     })
@@ -133,7 +228,7 @@ function loadFollowingPosts() {
     .then(response => response.json())
     .then(response => {
         if (response.status != 200){
-            const error = new Error(response.message)
+            const error = new Error(response.error)
             error.name = "LoadingFollowingPostsError"
         }
     })
@@ -155,7 +250,7 @@ function loadThisPost(postId) {
     .then(response => response.json())
     .then(response => {
         if (response.status != 200){
-            const error = new Error(response.message)
+            const error = new Error(response.error)
             error.name = "LoadingThisPostError"
         }
     })
@@ -169,6 +264,7 @@ function loadThisPost(postId) {
 
 
 // Create and display posts on page
+// Needs some work -- some routes/calcs missing
 function renderPosts(posts) {
 
     // Clear 'main' div 

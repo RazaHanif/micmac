@@ -217,6 +217,8 @@
 
 ## Client Side:
 
+Gonna say f it to 10 posts per page, will do infinite scroll instead
+
 ### Post Layout:
         Layout to follow anywhere posts are displayed
         
