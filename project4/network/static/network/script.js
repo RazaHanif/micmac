@@ -67,14 +67,19 @@ function closeNewPopup() {
 function createNewPost() {
     // Create some second fill layer that has a loading gif
     // Create the post in the db
-    fetch('/add', {
+    fetch('/new', {
         method: 'POST',
         body: JSON.stringify({
             post: document.querySelector('#popup-post').value
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log(response.status)
+        console.log(response.error)
+        response.json()
+    })
     .then(data => {
+        console.log(data)
         if ("message" in data){
             // Stop loading animation or turn it into a check
             closeNewPopup()
@@ -82,6 +87,7 @@ function createNewPost() {
         else {
             // Error handling
             // Stop loading animation or turn into a x
+            console.log(data.error)
             document.querySelector('#popup-error').value = data.error
             document.querySelector('#popup-error').style.color = 'red'
             document.querySelector('#popup-error').style.opacity = 100
