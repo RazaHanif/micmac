@@ -2,6 +2,69 @@ html, body {
     max-width: 100%;
 }
 
+
+/* Animation for popup window to open/close */
+@keyframes softOpen {
+    0% {
+        opacity: 0%;
+        visibility: visible;
+    }
+    75% {
+        opacity: 100%;
+        visibility: visible;
+    }
+    100% {
+        opacity: 100%;
+        visibility: visible;
+    }
+}
+
+@keyframes softClose {
+    0% {
+        opacity: 100%;
+        visibility: visible;
+    }
+    75% {
+        opacity: 0%;
+        visibility: hidden;
+    }
+    100% {
+        opacity: 0%;
+        visibility: hidden;
+    }
+}
+
+/* Popup Hidden on start */
+#fill-layer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 110vw;
+    height: 110vh;
+    z-index: 10;
+    animation-duration: 1s;
+    visibility: hidden;
+}
+
+#popup {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    padding: 1vw;
+    width: 75vw;
+    height: auto;
+    background-color: white;
+    border-radius: 10px;
+    border: 2px solid black;
+    box-shadow: 0 0 20px 5px black;
+}
+
 .navbar {
     border-bottom: 1px solid grey;
 }

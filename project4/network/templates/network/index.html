@@ -1,6 +1,15 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+<div id="fill-layer">
+    <div id="popup">
+        <button id="popup-close-btn">Close</button>
+        <p id="popup-user"></p>
+        <textarea id="popup-post"></textarea>
+        <button id="popup-submit-btn">Submit</button>
+
+    </div>
+</div>
 <div id="main">
 
     <div id="sidebar-left">
@@ -9,6 +18,10 @@
     </div>
 
     <div id="content">
+        <button class="open-new">new</button>
+        <button class="open-edit">edit</button>
+
+
         <div class="post-container">
             
             <div class="post-top">
@@ -38,7 +51,7 @@
                     <div id="post-edit-btn" class="edit-btn text-muted">Edit</div>
                 </div>
             </div>
-            
+
         </div>
     </div>
     <div id="sidebar-right">

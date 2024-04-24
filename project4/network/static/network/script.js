@@ -10,17 +10,23 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     // Use buttons to toggle between views
-    document.querySelector('#new-btn').addEventListener('click', openNewPopup);
+    document.querySelector('#new-btn').addEventListener('click', (e) => {
+        e.preventDefault()
+        console.log('shouldnt refresh now')
+        openNewPopup()
+    });
     // document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   
     // By default, load all posts
-    loadAllPosts();
+    // loadAllPosts();
 });
 
 // New posts 
 
 // Open popup initalized for new post
 function openNewPopup() {
+    console.log('open')
+    
     // Load all info into new post popup
     document.querySelector('#popup-user').value = username
     document.querySelector('#popup-post').value = ''
@@ -29,11 +35,12 @@ function openNewPopup() {
 
     // Run animation to display the popup
 	let fill = document.querySelector('#fill-layer')
-	fill.addEventListener('animationend', () => {
-		fill.style.visibility = 'visible'
-	})
-	fill.style.animationName = 'softOpen'
-	fill.style.animationPlayState = 'running'
+	// fill.addEventListener('animationend', () => {
+	// 	fill.style.visibility = 'visible'
+	// })
+	// fill.style.animationName = 'softOpen'
+	// fill.style.animationPlayState = 'running'
+    fill.style.visibility = 'visible'
 }
 
 // Close the new post popup
