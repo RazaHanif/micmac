@@ -217,7 +217,7 @@
 
 ## Client Side:
 
-Gonna say f it to 10 posts per page, will do infinite scroll instead
+Gonna say f it to 10 posts per page, will do infinite scroll instead -- Scrap this, instead json all posts and display on scroll like the example from lecture
 
 ### Post Layout:
         Layout to follow anywhere posts are displayed

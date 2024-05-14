@@ -3,13 +3,13 @@
     Use django fixtures to create some fake posts? 
     https://docs.djangoproject.com/en/stable/howto/initial-data/
 
-    Still need to add popup to html, try to make 1 popup for both new & edit
 */
 
 // Basic stuff to initialize onload
 document.addEventListener('DOMContentLoaded', function() {
 
     // Use buttons to toggle between views
+    // Figure out how to only do this if that button is on screen
     document.querySelector('#new-btn').addEventListener('click', (e) => {
         e.preventDefault()
         console.log('shouldnt refresh now')
@@ -35,11 +35,11 @@ function openNewPopup() {
 
     // Run animation to display the popup
 	let fill = document.querySelector('#fill-layer')
-	// fill.addEventListener('animationend', () => {
-	// 	fill.style.visibility = 'visible'
-	// })
-	// fill.style.animationName = 'softOpen'
-	// fill.style.animationPlayState = 'running'
+	fill.addEventListener('animationend', () => {
+		fill.style.visibility = 'visible'
+	})
+	fill.style.animationName = 'softOpen'
+	fill.style.animationPlayState = 'running'
     fill.style.visibility = 'visible'
 }
 
@@ -67,17 +67,15 @@ function closeNewPopup() {
 function createNewPost() {
     // Create some second fill layer that has a loading gif
     // Create the post in the db
+
+    console.log(document.querySelector('#popup-post').value)
     fetch('/new', {
         method: 'POST',
         body: JSON.stringify({
             post: document.querySelector('#popup-post').value
         })
     })
-    .then(response => {
-        console.log(response.status)
-        console.log(response.error)
-        response.json()
-    })
+    .then(response => response.json())
     .then(data => {
         console.log(data)
         if ("message" in data){
