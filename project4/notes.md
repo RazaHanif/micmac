@@ -13,6 +13,8 @@ TODO:
 
     compare to mail - check the csrf_exempt & 505 errors
 
+    instead of error if no posts, return a "no posts aval"
+
 ## Server Side: API ROUTES
 ### POST /new - new_post():
         Used to create a new post by current user

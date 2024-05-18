@@ -8,6 +8,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from time import sleep
 
 from .models import User, Post, Comment
@@ -97,6 +98,7 @@ def register(request):
 
 # Creates new post in db
 # POST
+@csrf_exempt
 @login_required
 def new_post(request):
     # Error if request method is not correct
@@ -230,20 +232,13 @@ def all_posts(request):
         return JsonResponse({
             'error': NO_POST_ERROR
         }, status=404)
-    
-    # Django Paginator implementation
-    page_num = request.GET.get('page')
-    p = Paginator(posts, 10)
-    page_obj = p.get_page(page_num)
-    
-    data = {
-        'posts': serialize('json', list(page_obj.object_list)),
-        'prev': page_obj.has_previous,
-        'next': page_obj.has_next
-    } 
-
-    # All good response message
-    return JsonResponse(data, safe=False, status=200)
+       
+    # All good response
+    return JsonResponse(
+        posts.as_dict(),
+        safe=False,
+        status=200
+    )
 
 
 # Returns a given post from the db
@@ -310,19 +305,12 @@ def user_posts(request):
             'error': NO_POST_ERROR
         }, status=404)
 
-    # Django Paginator implementation
-    page_num = request.GET.get('page')
-    p = Paginator(posts, 10)
-    page_obj = p.get_page(page_num)
-    
-    data = {
-        'posts': serialize('json', list(page_obj.object_list)),
-        'prev': page_obj.has_previous,
-        'next': page_obj.has_next
-    } 
-
     # All good response
-    return JsonResponse(data, safe=False, status=200)
+    return JsonResponse(
+        posts.as_dict(),
+        safe=False,
+        status=200
+    )
 
 
 # Returns all posts from users being followed by a given user
@@ -344,19 +332,12 @@ def following_posts(request):
             'error': NO_POST_ERROR
         }, status=404)
 
-    # Django Paginator Implementation
-    page_num = request.GET.get('page')
-    p = Paginator(posts, 10)
-    page_obj = p.get_page(page_num)
-    
-    data = {
-        'posts': serialize('json', list(page_obj.object_list)),
-        'prev': page_obj.has_previous,
-        'next': page_obj.has_next
-    } 
-
     # All good response
-    return JsonResponse(data, safe=False, status=200)
+    return JsonResponse(
+        posts.as_dict(),
+        safe=False,
+        status=200
+    )
 
 
 # Updates current user follows that user
