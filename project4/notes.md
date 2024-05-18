@@ -7,6 +7,8 @@ TODO:
     make a bunch of fake posts/users and real superuser
     log in and test
 
+    Create Admin page
+
     continue js
 
     new/edit/comment/like/follow

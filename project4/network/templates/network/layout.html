@@ -18,6 +18,7 @@
                     <a class="nav-link home-link" href="#">Home</a>
                 </li>
 
+                {% comment %} Goes to user page? {% endcomment %}
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>

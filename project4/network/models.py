@@ -8,9 +8,6 @@ class User(AbstractUser):
         symmetrical=False,
         related_name='followers'
     )
-    
-    def __str__(self):
-        return User.username
 
 
 class Post(models.Model):
@@ -26,17 +23,6 @@ class Post(models.Model):
         User,
         related_name="liked_posts"
     )
-    
-    # Dont need this anymore, using Django serialize
-    def as_dict(self):
-        return {
-            "id": self.id,
-            "creater": self.creater,
-            "content": self.content,
-            "date": self.date.strftime("%b %d %Y, %I:%M %p"),
-            "edited": self.edited,
-            "likes": self.likes.count()
-        }
        
 
 class Comment(models.Model):
