@@ -134,13 +134,13 @@ def new_post(request):
         }, status=404)
 
     # Create & Save post
-    post = Post.objects.create(
+    tweet = Post.objects.create(
+        creater=current_user,
         content=post,
         date=datetime.now(),
         edited=False,
-        user=current_user,
     )
-    post.save()
+    tweet.save()
     
     # fake delay, just wanna see what happens on client side
     sleep(2)

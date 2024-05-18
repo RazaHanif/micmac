@@ -1,19 +1,19 @@
 # Docs:
 
 TODO:
-    change all docs to just return full dataset
-    no 10 post per page, will do infinite scroll like in lecture
+    change all docs to just return full dataset//
+    no 10 post per page, will do infinite scroll like in lecture//
 
     make a bunch of fake posts/users and real superuser
     log in and test
 
-    Create Admin page
+    Create Admin page//
 
     continue js
 
     new/edit/comment/like/follow
 
-    compare to mail - check the csrf_exempt & 505 errors
+    compare to mail - check the csrf_exempt & 505 errors//
 
     instead of error if no posts, return a "no posts aval"
 
