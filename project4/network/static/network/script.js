@@ -28,8 +28,10 @@ function openNewPopup() {
     console.log('open')
     
     // Load all info into new post popup
-    document.querySelector('#popup-user').value = username
+    document.querySelector('#popup-user').innerHTML = username
     document.querySelector('#popup-post').value = ''
+    document.querySelector('#popup-error').innerHTML = 'error'
+    document.querySelector('#popup-error').style.opacity = 0
     document.querySelector('#popup-submit-btn').addEventListener('click', createNewPost)
     document.querySelector('#popup-close-btn').addEventListener('click', closeNewPopup)
 
@@ -86,7 +88,7 @@ function createNewPost() {
             // Error handling
             // Stop loading animation or turn into a x
             console.log(data.error)
-            document.querySelector('#popup-error').value = data.error
+            document.querySelector('#popup-error').innerHTML = data.error
             document.querySelector('#popup-error').style.color = 'red'
             document.querySelector('#popup-error').style.opacity = 100
         }
