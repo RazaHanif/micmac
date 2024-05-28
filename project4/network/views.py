@@ -232,10 +232,13 @@ def all_posts(request):
         return JsonResponse({
             'error': NO_POST_ERROR
         }, status=404)
+    
+    # Convery data from Queryset to JSON
+    posts = serialize('json', posts)
        
     # All good response
     return JsonResponse(
-        posts.as_dict(),
+        posts,
         safe=False,
         status=200
     )

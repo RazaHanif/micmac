@@ -199,18 +199,29 @@ function editThisPost(postId) {
 // Will need to add functionality to display which route is selected
 
 // Loads all posts
+
+/* Tryna figure out why all posts arent loading error 500 */
 function loadAllPosts() {
     fetch('/posts', {
         method: 'GET'
     })
-    .then(response => response.json())
     .then(response => {
         if (response.status != 200){
-            const error = new Error(response.error)
-            error.name = "LoadingAllPostsError"
+            const error = new Error(response.status)
+            error.name = 'LoadingAllPostsError'
+            throw error
         }
+
+        return response.json()
     })
-    .then(renderPosts(posts))
+    .then(posts => {
+        // posts is a string by default? Parse it to make it work
+        posts = JSON.parse(posts)
+        // Map over the posts and return only the 'fields' property
+        const fields = posts.map(post => post.fields)
+        return fields;
+    })
+    .then(fields => renderPosts(fields))
     .catch(error => {
         if (error?.name == "LoadingAllPostsError") {
             console.log(error)
@@ -288,9 +299,14 @@ function loadThisPost(postId) {
 // Needs some work -- some routes/calcs missing
 function renderPosts(posts) {
 
+    console.log("inside render posts")
+    console.log(posts)
+
     // Clear 'main' div 
-    const main = document.querySelector('content')
+    const main = document.querySelector('#content')
     main.innerHTML = ''
+
+    console.log(posts)
 
     // Create and add each post to the 'main' div
     posts.forEach(post => {
