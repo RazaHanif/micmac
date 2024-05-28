@@ -341,6 +341,37 @@ def following_posts(request):
         safe=False,
         status=200
     )
+    
+# Returns User object
+# GET
+def user(request):
+    # Checks if request method is not correct
+    if request.method != 'GET':
+        return JsonResponse({
+            'error': ERROR_GET
+        }, status=405)
+
+    # Get/Check data from client
+    data = json.loads(request.body)
+    if not (user_id := data.get("user_id", "")):
+        return JsonResponse({
+            'error': INPUT_ERROR
+        }, status=400)
+
+    # Server side data validation
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({
+            'error': NO_USER_ERROR
+        }, status=404)
+
+    # All good response
+    return JsonResponse(
+        user,
+        safe=False,
+        status=200
+    )
 
 
 # Updates current user follows that user

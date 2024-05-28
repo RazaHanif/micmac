@@ -299,17 +299,14 @@ function loadThisPost(postId) {
 // Needs some work -- some routes/calcs missing
 function renderPosts(posts) {
 
-    console.log("inside render posts")
-    console.log(posts)
-
     // Clear 'main' div 
     const main = document.querySelector('#content')
     main.innerHTML = ''
 
-    console.log(posts)
-
     // Create and add each post to the 'main' div
     posts.forEach(post => {
+        console.log(post)
+
         const container = document.createElement('div')
         container.className = 'post-container'
 
@@ -318,7 +315,27 @@ function renderPosts(posts) {
 
         const postUsername = document.createElement('p')
         postUsername.className = 'username text-info'
-        postUsername.innerHTML = post.creator
+        console.log(post.creater)
+
+        fetch('/user', {
+            method: 'GET',
+            user_id: post.creater
+        })
+        .then(response => {
+            console.log(response)
+            if (response.status != 200){
+                const error = new Error(response.status)
+                error.name = 'LoadingUserError'
+                throw error
+            }
+    
+            return response.json()
+        })
+        .then(user => {
+            postUsername.innerHTML = user.username
+        })
+
+        // postUsername.innerHTML = post.creater.username
         
         const postDate = document.createElement('p')
         postDate.className = 'date'

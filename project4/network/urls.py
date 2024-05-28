@@ -15,6 +15,7 @@ urlpatterns = [
     path("posts", views.all_posts, name="all_posts"),
     path("post", views.this_post, name="this_post"),
     path("user_posts", views.user_posts, name="user_posts"),
+    path("user", views.user, name="user"),
     path("following_posts", views.following_posts, name="following_posts"),
     path("follow", views.follow, name="follow"),
     path("unfollow", views.unfollow, name="unfollow"),

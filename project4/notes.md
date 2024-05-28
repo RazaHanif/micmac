@@ -106,6 +106,10 @@ TODO:
 
         if user or posts dont exist will return with error status 404
 
+### GET /user - user():
+        Used to get all info about a particular user
+        used to display username and compare current user to this user
+
 ### PUT /follow - follow():
         Creates instance of current user follows this user
 
