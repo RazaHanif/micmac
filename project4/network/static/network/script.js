@@ -316,19 +316,12 @@ function renderPosts(posts) {
         const postUsername = document.createElement('p')
         postUsername.className = 'username text-info'
         console.log(post.creater)
-
-        fetch('/user', {
+        let url = '/user/' + post.creater
+        fetch(url, {
             method: 'GET',
-            user_id: post.creater
         })
         .then(response => {
-            console.log(response)
-            if (response.status != 200){
-                const error = new Error(response.status)
-                error.name = 'LoadingUserError'
-                throw error
-            }
-    
+            console.log(response)    
             return response.json()
         })
         .then(user => {
