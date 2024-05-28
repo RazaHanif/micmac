@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   
     // By default, load all posts
-    // loadAllPosts();
+    loadAllPosts();
 });
 
 // New posts 
@@ -200,7 +200,9 @@ function editThisPost(postId) {
 
 // Loads all posts
 function loadAllPosts() {
-    fetch('/posts')
+    fetch('/posts', {
+        method: 'GET'
+    })
     .then(response => response.json())
     .then(response => {
         if (response.status != 200){

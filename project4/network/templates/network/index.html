@@ -3,12 +3,19 @@
 {% block body %}
 <div id="fill-layer">
     <div id="popup">
-        <button id="popup-close-btn">Close</button>
-        <p id="popup-user">username</p>
-        <p id="popup-error"></p>
-        <textarea id="popup-post"></textarea>
-        <button id="popup-submit-btn">Submit</button>
-
+        <div id="popup-top">
+            <button class="btn btn-outline-info my-2 my-sm-0" id="popup-close-btn">&#x2715;</button>
+        </div>
+        <div id="popup-mid-top">
+            <p id="popup-user">username</p>
+            <p id="popup-error"></p>
+        </div>
+        <div id="popup-mid-lower">
+            <textarea id="popup-post"></textarea>
+        </div>
+        <div id="popup-lower">
+            <button class="btn btn-outline-info my-2 my-sm-0" id="popup-submit-btn">Submit</button>
+        </div>
     </div>
 </div>
 <div id="main">
@@ -27,7 +34,7 @@
             </div>
 
             <div class="post-upper-middle">
-                <div id="post-content" class="post-content">This Twitter stuff is annoying!</div>
+                <div id="post-content" class="post-content">This project shit is annoying af!</div>
             </div>
 
             <div class="post-lower-middle">
