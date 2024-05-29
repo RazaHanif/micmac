@@ -23,6 +23,7 @@ class Post(models.Model):
     content = models.TextField(max_length=280)
     date = models.DateField()
     edited = models.BooleanField(default=False)
+    id = models.IntegerField(primary_key=True)
     likes = models.ManyToManyField(
         User,
         related_name="liked_posts",

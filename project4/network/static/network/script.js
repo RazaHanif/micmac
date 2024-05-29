@@ -165,6 +165,7 @@ function closeEditPopup() {
 
 // Should send the edited post to the db
 function editThisPost(postId) {
+    console.log(`Edit ${postId}`)
     // Create some second fill layer that has a loading gif
     // Edit the post in the db
     fetch('/add', {
@@ -305,14 +306,18 @@ function renderPosts(posts) {
 
     // Create and add each post to the 'main' div
     posts.forEach(post => {
+        // Just for testing
         console.log(post)
 
+        // Create container for post
         const container = document.createElement('div')
         container.className = 'post-container'
 
+        // MicroContainers
         const top = document.createElement('div')
         top.className = 'post-top'
 
+        // Query server for info on user
         const postUsername = document.createElement('p')
         postUsername.className = 'username text-info'
         console.log(post.creater)
@@ -327,29 +332,34 @@ function renderPosts(posts) {
         .then(user => {
             postUsername.innerHTML = user.username
         })
-
-        // postUsername.innerHTML = post.creater.username
         
+        // Date from post
         const postDate = document.createElement('p')
         postDate.className = 'date'
         postDate.innerHTML = post.date
 
+        // Add to container
         top.append(postUsername, postDate)
         container.append(top)
 
+        // MicroContainers - might combine with lower
         const upper = document.createElement('div')
         upper.className = 'post-upper-middle'
 
+        // Content from post
         const content = document.createElement('div')
         content.className = 'post-content'
         content.innerHTML = post.content
 
+        // Add to container - might combine upper with lower
         upper.append(content)
         container.append(upper)
 
+        // MicroContainers - might combine with upper
         const lower = document.createElement('div')
         lower.className = 'post-lower-middle'
 
+        // Edited flag updated from post
         const editedFlag = document.createElement('div')
         editedFlag.className = 'edited'
         editedFlag.innerHTML = 'Edited'
@@ -363,19 +373,24 @@ function renderPosts(posts) {
         lower.append(editedFlag)
         container.append(lower)
 
+        // MicroContainer
         const bottom = document.createElement('div')
         bottom.className = 'post-bottom'
 
+        // MicroMicroContainer
         const bottomLeft = document.createElement('div')
         bottomLeft.className = 'bottom-left'
 
+        // Still need to create implementation for btn
         const likeBtn = document.createElement('div')
         likeBtn.className = 'like-btn'
         likeBtn.addEventListener('click', () => toggleLike(post.id))
         likeBtn.innerHTML = '&lt;3'
         const likeCount = document.createElement('p')
         likeCount.className = 'like-count'
-        // Figure this part out, will need to add somthing in the api to calculate the count
+
+        // Figure this part out
+        // Will need to get like count - like is array in post
         likeCount.innerHTML = '...'
 
         bottomLeft.append(likeBtn, likeCount)
@@ -384,9 +399,9 @@ function renderPosts(posts) {
         const bottomCenter = document.createElement('div')
         bottomCenter.className = 'bottom-center'
 
+        // Create new api route to get all comments for x post
         const comments = document.createElement('div')
         comments.className = 'post-comments'
-        // Forgot to create an api route for this. Create a way to get all comments for a given post
         comments.innerHTML = 'comments go here.....'
 
         bottomCenter.append(comments)
@@ -395,6 +410,7 @@ function renderPosts(posts) {
         const bottomRight = document.createElement('div')
         bottomRight.className = 'bottom-right'
 
+        // Create functionality for edit btn only if post user id == current user id
         const editBtn = document.createElement('div')
         editBtn.className = 'edit-btn text-muted'
         editBtn.innerHTML = 'EditThisShit'
