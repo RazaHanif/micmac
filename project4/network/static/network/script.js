@@ -306,8 +306,6 @@ function renderPosts(posts) {
 
     // Create and add each post to the 'main' div
     posts.forEach(post => {
-        // Just for testing
-        console.log(post)
 
         // Create container for post
         const container = document.createElement('div')
@@ -413,16 +411,13 @@ function renderPosts(posts) {
             method: 'GET',
         })
         .then(response => {
-            console.log(response)
             return response.json()
         })
         .then(obj => {
             obj = JSON.parse(obj)
-            console.log(obj, obj.length, typeof obj)
             
             if (obj.length > 0){
                 const fields = obj.map(post => post.fields)
-                console.log(fields)
                 return fields
             }
 
@@ -431,18 +426,11 @@ function renderPosts(posts) {
             if (fields) {
                 if (fields.length > 0) {
                     fields.forEach(comment => {
-                        console.log(comment)
-                        commentList.push(comment)
+                        const commentContainer = document.createElement('p')
+                        commentContainer.className =  'post-comment-container'
+                        commentContainer.innerHTML = comment.comment
+                        comments.append(commentContainer)
                     })
-                }
-
-                console.log(commentList, commentList.length)
-                if (commentList.length > 0){
-                    comments.innerHTML = ''
-
-                    const com = commentList.map(comment => comment.comment)
-                    console.log(com)
-                    comments.innerHTML = com
                 }
             }
         })
