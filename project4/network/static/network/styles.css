@@ -247,8 +247,12 @@ html, body {
     align-items: center;
 }
 
-.comments{
+.post-comments{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: scroll;
+    text-align: center;
 }
 
 .bottom-right{

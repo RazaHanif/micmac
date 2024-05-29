@@ -219,7 +219,7 @@ function loadAllPosts() {
         // posts is a string by default? Parse it to make it work
         posts = JSON.parse(posts)
         // Map over the posts and return only the 'fields' property
-        const fields = posts.map(post => post.fields)
+        const fields = posts.map(post => ({...post.fields, id: post.pk}))
         return fields;
     })
     .then(fields => renderPosts(fields))
@@ -320,13 +320,11 @@ function renderPosts(posts) {
         // Query server for info on user
         const postUsername = document.createElement('p')
         postUsername.className = 'username text-info'
-        console.log(post.creater)
         let url = '/user/' + post.creater
         fetch(url, {
             method: 'GET',
         })
         .then(response => {
-            console.log(response)    
             return response.json()
         })
         .then(user => {
@@ -391,7 +389,11 @@ function renderPosts(posts) {
 
         // Figure this part out
         // Will need to get like count - like is array in post
-        likeCount.innerHTML = '...'
+        if (post.likes.length > 0) {
+            likeCount.innerHTML = post.likes.length
+        } else {
+            likeCount.innerHTML = 'Zero'
+        }
 
         bottomLeft.append(likeBtn, likeCount)
         bottom.append(bottomLeft)
@@ -403,6 +405,47 @@ function renderPosts(posts) {
         const comments = document.createElement('div')
         comments.className = 'post-comments'
         comments.innerHTML = 'comments go here.....'
+
+        let commentList = []
+
+        url = '/comment/' + post.id
+        fetch(url, {
+            method: 'GET',
+        })
+        .then(response => {
+            console.log(response)
+            return response.json()
+        })
+        .then(obj => {
+            obj = JSON.parse(obj)
+            console.log(obj, obj.length, typeof obj)
+            
+            if (obj.length > 0){
+                const fields = obj.map(post => post.fields)
+                console.log(fields)
+                return fields
+            }
+
+        })
+        .then(fields => {
+            if (fields) {
+                if (fields.length > 0) {
+                    fields.forEach(comment => {
+                        console.log(comment)
+                        commentList.push(comment)
+                    })
+                }
+
+                console.log(commentList, commentList.length)
+                if (commentList.length > 0){
+                    comments.innerHTML = ''
+
+                    const com = commentList.map(comment => comment.comment)
+                    console.log(com)
+                    comments.innerHTML = com
+                }
+            }
+        })
 
         bottomCenter.append(comments)
         bottom.append(bottomCenter)

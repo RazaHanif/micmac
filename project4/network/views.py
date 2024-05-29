@@ -363,7 +363,34 @@ def user(request, user_id):
         'username': user.username,
         'email': user.email,
     }, status=200)
+    
+    
+# Returns Comment object
+# GET
+def comment(request, post_id):
+    # Checks if request method is not correct
+    if request.method != 'GET':
+        return JsonResponse({
+            'error': ERROR_GET
+        }, status=405)
 
+    # Server side data validation
+    try:
+        this_post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({
+            'error': NO_USER_ERROR
+        }, status=404)
+        
+    comments = Comment.objects.filter(post=this_post)
+    
+    comments = serialize('json', comments)
+
+    return JsonResponse(
+        comments,
+        safe=False,
+        status=200
+    )
 
 # Updates current user follows that user
 # PUT
@@ -551,3 +578,4 @@ def create_comment(request):
     return JsonResponse({
         'message': 'Comment Created'
     }, status=201)
+    
