@@ -350,17 +350,18 @@ function renderPosts(posts) {
         const lower = document.createElement('div')
         lower.className = 'post-lower-middle'
 
-        const editedFlag = document.createElement('p')
+        const editedFlag = document.createElement('div')
         editedFlag.className = 'edited'
         editedFlag.innerHTML = 'Edited'
+        editedFlag.style.color = 'grey'
         if (post.edited) {
-            editedFlag.style.opacity = 100
+            editedFlag.style.opacity = '50%'
         } else {
-            editedFlag.style.opacity = 0
+            editedFlag.style.opacity = '0%'
         }
 
         lower.append(editedFlag)
-        container.append(upper)
+        container.append(lower)
 
         const bottom = document.createElement('div')
         bottom.className = 'post-bottom'

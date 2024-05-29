@@ -126,7 +126,6 @@ html, body {
 }
 
 #main {
-    height: 99vh;
     display: flex;
     justify-content: space-between;
     gap: 2vw;
@@ -151,13 +150,18 @@ html, body {
 #content {
     background-color: white;
     flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    gap: 2vh;
 }
 
 .post-container {
     background-color: whitesmoke;
     border: 2px solid black;
-    max-width: 35vw;
-    min-width: 400px;
+    max-width: 500px;
+    min-width: 500px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -190,6 +194,7 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 1vh;
 }
 
 .post-content{
@@ -202,11 +207,15 @@ html, body {
     background-color: lightgray;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items:baseline;
+    padding-top: 1vh;
 }
 
 .edited{
+    display: flex;
+    text-align: end;
     opacity: 50%;
+    padding: none;
 }
 
 .post-bottom{
