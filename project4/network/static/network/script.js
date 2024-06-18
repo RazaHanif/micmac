@@ -14,13 +14,39 @@ document.addEventListener('DOMContentLoaded', function() {
     // Use buttons to toggle between views
     // Figure out how to only do this if that button is on screen
     let new_btn = document.querySelector('#new-btn')
-
+    let home_btn = document.querySelector('#home-btn')
+    let profile_btn = document.querySelector('#profile-btn')
+    let following_btn = document.querySelector('#following-btn')
+    
     if (new_btn) {
         new_btn.addEventListener('click', (e) => {
             e.preventDefault
             openNewPopup()
         })
-    }  
+    }
+
+    if (home_btn) {
+        home_btn.addEventListener('click', (e) => {
+            e.preventDefault
+            console.log("home-btn")
+            loadAllPosts()
+        })
+    }
+    
+    if (profile_btn) {
+        profile_btn.addEventListener('click', (e) => {
+            e.preventDefault
+            loadCurrUserProfile(curr_user_id)
+        })
+    }
+    
+    if (following_btn) {
+        following_btn.addEventListener('click', (e) => {
+            e.preventDefault
+            console.log("following-btn")
+            loadAllPosts()
+        })
+    }
 });
 
 // New posts 
@@ -224,7 +250,7 @@ function loadAllPosts() {
         const fields = posts.map(post => ({...post.fields, id: post.pk}))
         return fields;
     })
-    .then(fields => renderPosts(fields))
+    .then(fields => renderPosts(fields, "all"))
     .catch(error => {
         if (error?.name == "LoadingAllPostsError") {
             console.log(error)
@@ -300,176 +326,198 @@ function loadThisPost(postId) {
 
 // Create and display posts on page
 // Needs some work -- some routes/calcs missing
-function renderPosts(posts) {
+function renderPosts(posts, name) {
 
     // Clear 'main' div 
     const main = document.querySelector('#content')
     main.innerHTML = ''
 
     // Create and add each post to the 'main' div
-    posts.forEach(post => {
 
-        // Create container for post
-        const container = document.createElement('div')
-        container.className = 'post-container'
+    if (posts) {
 
-        // MicroContainers
-        const top = document.createElement('div')
-        top.className = 'post-top'
+        posts.forEach(post => {
 
-        // Query server for info on user
-        const postUsername = document.createElement('p')
-        postUsername.className = 'username text-info'
-        let url = '/user/' + post.creater
-        fetch(url, {
-            method: 'GET',
-        })
-        .then(response => {
-            return response.json()
-        })
-        .then(user => {
-            postUsername.innerHTML = user.username
-        })
-        
-        // Date from post
-        const postDate = document.createElement('p')
-        postDate.className = 'date'
-        postDate.innerHTML = post.date
+            // Create container for post
+            const container = document.createElement('div')
+            container.className = 'post-container'
 
-        // Add to container
-        top.append(postUsername, postDate)
-        container.append(top)
+            // MicroContainers
+            const top = document.createElement('div')
+            top.className = 'post-top'
 
-        // MicroContainers - might combine with lower
-        const upper = document.createElement('div')
-        upper.className = 'post-upper-middle'
-
-        // Content from post
-        const content = document.createElement('div')
-        content.className = 'post-content'
-        content.innerHTML = post.content
-
-        // Add to container - might combine upper with lower
-        upper.append(content)
-        container.append(upper)
-
-        // MicroContainers - might combine with upper
-        const lower = document.createElement('div')
-        lower.className = 'post-lower-middle'
-
-        // Edited flag updated from post
-        const editedFlag = document.createElement('div')
-        editedFlag.className = 'edited'
-        editedFlag.innerHTML = 'Edited'
-        editedFlag.style.color = 'grey'
-        if (post.edited) {
-            editedFlag.style.opacity = '50%'
-        } else {
-            editedFlag.style.opacity = '0%'
-        }
-
-        lower.append(editedFlag)
-        container.append(lower)
-
-        // MicroContainer
-        const bottom = document.createElement('div')
-        bottom.className = 'post-bottom'
-
-        // MicroMicroContainer
-        const bottomLeft = document.createElement('div')
-        bottomLeft.className = 'bottom-left'
-
-        // Still need to create implementation for btn
-        const likeBtn = document.createElement('div')
-        likeBtn.className = 'like-btn'
-        likeBtn.addEventListener('click', () => toggleLike(post.id))
-        likeBtn.innerHTML = '&lt;3'
-        const likeCount = document.createElement('p')
-        likeCount.className = 'like-count'
-
-        // Figure this part out
-        // Will need to get like count - like is array in post
-        if (post.likes.length > 0) {
-            likeCount.innerHTML = post.likes.length
-        } else {
-            likeCount.innerHTML = 'Zero'
-        }
-
-        bottomLeft.append(likeBtn, likeCount)
-        bottom.append(bottomLeft)
-
-        const bottomCenter = document.createElement('div')
-        bottomCenter.className = 'bottom-center'
-
-        // Create new api route to get all comments for x post
-        const comments = document.createElement('div')
-        comments.className = 'post-comments'
-        comments.innerHTML = 'Comments'
-
-        // idk if i need this
-        let commentList = []
-
-        url = '/comment/' + post.id
-        fetch(url, {
-            method: 'GET',
-        })
-        .then(response => {
-            return response.json()
-        })
-        .then(obj => {
-            obj = JSON.parse(obj)
+            // Query server for info on user
+            const postUsername = document.createElement('p')
+            postUsername.className = 'username text-info'
+            let url = '/user/' + post.creater
+            fetch(url, {
+                method: 'GET',
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(user => {
+                postUsername.innerHTML = user.username
+            })
             
-            if (obj.length > 0){
-                const fields = obj.map(post => post.fields)
-                return fields
+            // Date from post
+            const postDate = document.createElement('p')
+            postDate.className = 'date'
+            postDate.innerHTML = post.date
+
+            // Add to container
+            top.append(postUsername, postDate)
+            container.append(top)
+
+            // MicroContainers - might combine with lower
+            const upper = document.createElement('div')
+            upper.className = 'post-upper-middle'
+
+            // Content from post
+            const content = document.createElement('div')
+            content.className = 'post-content'
+            content.innerHTML = post.content
+
+            // Add to container - might combine upper with lower
+            upper.append(content)
+            container.append(upper)
+
+            // MicroContainers - might combine with upper
+            const lower = document.createElement('div')
+            lower.className = 'post-lower-middle'
+
+            // Edited flag updated from post
+            const editedFlag = document.createElement('div')
+            editedFlag.className = 'edited'
+            editedFlag.innerHTML = 'Edited'
+            editedFlag.style.color = 'grey'
+            if (post.edited) {
+                editedFlag.style.opacity = '50%'
+            } else {
+                editedFlag.style.opacity = '0%'
             }
 
-        })
-        .then(fields => {
-            if (fields) {
-                if (fields.length > 0) {
-                    comments.innerHTML = null
-                    fields.forEach(comment => {
-                        const commentContainer = document.createElement('p')
-                        commentContainer.className =  'post-comment-container'
-                        
-                        // Get the commenters name
-                        let url = '/user/' + comment.user
-                        fetch(url, {
-                            method: 'GET',
-                        })
-                        .then(response => {
-                            return response.json()
-                        })
-                        .then(user => {
-                            let username = user.username
-                            commentContainer.innerHTML = `${comment.comment}  - ${username}`
-                            comments.append(commentContainer)
-                        })
-                    })
+            lower.append(editedFlag)
+            container.append(lower)
+
+            // MicroContainer
+            const bottom = document.createElement('div')
+            bottom.className = 'post-bottom'
+
+            // MicroMicroContainer
+            const bottomLeft = document.createElement('div')
+            bottomLeft.className = 'bottom-left'
+
+            // Still need to create implementation for btn
+            const likeBtn = document.createElement('div')
+            likeBtn.className = 'like-btn'
+            likeBtn.addEventListener('click', () => toggleLike(post.id))
+            likeBtn.innerHTML = '&lt;3'
+            const likeCount = document.createElement('p')
+            likeCount.className = 'like-count'
+
+            // Figure this part out
+            // Will need to get like count - like is array in post
+            if (post.likes.length > 0) {
+                likeCount.innerHTML = post.likes.length
+            } else {
+                likeCount.innerHTML = 'Zero'
+            }
+
+            bottomLeft.append(likeBtn, likeCount)
+            bottom.append(bottomLeft)
+
+            const bottomCenter = document.createElement('div')
+            bottomCenter.className = 'bottom-center'
+
+            // Create new api route to get all comments for x post
+            const comments = document.createElement('div')
+            comments.className = 'post-comments'
+            comments.innerHTML = 'Comments'
+
+            // idk if i need this
+            let commentList = []
+
+            url = '/comment/' + post.id
+            fetch(url, {
+                method: 'GET',
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(obj => {
+                obj = JSON.parse(obj)
+                
+                if (obj.length > 0){
+                    const fields = obj.map(post => post.fields)
+                    return fields
                 }
-            }
+
+            })
+            .then(fields => {
+                if (fields) {
+                    if (fields.length > 0) {
+                        comments.innerHTML = null
+                        fields.forEach(comment => {
+                            const commentContainer = document.createElement('p')
+                            commentContainer.className =  'post-comment-container'
+                            
+                            // Get the commenters name
+                            let url = '/user/' + comment.user
+                            fetch(url, {
+                                method: 'GET',
+                            })
+                            .then(response => {
+                                return response.json()
+                            })
+                            .then(user => {
+                                let username = user.username
+                                commentContainer.innerHTML = `${comment.comment}  - ${username}`
+                                comments.append(commentContainer)
+                            })
+                        })
+                    }
+                }
+            })
+
+            bottomCenter.append(comments)
+            bottom.append(bottomCenter)
+
+            const bottomRight = document.createElement('div')
+            bottomRight.className = 'bottom-right'
+
+            // Create functionality for edit btn only if post user id == current user id
+            const editBtn = document.createElement('div')
+            editBtn.className = 'edit-btn text-muted'
+            editBtn.innerHTML = 'EditThisShit'
+            
+            editBtn.addEventListener('click', () => editThisPost(post.id))
+
+            bottomRight.append(editBtn)
+            bottom.append(bottomRight)
+
+            container.append(bottom)
+
+            main.append(container)
         })
+    }
+    else {
+        main.innerHTML = name
+    }
+}
 
-        bottomCenter.append(comments)
-        bottom.append(bottomCenter)
+function loadCurrUserProfile(user_id) {
 
-        const bottomRight = document.createElement('div')
-        bottomRight.className = 'bottom-right'
-
-        // Create functionality for edit btn only if post user id == current user id
-        const editBtn = document.createElement('div')
-        editBtn.className = 'edit-btn text-muted'
-        editBtn.innerHTML = 'EditThisShit'
-        
-        editBtn.addEventListener('click', () => editThisPost(post.id))
-
-        bottomRight.append(editBtn)
-        bottom.append(bottomRight)
-
-        container.append(bottom)
-
-        main.append(container)
+    let url = '/user/' + user_id
+    fetch(url, {
+        method: 'GET',
+    })
+    .then(response => {
+        return response.json()
+    })
+    .then(user => {
+        let username = user.username
+        renderPosts(null, username)
     })
 }
 

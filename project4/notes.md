@@ -16,6 +16,19 @@ TODO: Comment out completed
         like
         follow
 
+    Need to add EditBtn & Like functionality on homepage
+
+    then create profile page - disaplay all posts by that person
+    make each username on a post a link to thier profile page
+
+    current user page shouldnt have follow btn
+
+    follwing page should be copy paste homepage but only posts from users that current user follows (obv)
+
+    scrap the seperate pages, make it a one page app 
+
+
+
 ## Server Side: API ROUTES
 ### POST /new - new_post():
         Used to create a new post by current user

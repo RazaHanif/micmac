@@ -30,7 +30,8 @@ POST_MIN = 4
 # Prewritten - Default Route
 def index(request):
     # Renders Homepage
-    return render(request, 'network/index.html')
+    context = {'curr_user_id': request.user.id}
+    return render(request, 'network/index.html', context)
 
 
 # Prewritten - Logs user in

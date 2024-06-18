@@ -7,6 +7,7 @@
     <link href="{% static 'network/styles.css' %}" rel="stylesheet">
     <script type="text/javascript">
         var username = "{{ user.username }}"
+        var curr_user_id = "{{ curr_user_id }}"
     </script>
     <script src="{% static 'network/script.js' %}"></script>
 </head>
@@ -15,16 +16,16 @@
         <div class="nav-content">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link home-link" href="{% url 'index' %}">Home</a>
+                    <a class="nav-link home-link" id="home-btn" href="#">Home</a>
                 </li>
 
                 {% comment %} Goes to user page? {% endcomment %}
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'profile' %}"><strong>{{ user.username }}</strong></a>
+                        <a class="nav-link" id="profile-btn" href="#"><strong>{{ user.username }}</strong></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'following' %}">Following</a>
+                        <a class="nav-link" id="following-btn" href="#">Following</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
