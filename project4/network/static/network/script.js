@@ -8,17 +8,19 @@
 // Basic stuff to initialize onload
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Use buttons to toggle between views
-    // Figure out how to only do this if that button is on screen
-    document.querySelector('#new-btn').addEventListener('click', (e) => {
-        e.preventDefault()
-        console.log('shouldnt refresh now')
-        openNewPopup()
-    });
-    // document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
-  
     // By default, load all posts
     loadAllPosts();
+
+    // Use buttons to toggle between views
+    // Figure out how to only do this if that button is on screen
+    let new_btn = document.querySelector('#new-btn')
+
+    if (new_btn) {
+        new_btn.addEventListener('click', (e) => {
+            e.preventDefault
+            openNewPopup()
+        })
+    }  
 });
 
 // New posts 
