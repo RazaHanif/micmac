@@ -219,13 +219,14 @@ html, body {
 }
 
 .post-bottom{
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .bottom-left{
-    flex-grow: 1;
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -241,7 +242,7 @@ html, body {
 }
 
 .bottom-center{
-    flex-grow: 3;
+    flex: 2;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -250,14 +251,22 @@ html, body {
 .post-comments{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: scroll;
+    height: 70px;
+    overflow-y: auto;
     text-align: center;
+    flex-grow: 0;
+    padding: 5px;
+}
+
+.post-comment-container{
+    margin: 5px;
+    border-radius: 5px;
+    border: 2px solid lightgray;
+    box-shadow: 2px 2px 3px lightgray;
 }
 
 .bottom-right{
-    flex-grow: 1;
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: end;

@@ -404,8 +404,9 @@ function renderPosts(posts) {
         // Create new api route to get all comments for x post
         const comments = document.createElement('div')
         comments.className = 'post-comments'
-        comments.innerHTML = 'comments go here.....'
+        comments.innerHTML = 'Comments'
 
+        // idk if i need this
         let commentList = []
 
         url = '/comment/' + post.id
@@ -427,11 +428,24 @@ function renderPosts(posts) {
         .then(fields => {
             if (fields) {
                 if (fields.length > 0) {
+                    comments.innerHTML = null
                     fields.forEach(comment => {
                         const commentContainer = document.createElement('p')
                         commentContainer.className =  'post-comment-container'
-                        commentContainer.innerHTML = comment.comment
-                        comments.append(commentContainer)
+                        
+                        // Get the commenters name
+                        let url = '/user/' + comment.user
+                        fetch(url, {
+                            method: 'GET',
+                        })
+                        .then(response => {
+                            return response.json()
+                        })
+                        .then(user => {
+                            let username = user.username
+                            commentContainer.innerHTML = `${comment.comment}  - ${username}`
+                            comments.append(commentContainer)
+                        })
                     })
                 }
             }
@@ -447,6 +461,7 @@ function renderPosts(posts) {
         const editBtn = document.createElement('div')
         editBtn.className = 'edit-btn text-muted'
         editBtn.innerHTML = 'EditThisShit'
+        
         editBtn.addEventListener('click', () => editThisPost(post.id))
 
         bottomRight.append(editBtn)
