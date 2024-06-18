@@ -255,7 +255,7 @@ html, body {
     overflow-y: auto;
     text-align: center;
     flex-grow: 0;
-    padding: 5px;
+    margin: 5px;
 }
 
 .post-comment-container{
