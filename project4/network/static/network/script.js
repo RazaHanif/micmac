@@ -12,41 +12,26 @@ document.addEventListener('DOMContentLoaded', function() {
     loadAllPosts();
 
     // Use buttons to toggle between views
-    // Figure out how to only do this if that button is on screen
-    let new_btn = document.querySelector('#new-btn')
-    let home_btn = document.querySelector('#home-btn')
-    let profile_btn = document.querySelector('#profile-btn')
-    let following_btn = document.querySelector('#following-btn')
-    
-    if (new_btn) {
-        new_btn.addEventListener('click', (e) => {
-            e.preventDefault
-            openNewPopup()
-        })
-    }
-
-    if (home_btn) {
-        home_btn.addEventListener('click', (e) => {
-            e.preventDefault
-            console.log("home-btn")
-            loadAllPosts()
-        })
-    }
-    
-    if (profile_btn) {
-        profile_btn.addEventListener('click', (e) => {
-            e.preventDefault
-            loadCurrUserProfile(curr_user_id)
-        })
-    }
-    
-    if (following_btn) {
-        following_btn.addEventListener('click', (e) => {
-            e.preventDefault
-            console.log("following-btn")
-            loadAllPosts()
-        })
-    }
+    // Prevents error if not logged in
+    // Uses js ? chaining 
+    document.querySelector('#new-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openNewPopup();
+    });
+    document.querySelector('#home-btn')?.addEventListener('click', (e) => {
+        e.preventDefault
+        console.log("home-btn")
+        loadAllPosts()
+    });
+    document.querySelector('#profile-btn')?.addEventListener('click', (e) => {
+        e.preventDefault
+        loadCurrUserProfile(curr_user_id)
+    });
+    document.querySelector('#following-btn')?.addEventListener('click', (e) => {
+        e.preventDefault
+        console.log("following-btn")
+        loadAllPosts()
+    });
 });
 
 // New posts 
@@ -506,6 +491,9 @@ function renderPosts(posts, name) {
     }
 }
 
+// Idk if im gonna keep this
+// Rn just grabs current user name and prints to screen
+// Wanna keep curr user profile and regular profile page sepeareate
 function loadCurrUserProfile(user_id) {
 
     let url = '/user/' + user_id
@@ -521,6 +509,7 @@ function loadCurrUserProfile(user_id) {
     })
 }
 
+// This is redundent with loadUserPosts will rename/combine later
 function loadUserProfile(user_id) {
 
     let url = '/user/' + user_id

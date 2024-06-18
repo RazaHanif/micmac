@@ -25,7 +25,8 @@ TODO: Comment out completed
 
     follwing page should be copy paste homepage but only posts from users that current user follows (obv)
 
-    scrap the seperate pages, make it a one page app 
+    
+
 
 
 
