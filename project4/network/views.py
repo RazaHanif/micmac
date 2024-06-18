@@ -87,6 +87,13 @@ def register(request):
     else:
         return render(request, REG)
 
+def following(request):
+    # Renders Homepage
+    return render(request, 'network/following.html')
+
+def profile(request):
+    # Renders Homepage
+    return render(request, 'network/profile.html')
 
 ''' 
     API ROUTES
