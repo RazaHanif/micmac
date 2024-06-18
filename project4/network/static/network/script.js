@@ -521,6 +521,23 @@ function loadCurrUserProfile(user_id) {
     })
 }
 
+function loadUserProfile(user_id) {
+
+    let url = '/user/' + user_id
+    fetch(url, {
+        method: 'GET',
+    })
+    .then(response => {
+        return response.json()
+    })
+    .then(user => {
+        let username = user.username
+        renderPosts(null, username)
+    })
+}
+
+
+
 // Create funcs for Home, User, Following, Profile btns/pages
 // Home page should be same signed in or not
 // User page should have 'Follow' or 'Following' Btn - if user signed in else blank
