@@ -1,9 +1,4 @@
-/* 
-    Populate all posts onto home page
-    Use django fixtures to create some fake posts? 
-    https://docs.djangoproject.com/en/stable/howto/initial-data/
-
-*/
+// Trying to keep it as a one page webpage
 
 // Basic stuff to initialize onload
 document.addEventListener('DOMContentLoaded', function() {
@@ -308,6 +303,47 @@ function loadThisPost(postId) {
     })
 }
 
+function toggleLike(postId, user_id){
+    let message = `User ${Number(user_id)} likes post ${postId}`
+    console.log(message)
+
+    // load up post details
+    fetch(`/post/${postId}`, {
+        method: 'GET',
+    })
+    .then(response => {
+        if (response.status != 200){
+            const error = new Error(response.status)
+            error.name = 'LoadingThisPostError'
+            throw error
+        }
+        return response.json()
+    })
+    .then(post => {
+        // posts is a string by default? Parse it to make it work
+        console.log(post)
+        post = JSON.parse(post)
+        // Map over the post and return only the 'fields' property
+        const fields = post.map(post => ({...post.fields, id: post.pk}))
+        return fields;
+    })
+    .then(fields => {
+        console.log(fields)
+    })    
+    .catch(error => {
+        if (error?.name == "LoadingUserPostsError") {
+            console.log(error)
+        }
+    })
+
+    // If current user does not like post
+    // do x to like the post
+
+    // If current user does like the post
+    // do y to unlike the post
+
+    // referesh page -- loadallposts
+}
 
 // Create and display posts on page
 // Needs some work -- some routes/calcs missing
@@ -396,8 +432,13 @@ function renderPosts(posts, name) {
             // Still need to create implementation for btn
             const likeBtn = document.createElement('div')
             likeBtn.className = 'like-btn'
-            likeBtn.addEventListener('click', () => toggleLike(post.id))
-            likeBtn.innerHTML = '&lt;3'
+            likeBtn.addEventListener('click', () => toggleLike(post.id, curr_user_id))
+            // If current user does not like this post show a heart outline
+            likeBtn.innerHTML = '&#x2661;'
+            // If the current user likes this post fill in the heart
+            if (post.likes.includes(Number(curr_user_id))) {
+                likeBtn.innerHTML = '&#x2665;'
+            }
             const likeCount = document.createElement('p')
             likeCount.className = 'like-count'
 
@@ -474,10 +515,17 @@ function renderPosts(posts, name) {
             // Create functionality for edit btn only if post user id == current user id
             const editBtn = document.createElement('div')
             editBtn.className = 'edit-btn text-muted'
-            editBtn.innerHTML = 'EditThisShit'
-            
-            editBtn.addEventListener('click', () => editThisPost(post.id))
 
+            // Only assigns funtion if current user made the post
+            if (curr_user_id == post.creater) {
+                editBtn.innerHTML = 'Edit'
+                editBtn.addEventListener('click', () => editThisPost(post.id))
+            }
+            else {
+                editBtn.innerHTML = ''
+            }
+
+            
             bottomRight.append(editBtn)
             bottom.append(bottomRight)
 

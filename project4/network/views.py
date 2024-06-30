@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.serializers import serialize
 from django.db import IntegrityError
+from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -254,19 +255,12 @@ def all_posts(request):
 
 # Returns a given post from the db
 # GET
-def this_post(request):
+def this_post(request, post_id):
     # Error if request method is not correct
     if request.method != 'GET':
         return JsonResponse({
             'error': ERROR_GET
         }, status=405)
-        
-    # Get/Check data from client
-    data = json.loads(request.body)
-    if not (post_id := data.get("post_id", "")):
-        return JsonResponse({
-            'error': INPUT_ERROR
-        }, status=400)
     
     # Server side data validation
     try:
@@ -275,10 +269,12 @@ def this_post(request):
         return JsonResponse({
             'error': NO_POST_ERROR
         }, status=404)
+        
+    post = model_to_dict(post)
     
     # All good response
     return JsonResponse(
-        post.as_dict(),
+        post,
         safe=False,
         status=200
     )

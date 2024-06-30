@@ -38,7 +38,7 @@ TODO: Comment out completed
         
         fetch('/add', {
             method: 'POST',
-            body: JSON.stringfy({
+            body: JSON.stringify({
                 post: 'Writing docs sucks!',
             })
         })
@@ -56,7 +56,7 @@ TODO: Comment out completed
 
         fetch('/edit', {
             method: 'PUT',
-            body: JSON.stringfy({
+            body: JSON.stringify({
                 post: 'Editing docs sucks too!',
                 post_id: 5,
             })
@@ -84,7 +84,7 @@ TODO: Comment out completed
 
         fetch('/post', {
             method: 'GET',
-            body: JSON.stringfy({
+            body: JSON.stringify({
                 post_id: 5,
             })
         })
@@ -99,7 +99,7 @@ TODO: Comment out completed
 
         fetch('/user_posts', {
             method: 'GET',
-            body: JSON.stringfy({
+            body: JSON.stringify({
                 user_id: 5,
             })
         })
@@ -128,7 +128,7 @@ TODO: Comment out completed
 
         fetch('/follow', {
             method: 'PUT',
-            body: JSON.stringfy({
+            body: JSON.stringify({
                 follow_id: 5,
             })
         })
@@ -142,7 +142,7 @@ TODO: Comment out completed
 
         fetch('/unfollow', {
             method: 'PUT',
-            body: JSON.stringfy({
+            body: JSON.stringify({
                 follow_id: 5,
             })
         })
@@ -156,7 +156,7 @@ TODO: Comment out completed
 
         fetch('/like', {
             method: 'PUT',
-            body: JSON.stringfy({
+            body: JSON.stringify({
                 post_id: 5,
             })
         })
@@ -170,7 +170,7 @@ TODO: Comment out completed
 
         fetch('/unlike', {
             method: 'PUT',
-            body: JSON.stringfy({
+            body: JSON.stringify({
                 post_id: 5,
             })
         })
