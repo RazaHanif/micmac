@@ -60,3 +60,11 @@ Conditonal
 
 Lists
     Lists can be manipulated same as js, and you can pass list objs as a prop to the component
+
+onClick
+    if a click handler is 
+        onClick={func(arg)}
+    it will call assoon as the page loads
+    to prevent that make it 
+        onClick={() => func(arg)}
+

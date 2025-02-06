@@ -7,6 +7,8 @@ import PropCard from "./PropCard";
 import UserGreeting from "./UserGreeting";
 import List from "./List";
 import PropList from "./PropList";
+import Click from "./Click";
+
 
 function App() {
 
@@ -32,6 +34,7 @@ function App() {
       <Header></Header>
       {/* <Food></Food> */}
       <List></List>
+      <Click></Click>
       <PropList items={fruits} category="Fruits"></PropList>
       <PropList items={veg} category="Vegtable"></PropList>
       <Card></Card>
