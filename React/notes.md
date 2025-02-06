@@ -68,3 +68,15 @@ onClick
     to prevent that make it 
         onClick={() => func(arg)}
 
+React Hooks
+    function that allows func compoennets to use react features without writing class components (useState, useEffect, useContext...)
+
+useState
+    React hook that allows the creation of a stat var AND a setter function to update its value in the DOM
+    const [name, setName] = useState("guest")
+
+    setName("name")
+
+onChange
+    event handler used with forms
+    Triggers a funciton everytime the value changes

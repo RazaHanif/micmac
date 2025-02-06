@@ -67,77 +67,46 @@ button:focus-visible {
   }
 }
 
-.card {
-  border: 2px solid hsl(0,0%,80%);
-  border-radius: 10px;
-  box-shadow: 5px 5px 5px hsl(0, 0%, 0%, 0.1);
-  padding: 20px;
-  margin: 10px;
+.color-picker-container {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.color-picker-container h1 {
+  margin: 50px;
+  font-size: 3em;
+}
+
+.color-display {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 5px solid slategray;
+  border-radius: 25px;
+  margin-bottom: 25px;
+  transition: 0.25s ease;
+}
+
+.color-display p {
+  color: black;
+  font-size: 2rem;
   text-align: center;
-  max-width: 250px;
-  display: inline-block;
 }
 
-.card img {
-  max-width: 60%;
-  height: auto;
-  border-radius: 50%;
-}
-
-.card h2 {
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0%;
-}
-
-.card p {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.user-true {
-  font-size: 2.5em;
-  background-color: green;
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  margin: 0;
-}
-
-.user-false {
-  font-size: 2.5em;
-  background-color: red;
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  margin: 0;
-  
-}
-
-.counter-container {
-  text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.counter-display {
-  font-size: 2em;
-  margin-top: 0;
-  margin-bottom: 50px;
-}
-
-.counter-button {
-  text-align: center;
-  width: 100px;
-  height: 50px;
-  font-size: 1em;
+.color-display label {
+  font-size: 1.5rem;
   font-weight: bold;
-  margin: 0px 5px;
-  background-color: slategray;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  margin-bottom: 10px;
 }
 
-.counter-button:hover {
-  background-color: slateblue;
+input[type="color"] {
+  width: 75px;
+  height: 50px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 3px solid white;
 }
-

@@ -8,6 +8,9 @@ import UserGreeting from "./UserGreeting";
 import List from "./List";
 import PropList from "./PropList";
 import Click from "./Click";
+import Counter from "./Counter";
+import MyComp from "./myComp";
+import ChangeForm from "./ChangeForm";
 
 
 function App() {
@@ -32,6 +35,9 @@ function App() {
   return(
     <>
       <Header></Header>
+      <ChangeForm></ChangeForm>
+      <MyComp></MyComp>
+      <Counter></Counter>
       {/* <Food></Food> */}
       <List></List>
       <Click></Click>
