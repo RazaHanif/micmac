@@ -1,0 +1,86 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: rgb(40, 40, 45);
+}
+
+.todo-container {
+  border: 1px solid black;
+  box-shadow: 5px 2px 2px black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 100%;
+  gap: 0px;
+}
+
+.todo-container h2 {
+  color: white;
+}
+
+.todo-add-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 5px;
+  margin: 0;
+}
+
+.todo-add-container input {
+  background-color: white;
+  border: 2px solid white;
+  border-radius: 5px;
+  margin-right: 5px;
+  color: black;
+}
+
+.todo-add-container input:focus {
+  outline: none;
+  border: 2px solid lightblue;
+}
+
+.todo-add-container button {
+  color: white;
+  background-color: lightblue;
+  border: none;
+  border-radius: 5px;
+}
+
+.task-list {
+  margin: 0;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.task-container {
+  background-color: white;
+  display: flex;
+  text-align: center;
+  justify-content: right;
+  margin: 0.5em;
+  border-radius: 5px;
+  gap: 0.5em;
+  padding: 0.5em;
+}
+
+.task-name {
+  flex-grow: 1;
+  font-weight: bold;
+}
+
+.task-btn {
+  text-align: center;
+  background-color: lightblue;
+  border: none;
+  border-radius: 5px;
+  width: 30px;
+  height: auto;
+}
+
+.delete {
+  background-color: red;
+  width: 75px;
+  color: white;
+}

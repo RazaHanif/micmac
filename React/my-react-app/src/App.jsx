@@ -11,6 +11,9 @@ import Click from "./Click";
 import Counter from "./Counter";
 import MyComp from "./myComp";
 import ChangeForm from "./ChangeForm";
+import Car from "./Car"
+import Array from "./Array";
+import Cars from "./Cars"
 
 
 function App() {
@@ -35,10 +38,13 @@ function App() {
   return(
     <>
       <Header></Header>
+      <Cars></Cars>
+      <Array></Array>
+      <Car></Car>
       <ChangeForm></ChangeForm>
       <MyComp></MyComp>
       <Counter></Counter>
-      {/* <Food></Food> */}
+      <Food></Food>
       <List></List>
       <Click></Click>
       <PropList items={fruits} category="Fruits"></PropList>

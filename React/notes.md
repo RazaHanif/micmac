@@ -80,3 +80,20 @@ useState
 onChange
     event handler used with forms
     Triggers a funciton everytime the value changes
+
+updater function
+    used to allow safe updating of vars
+
+    used with multiple state updates
+
+    react uses the current state to calulate where the next state should be, 
+    setCount doesnt change the count directly, instead react waits till the next "update" then applys it, so multiple changes of the state before the "update is only one change
+
+    instead of doing
+    setCount(count + 1)
+
+    do 
+
+    setCount(c => c + 1)
+    OR
+    setCount(prevCount => prevCount + 1)
