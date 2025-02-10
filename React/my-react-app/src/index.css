@@ -141,3 +141,7 @@ button:focus-visible {
   background-color: slateblue;
 }
 
+.box {
+  padding: 10px;
+  border: 1px solid pink;
+}

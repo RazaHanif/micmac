@@ -4,11 +4,11 @@ import React, {useState, useEffect} from "react";
 
 function Clock() {
 
-    const [time, setTime] = useState(new Date())
+    const [time, setTime] = useState(new Date().toLocaleTimeString())
 
     useEffect(() => {
         const timer = setInterval(() => {
-            setTime(new Date())
+            setTime(new Date().toLocaleTimeString())
         }, 1000)
 
         return () => {
@@ -19,7 +19,7 @@ function Clock() {
     return (
         <div className="page">
             <div className="time-container">
-                <p className="time">{time.toLocaleTimeString()}</p>
+                <p className="time">{time}</p>
             </div>
         </div>
     )

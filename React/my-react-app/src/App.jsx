@@ -16,6 +16,8 @@ import Array from "./Array";
 import Cars from "./Cars"
 import MyEffect from "./Effect";
 import SizeEffect from "./SizeEffect";
+import MyContext from "./MyContext";
+import MyRef from "./MyRef";
 
 
 function App() {
@@ -40,27 +42,29 @@ function App() {
   return(
     <>
       <Header></Header>
-      <SizeEffect></SizeEffect>
-      <MyEffect></MyEffect>
-      <Cars></Cars>
-      <Array></Array>
-      <Car></Car>
-      <ChangeForm></ChangeForm>
-      <MyComp></MyComp>
-      <Counter></Counter>
-      <Food></Food>
-      <List></List>
-      <Click></Click>
-      <PropList items={fruits} category="Fruits"></PropList>
-      <PropList items={veg} category="Vegtable"></PropList>
-      <Card></Card>
-      <PropCard name="Harry" age={25} isStudent={true}></PropCard>
-      <PropCard name="Ron" age={24} isStudent={false}></PropCard>
-      <PropCard></PropCard>
-      <Button></Button>
-      <UserGreeting isLoggedIn={true} username="Raza"></UserGreeting>
-      <UserGreeting isLoggedIn={false} username="Bob"></UserGreeting>
-      <UserGreeting isLoggedIn={true}></UserGreeting>
+      <MyRef></MyRef>
+      {/* <MyContext></MyContext> */}
+      {/* <SizeEffect></SizeEffect> */}
+      {/* <MyEffect></MyEffect> */}
+      {/* <Cars></Cars> */}
+      {/* <Array></Array> */}
+      {/* <Car></Car> */}
+      {/* <ChangeForm></ChangeForm> */}
+      {/* <MyComp></MyComp> */}
+      {/* <Counter></Counter> */}
+      {/* <Food></Food> */}
+      {/* <List></List> */}
+      {/* <Click></Click> */}
+      {/* <PropList items={fruits} category="Fruits"></PropList> */}
+      {/* <PropList items={veg} category="Vegtable"></PropList> */}
+      {/* <Card></Card> */}
+      {/* <PropCard name="Harry" age={25} isStudent={true}></PropCard> */}
+      {/* <PropCard name="Ron" age={24} isStudent={false}></PropCard> */}
+      {/* <PropCard></PropCard> */}
+      {/* <Button></Button> */}
+      {/* <UserGreeting isLoggedIn={true} username="Raza"></UserGreeting> */}
+      {/* <UserGreeting isLoggedIn={false} username="Bob"></UserGreeting> */}
+      {/* <UserGreeting isLoggedIn={true}></UserGreeting> */}
       <Footer></Footer>
     </>
   );
