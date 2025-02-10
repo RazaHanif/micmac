@@ -14,6 +14,8 @@ import ChangeForm from "./ChangeForm";
 import Car from "./Car"
 import Array from "./Array";
 import Cars from "./Cars"
+import MyEffect from "./Effect";
+import SizeEffect from "./SizeEffect";
 
 
 function App() {
@@ -38,6 +40,8 @@ function App() {
   return(
     <>
       <Header></Header>
+      <SizeEffect></SizeEffect>
+      <MyEffect></MyEffect>
       <Cars></Cars>
       <Array></Array>
       <Car></Car>
