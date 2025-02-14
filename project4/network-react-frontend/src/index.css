@@ -76,16 +76,35 @@ button:focus-visible {
 }
 
 .nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--main);
   padding: 0.25em;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   gap: 1em;
+  padding-bottom: 0.5em;
+  box-shadow: 0 2px 5px var(--border);
+  transition:  0.3s ease-in-out;
+  will-change: transform;
+}
+
+
+.nav-bar.hidden {
+  transform: translateY(-100%);
 }
 
 .nav-icon {
   font-size: 2em;
 }
+
+.content {
+  margin-top: 60px;
+  padding: 20px;
+}
+
 
 .page-links {
   background-color: var(--card-main);
@@ -115,7 +134,7 @@ button:focus-visible {
 }
 
 .icon:hover {
-  text-decoration: ;
+  text-decoration: none;
 }
 
 .body {
@@ -123,4 +142,11 @@ button:focus-visible {
   padding: 0.5em;
   border-radius: 0.5em;
   border: 2px solid var(--contrast);
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
