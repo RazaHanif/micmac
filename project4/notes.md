@@ -1,32 +1,33 @@
 # Docs:
 
 TODO: Comment out completed
-    <!-- change all docs to just return full dataset -->
-    <!-- no 10 post per page -->
-        Infinite scroll like lecture
-        load after reaching bottom of screen
-    <!-- make a bunch of fake posts/users and real superuser -->
-    <!-- log in and test -->
-    <!-- Create Admin page -->
-    Create User/Following/Explore/Profile pages
-        JS Fucntionality
-    <!-- new post -->
-        edit post
-    <!-- comments -->
-        like
-        follow
+    <!-- Page is same if logged in or out, only some elements change -->
+    Main Page
+        Logged In: Shows posts only from users you are following
+        Logged Out: Shows all posts
 
-    Need to add EditBtn & Like functionality on homepage
+        Infinite scroll
+        Load 10 posts and load more once you get to bottom of page
 
-    then create profile page - disaplay all posts by that person
-    make each username on a post a link to thier profile page
+    User Page
+        Shows all the posts a specific user has made
+        Looks same as the main page, but has a large User card ontop
 
-    current user page shouldnt have follow btn
+    Profile Page
+        Looks same as User Page but top user card is different
 
-    follwing page should be copy paste homepage but only posts from users that current user follows (obv)
+    Following / Followers Pop up: Logged In Only
+        Clickable element from a profile/user page,
+        shows a list of all that users followers/following
 
-    
+    Explore Page: Logged In Only
+        Same as Logged Out main page
 
+    Log In / Register 
+        Copy the Django login / Auth page
+
+    If user is logged in you can follow/unfollow users, create/edit/delete posts
+    If user is logged out then follow button redirects to log in page, no post CRUD
 
 
 
