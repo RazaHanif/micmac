@@ -1,6 +1,28 @@
 # Docs:
 
 TODO: Comment out completed
+    Posts - <Card/>
+        Copy from old layout
+        ------------------------------------------
+        |               username                 |
+        |                 date                   |
+        ------------------------------------------
+        |                content                 |
+        |                                        |
+        |               edit/flag                |
+        ------------------------------------------
+        |   <3                                   |
+        | numLike        Comments        EditBtn |
+        ------------------------------------------
+
+        numLike should update automaticcaly
+        Comments should open up a popup with the tweet on top and all the comments below
+
+        editBtn should only be visiable to the user who created the post
+
+        <3 should be a unfilled heart if not liked and a filled heart if the current user liked the post
+
+
     <!-- Page is same if logged in or out, only some elements change -->
     Main Page
         Logged In: Shows posts only from users you are following
@@ -28,6 +50,7 @@ TODO: Comment out completed
 
     If user is logged in you can follow/unfollow users, create/edit/delete posts
     If user is logged out then follow button redirects to log in page, no post CRUD
+
 
 
 
