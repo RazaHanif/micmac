@@ -26,15 +26,3 @@ urlpatterns = [
     path("unlike/", views.unlike, name="unlike"),
     path("comment/", views.unlike, name="unlike"),
 ]
-
-""" 
-{
-    "creater_id": 1,
-    "content": "Maybe we should introduce a paid tier that gives you nothing",
-    "date": "2024-05-25",
-    "edited": true,
-    "id": 2
-}
-
-<Card id={ post.id } content={ post.content} date={ post.date } edited={ post.edited } creater={post.creater_id} />
-"""
