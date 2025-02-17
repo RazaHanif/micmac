@@ -242,12 +242,12 @@ def all_posts(request):
             'error': NO_POST_ERROR
         }, status=404)
     
-    # Convery data from Queryset to JSON
-    posts = serialize('json', posts)
+    # Convery data from Queryset to a list of dicts
+    posts_data = list(posts.values())
        
     # All good response
     return JsonResponse(
-        posts,
+        posts_data,
         safe=False,
         status=200
     )
