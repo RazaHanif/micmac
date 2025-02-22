@@ -14,3 +14,12 @@ function CompC() {
 }
 
 export default CompC
+
+
+// {
+//     "creater_id": 2,
+//     "content": "AI = Big Brother",
+//     "date": "2024-05-28",
+//     "edited": false,
+//     "id": 3
+// }

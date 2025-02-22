@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, createContext } from "react"
 import Card from "./Card"
 
+export const PostContext = createContext()
+
 function MainPage() {
+
 
     const [posts, setPosts] = useState([])
 
@@ -29,16 +32,10 @@ function MainPage() {
         <div className="posts">
             {/* Map func on posts to create multiple <Card/> comps */}
             {posts.map(post => (
-                <Card 
-                    key={post.id}
-                    id={post.id}
-                    user={post.creater_id}
-                    content={post.content}
-                    date={post.date}
-                    edited={post.edited}
-                />
+                <PostContext.Provider value={post} key={post.id}>
+                    <Card />
+                </PostContext.Provider>
             ))}
-
         </div>
     )
 }

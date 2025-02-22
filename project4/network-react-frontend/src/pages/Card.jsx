@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { PostContext } from "./MainPage";
 import PropTypes from 'prop-types'
 
-function Card({ user, content, date, edited, postId}) {
+function Card() {
     // Placeholder for user image - i dont have backend func for this
     const imgSrc = "https://cdn.jsdelivr.net/npm/twemoji@11.3.0/2/svg/1f9f1.svg"
 
+    // Context for the post
+    const post = useContext(PostContext)
+
     // deconstruct props and declare inital vars
-    const [userState, setUserState] = useState(user)
-    const [contentState, setContentState] = useState(content)
-    const [dateState, setDateState] = useState(date)
-    const [editedState, setEditedState] = useState(edited)
-    const [postIdState, setPostIdState] = useState(postId)
+    const [userState, setUserState] = useState(post.creater_id)
+    const [contentState, setContentState] = useState(post.content)
+    const [dateState, setDateState] = useState(post.date)
+    const [editedState, setEditedState] = useState(post.edited)
 
     // Checks if post was made today, if made today will change date to 'today'
     useEffect(() => {
@@ -18,10 +21,7 @@ function Card({ user, content, date, edited, postId}) {
         today = today.toISOString().split('T')[0]
 
         if (dateState == today){
-            setDate("today")
-        }
-        else {
-            setDate(date)
+            setDateState("today")
         }
     }, [])
 
@@ -36,7 +36,7 @@ function Card({ user, content, date, edited, postId}) {
             return response.json()
         })
         .then(data => {
-            setUser(data)
+            setUserState(data)
         })
         .catch((err) => {
             console.error('Error fetching username:', err)
@@ -59,27 +59,14 @@ function Card({ user, content, date, edited, postId}) {
                 <div className="card-text">
                     <p className="card-date">{dateState}</p>
                     <h6 className="card-content">{contentState}</h6>
-                    <p className="card-edited-flag">{editedState ? 'eEditedState' : ""}</p>
-     postIdState     PostIdState</div>
+                    <p className="card-edited-flag">{editedState ? 'edited' : ""}</p>
+                    <p>&hearts;</p>
+                </div>
             </div>
-            
         </div>
     );
 }
 
-PropCard.propTypes = {
-    name: PropTypes.string,
-    date: PropTypes.string,
-    id: PropTypes.number,
-    user: PropTypes.number,
-    edited: PropTypes.bool,
-}
-
-PropCard.defaultProps = {
-    name: "Guest",
-    age: 0,
-    isStudent: false,
-}
 
 export default Card
 
