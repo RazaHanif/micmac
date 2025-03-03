@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, createContext } from "react"
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom"
 import MainPage from "./pages/MainPage.jsx"
-import UserPage from "./pages/UserPage.jsx"
+// import UserPage from "./pages/UserPage.jsx"
 import ProfilePage from "./pages/ProfilePage.jsx"
 import ExplorePage from "./pages/ExplorePage.jsx"
 import LoginPage from "./pages/LoginPage.jsx"
+import RegisterPage from "./pages/RegisterPage.jsx"
 import './pages/LoginPage.css'
 import './pages/Card.css'
-import RegisterPage from "./pages/RegisterPage.jsx"
 
-// I gotta figure out how to use the django log in and auth stuff from the templates.
+
+// Using useContext and a user is logged in check to pass through all other funcs
+export const UserLoggedInContext = createContext()
+
+
 
 function App() {
   const [scrollingDown, setScrollingDown] = useState(false);
@@ -40,6 +44,8 @@ function App() {
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
+
+  
 
 
   document.title = "Brick"

@@ -7,12 +7,16 @@ from django.core.serializers import serialize
 from django.db import IntegrityError
 from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
+from django.middleware.csrf import get_token
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from time import sleep
 
 from .models import User, Post, Comment
+
+
 
 # Constants just to avoid the sonarlint errors
 REG = 'network/register.html'
@@ -36,24 +40,26 @@ def index(request):
 
 
 # Prewritten - Logs user in
+@csrf_exempt
 def login_view(request):
     if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))  # Parse JSON from React
+            username = data.get('username')
+            password = data.get('password')
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
 
-        # Attempt to sign user in
-        username = request.POST['username']
-        password = request.POST['password']
         user = authenticate(request, username=username, password=password)
 
-        # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse('index'))
+            return JsonResponse({"message": "Login successful", "user": username}, status=200)
         else:
-            return render(request, 'network/login.html', {
-                'message': 'Invalid username and/or password.'
-            })
-    else:
-        return render(request, 'network/login.html')
+            return JsonResponse({"error": "Invalid username or password"}, status=401)
+    
+    return JsonResponse({"error": "POST request required"}, status=400)
+
 
 
 # Prewritten - Logs user out
@@ -88,6 +94,18 @@ def register(request):
         return HttpResponseRedirect(reverse('index'))
     else:
         return render(request, REG)
+    
+# Defualt to return a csrf token in http
+def get_csrf_token(request):
+    csrf_token = get_token(request)  # Get CSRF token
+    response = JsonResponse({'csrfToken': csrf_token})
+    response.set_cookie(
+        "csrftoken", csrf_token, 
+        httponly=False,  # Allow frontend access
+        secure=False,    # Set to True if using HTTPS
+        samesite="Lax"   # Important for cross-origin requests
+    )
+    return response
 
 def following(request):
     # Renders Homepage

@@ -1,21 +1,73 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [data, setData] = useState();
+    const [csrf, setCsrf] = useState();
+
+    useEffect(() => {
+        fetch('http://127.0.0.1:8000/token/', {
+            method: 'GET',
+            credentials: 'include',
+        })
+        .then (response => {
+            if (response.status != 200){
+                const err = new Error(response.status)
+                err.name = 'Getting CSRF'
+                throw err
+            }
+        return response.json()
+        })
+        .then(data => {
+            setCsrf(data.csrfToken)
+        })
+    }, [])
+
+    const handleUsernameChange = (e) => {
+        setUsername(e.target.value)
+    }
+
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value)
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Example of how you might handle the form submission.
-        // Replace this with your actual authentication logic.
-        if (username === 'admin' && password === 'password') {
-            alert('Logged in successfully!');
-        } else {
-            setErrorMessage('Invalid username or password.');
-        }
+        fetch('http://127.0.0.1:8000/login/', { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrf,
+            },
+            body: JSON.stringify({
+                username,
+                password,
+            }),
+            credentials: 'include'
+        })
+        .then (response => {
+            if (response.status != 200){
+                const err = new Error(response.status)
+                err.name = 'Logging In'
+                throw err
+            }
+            
+            return response.json()
+        })
+        .then(data => {
+            setData(data)
+        })
+        .catch(err => {
+            console.error('Error Logging In', err)
+        })
+
+        console.log(`username:${username} -- password:${password} -- csrf:${csrf}`)
+        console.log(data)
     };
+        
 
     return (
         <div className="login-container">
@@ -32,7 +84,7 @@ const LoginPage = () => {
                         id="username"
                         name="username"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={handleUsernameChange}
                         required
                     />
                 </div>
@@ -44,7 +96,7 @@ const LoginPage = () => {
                         id="password"
                         name="password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={handlePasswordChange}
                         required
                     />
                 </div>

@@ -5,11 +5,12 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("following", views.following, name="following"),
-    path("login", views.login_view, name="login"),
-    path("logout", views.logout_view, name="logout"),
-    path("profile", views.profile, name="profile"),
-    path("register", views.register, name="register"),
+    path("following/", views.following, name="following"),
+    path("login/", views.login_view, name="login"),
+    path("token/", views.get_csrf_token, name="token"),
+    path("logout/", views.logout_view, name="logout"),
+    path("profile/", views.profile, name="profile"),
+    path("register/", views.register, name="register"),
     
     # API ROUTES
     path("new/", views.new_post, name="add_post"),
