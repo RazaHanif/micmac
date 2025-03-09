@@ -13,6 +13,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from time import sleep
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User, Post, Comment
 
@@ -39,7 +40,7 @@ def index(request):
     return render(request, 'network/index.html', context)
 
 
-# Prewritten - Logs user in
+# Logs user in - csrf exempt cuz i cant figure it out
 @csrf_exempt
 def login_view(request):
     if request.method == 'POST':
@@ -49,17 +50,23 @@ def login_view(request):
             password = data.get('password')
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
-
+        
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            login(request, user)
-            return JsonResponse({"message": "Login successful", "user": username}, status=200)
+            refresh = RefreshToken(user)
+            return JsonResponse({
+                "success": True,
+                "access_token": str(refresh.access_token),
+                "refresh_token": str(refresh)
+            }, status=200)
         else:
-            return JsonResponse({"error": "Invalid username or password"}, status=401)
-    
-    return JsonResponse({"error": "POST request required"}, status=400)
+            return JsonResponse({
+                "success": False,
+                "error": "Invalid username or password"
+            }, status=401)
 
+    return JsonResponse({"error": "POST request required"}, status=400)
 
 
 # Prewritten - Logs user out
@@ -96,7 +103,9 @@ def register(request):
         return render(request, REG)
     
 # Defualt to return a csrf token in http
-def get_csrf_token(request):
+
+# Probably delete this
+""" def get_csrf_token(request):
     csrf_token = get_token(request)  # Get CSRF token
     response = JsonResponse({'csrfToken': csrf_token})
     response.set_cookie(
@@ -105,7 +114,7 @@ def get_csrf_token(request):
         secure=False,    # Set to True if using HTTPS
         samesite="Lax"   # Important for cross-origin requests
     )
-    return response
+    return response """
 
 def following(request):
     # Renders Homepage

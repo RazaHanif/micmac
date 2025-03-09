@@ -5,25 +5,6 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [data, setData] = useState();
-    const [csrf, setCsrf] = useState();
-
-    useEffect(() => {
-        fetch('http://127.0.0.1:8000/token/', {
-            method: 'GET',
-            credentials: 'include',
-        })
-        .then (response => {
-            if (response.status != 200){
-                const err = new Error(response.status)
-                err.name = 'Getting CSRF'
-                throw err
-            }
-        return response.json()
-        })
-        .then(data => {
-            setCsrf(data.csrfToken)
-        })
-    }, [])
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value)
@@ -33,39 +14,35 @@ const LoginPage = () => {
         setPassword(e.target.value)
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        fetch('http://127.0.0.1:8000/login/', { 
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrf,
-            },
-            body: JSON.stringify({
-                username,
-                password,
-            }),
-            credentials: 'include'
-        })
-        .then (response => {
-            if (response.status != 200){
-                const err = new Error(response.status)
-                err.name = 'Logging In'
-                throw err
-            }
-            
-            return response.json()
-        })
-        .then(data => {
-            setData(data)
-        })
-        .catch(err => {
-            console.error('Error Logging In', err)
-        })
+        try {
+            const response = await fetch('http://127.0.0.1:8000/token/', { // Simple JWT endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                }),
+            });
 
-        console.log(`username:${username} -- password:${password} -- csrf:${csrf}`)
-        console.log(data)
+            if (response.ok) {
+                const data = await response.json();
+                // Store access token and refresh token (e.g., in localStorage)
+                localStorage.setItem('access_token', data.access_token);
+                localStorage.setItem('refresh_token', data.refresh_token);
+                // Redirect or update state as needed
+            } else {
+                const errorData = await response.status;
+                setErrorMessage(errorData || 'Invalid credentials');
+            }
+        } catch (error) {
+            console.error('Error logging in:', error);
+            setErrorMessage('An error occurred');
+        }
     };
         
 
