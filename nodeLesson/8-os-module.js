@@ -5,7 +5,7 @@ const os = require('os')
 
 // Info on current user
 const user = os.userInfo()
-// console.log(user);
+console.log(user);
 
 
 // Method returns the system uptime in seconds
