@@ -1,0 +1,138 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Item - {{listing.title}}
+{% endblock %}
+
+{% block body %}
+
+<div id="container">
+    <!-- Top Left: All Item Info  -->
+    <div id="container_a">
+        <!-- Signed In: Button to toggle item in users wishlist -->
+        {% if user.is_authenticated %}
+            {% if user != listing.seller %}
+                <div id="wishlist_toggle">
+                        <form action="{% url 'wish' %}" method="post">
+                        {% csrf_token %}
+                        <input type="text" value={{listing.id}} name="listing_id" hidden>
+
+                        <!-- Toggles Text based on if item is already in users wishlist -->
+                        <!-- IDK if this is needed -->
+                        {% if not wishlist %}
+                            <input type="Submit" value="Add To Wishlist">
+                        {% else %}
+                            <input type="Submit" value="Remove From Wishlist">
+                        {% endif %}
+                    </form>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        
+        <!-- SignedIn Seller: Start/Stop Listing -->
+        {% if user == listing.seller %}
+            <div id="listing_status">
+                <form action="{% url 'change' %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" value={{listing.id}} name="listing_id" hidden>
+                    <input type="text" value={{price.bid_user.id}} name="buyer" hidden>
+                    <input type="Submit" class="{% if listing.active %} active {% else %} not-active {% endif %}" value="{% if listing.active %} End Listing {% else %} Reactivate Listing {% endif %}">
+                </form>
+            </div>
+        {% endif %}
+
+        <div id="seller_container">
+            <p>Seller
+                <a class="user_link" href="{% url 'user' listing.seller.id %}" >{{listing.seller}}</a>
+            </p>
+        </div>
+    
+        <!-- Item Details: seperate containers for each part -->
+        <div id="title_container">
+            <h1>{{listing.title}}</h1>
+        </div>
+
+
+        <div id="image_container">
+            <img src={{listing.image_link}} alt={{listing.title}} width="250px" height="auto"/>
+        </div>
+
+        <!-- Move this JS into another file and link it -->
+        <div id="desc_container">
+            <p id="desc_full">{{listing.desc}}</p>
+            <button id="more" onClick="show()">More...</button>
+        </div>
+    </div>
+
+    <!-- Top Right: All Bidding Info -->
+    <div id="container_b">
+
+        <!-- If there is a bid, display otherwise display askingprice -->
+        <!-- Add in a link to use -->
+        <div id="price_container">
+            {% if price.bid > listing.starting_bid %}
+                <!-- If there is a bid display that with buyer info -->
+                <h5>
+                    <a class="user_link" href="{% url 'user' price.bid_user.id %}" >
+                        {{price.bid_user}}
+                    </a>
+                    Bids ${{price.bid}}</h5>
+                {% else %}
+                <!-- If no bid display asking price with seller info -->
+                <h5>{{listing.seller}} Asking ${{listing.starting_bid}}</h5>
+            {% endif %}
+        </div>
+        
+        <!-- SignedIn: Buyers Only -->
+        <div id="bid_container">
+            {% if user.is_authenticated %}
+                {% if user != listing.seller %}
+                    <form action="{% url 'bid' %}" method="post">
+                        {% csrf_token %}
+                        {% if price.bid > listing.starting_bid %}
+                            <input type="number" name="bid" min={{price.bid|add:"1"}} placeholder="New Bid" required>
+                        {% else %}
+                            <input type="number" name="bid" min={{listing.starting_bid|add:"1"}} placeholder="New Bid" required>
+                        {% endif %}
+                        <input type="text" name="listing_id" value={{listing.id}} hidden>
+                        <input type="submit" value="Bid">
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+
+    </div>
+        
+    <!-- Bottom: Comments - Can add suggested listings in future -->
+    <div id="container_c">
+
+        <div id="comments">
+            <table>
+                <tr>
+                    <th title="Comments">Comments</th>
+                </tr>
+    
+                {% for comment in comments %}
+                <tr>
+                    <td>{{comment.comment_user}}: {{comment.comment}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- SignedIn: textarea to add new comments -->
+        <div id="new_comments">
+            {% if user.is_authenticated %}
+                <form action="{% url 'comment' %}" method="post">
+                    {% csrf_token %}
+                    {{ comment_input }}
+                    <input type="text" value={{listing.id}} name="listing_id" hidden>
+                    <input type="submit" value="Add">
+                </form>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

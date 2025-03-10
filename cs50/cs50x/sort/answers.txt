@@ -1,0 +1,11 @@
+sort1 uses: Bubble
+
+How do you know?: has the slowest speeds for both worst and best case scenario inidcaing theta(n^2)
+
+sort2 uses: Merge
+
+How do you know?: has the fastest worst case scenario indicating theta(n log n)
+
+sort3 uses: Selection
+
+How do you know?: has a faster speed than selection but not as fast as method

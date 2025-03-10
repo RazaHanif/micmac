@@ -1,0 +1,72 @@
+{% extends "mail/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2>{{ request.user.email }}</h2>
+
+    <!-- 
+        Would prefer to remove bootstrap and implement it myself 
+        but too lazy to figure out how to style the <a> the same as the <button>
+    -->
+    <button class="btn btn-sm btn-outline-secondary" id="inbox">Inbox</button>
+    <button class="btn btn-sm btn-outline-secondary" id="compose">Compose</button>
+    <button class="btn btn-sm btn-outline-secondary" id="sent">Sent</button>
+    <button class="btn btn-sm btn-outline-secondary" id="archived">Archived</button>
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'logout' %}">Log Out</a>
+    <hr>
+
+    <!-- NestedDivHell -->
+    <!-- Email View Popup -->
+    <div id="fill-layer">
+        <div id="popup-email">
+            <div id="email-header">
+                <div id="email-subject"></div> 
+                <div id="email-button">X</div>
+            </div>
+            <div id="email-main">
+                <div id='email-info'>
+                    <div id="email-sender"></div> 
+                    <div id="email-time"></div> 
+                    <div id="email-recipients"></div> 
+                </div>
+                <div id="email-body"></div> 
+                <div id="email-toggles">
+                    <hr>
+                    <div class="toggle">
+                        <div id="read-toggle" class="toggle-btn">Read</div>
+                        <div id="reply" class="btn btn-sm btn-outline-secondary">Reply</div>
+                        <div id="archive-toggle" class="toggle-btn">Archive</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Div for all emails to load -->
+    <div id="emails-view">
+    </div>
+
+    <!-- Prebuilt form for new emails -->
+    <div id="compose-view">
+        <h3>New Email</h3>
+        <form id="compose-form">
+            <div class="form-group">
+                From: <input disabled class="form-control" value="{{ request.user.email }}">
+            </div>
+            <div class="form-group">
+                <p>To:</p>
+                <p id="recipients-error">Error</p> 
+                <input class="form-control" id="compose-recipients" placeholder="name@example.com" required>
+            </div>
+            <div class="form-group">
+                <input class="form-control" id="compose-subject" placeholder="Subject" required>
+            </div>
+            <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
+            <input id="submit" type="submit" class="btn btn-primary"/ required>
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'mail/inbox.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,178 @@
+just a list of useful websites im using during development
+
+NHTSA Api page - https://vpic.nhtsa.dot.gov/api/
+
+NHTSA Api sample - https://vpic.nhtsa.dot.gov/api/Home/Index/LanguageExamples
+
+.schema of the NHTSA Api = https://vpic.nhtsa.dot.gov/api/vehicles/decodevinextended/VINNO?format=jso
+
+Random Vins for testing - https://randomvin.com/
+
+
+NHTSA Api Error Codes
+[
+    0 - VIN deccoed clean. Check Digit (9th Position) is correct
+    1 - Check Digit (9th Position) does not calculate properly
+    6 - Incomplete VIN;
+    7 - Manufacturer is not registered with NHTSA for sale or importation in the U.S. for use on U.S roads; Please contact the manufacturer directly for more information;
+    11 - Incorrect Model Year - Position 10 does not match valid model year codes (I, O, Q, U, Z, 0). Decoded data may not be accurate.;
+    400 - Invalid Characters Present
+]
+
+NHTSA Api response List indexs
+[
+    0 - Suggested VIN
+    1 - Error Code
+    2 - Possible Values
+    3 - Additional Error Text
+    4 - Error Text
+    5 - Vehicle Descriptor
+    6 - Destination Market
+    7 - Make
+    8 - Manufacturer Name
+    9 - Model
+    10 - Model Year
+    11 - Plant City
+    12 - Series
+    13 - Trim
+    14 - Vehicle Type
+    15 - Plant Country
+    16 - Plant Company Name
+    17 - Plant State
+    18 - Trim2
+    19 - Series2
+    20 - Note
+    21 - Base Price ($)
+    22 - Non-Land Use
+    23 - Body Class
+    24 - Doors
+    25 - Windows
+    26 - Wheel Base Type
+    27 - Track Width (inches)
+    28 - Gross Vehicle Weight Rating From
+    29 - Bed Length (inches)
+    30 - Curb Weight (pounds)
+    31 - Wheel Base (inches) From
+    32 - Wheel Base (inches) To
+    33 - Gross Combination Weight Rating From
+    34 - Gross Combination Weight Rating To
+    35 - Gross Vehicle Weight Rating To
+    36 - Bed Type
+    37 - Cab Type
+    38 - Trailer Type Connection
+    39 - Trailer Body Type
+    40 - Trailer Length (feet)
+    41 - Other Trailer Info
+    42 - Number of Wheels
+    43 - Wheel Size Front (inches)
+    44 - Wheel Size Rear (inches)
+    45 - Entertainment System
+    46 - Steering Location
+    47 - Number of Seats
+    48 - Number of Seat Rows
+    49 - Transmission Style
+    50 - Transmission Speeds
+    51 - Drive Type
+    52 - Axles
+    53 - Axle Configuration
+    54 - Brake System Type
+    55 - Brake System Description
+    56 - Other Battery Info
+    57 - Battery Type
+    58 - Number of Battery Cells per Module
+    59 - Battery Current (Amps) From
+    60 - Battery Voltage (Volts) From
+    61 - Battery Energy (kWh) From
+    62 - EV Drive Unit
+    63 - Battery Current (Amps) To
+    64 - Battery Voltage (Volts) To
+    65 - Battery Energy (kWh) To
+    66 - Number of Battery Modules per Pack
+    67 - Number of Battery Packs per Vehicle
+    68 - Charger Level
+    69 - Charger Power (kW)
+    70 - Engine Number of Cylinders
+    71 - Displacement (CC)
+    72 - Displacement (CI)
+    73 - Displacement (L)
+    74 - Engine Stroke Cycles
+    75 - Engine Model
+    76 - Engine Power (kW)
+    77 - Fuel Type - Primary
+    78 - Valve Train Design
+    79 - Engine Configuration
+    80 - Fuel Type - Secondary
+    81 - Fuel Delivery / Fuel Injection Type
+    82 - Engine Brake (hp) From
+    83 - Cooling Type
+    84 - Engine Brake (hp) To
+    85 - Electrification Level
+    86 - Other Engine Info
+    87 - Turbo
+    88 - Top Speed (MPH)
+    89 - Engine Manufacturer
+    90 - Pretensioner
+    91 - Seat Belt Type
+    92 - Other Restraint System Info
+    93 - Curtain Air Bag Locations
+    94 - Seat Cushion Air Bag Locations
+    95 - Front Air Bag Locations
+    96 - Knee Air Bag Locations
+    97 - Side Air Bag Locations
+    98 - Anti-lock Braking System (ABS)
+    99 - Electronic Stability Control (ESC)
+    100 - Traction Control
+    101 - Tire Pressure Monitoring System (TPMS) Type
+    102 - Active Safety System Note
+    103 - Auto-Reverse System for Windows and Sunroofs
+    104 - Automatic Pedestrian Alerting Sound (for Hybrid and EV only)
+    105 - Event Data Recorder (EDR)
+    106 - Keyless Ignition
+    107 - SAE Automation Level From
+    108 - SAE Automation Level To
+    109 - NCSA Body Type
+    110 - NCSA Make
+    111 - NCSA Model
+    112 - NCSA Note
+    113 - Adaptive Cruise Control (ACC)
+    114 - Crash Imminent Braking (CIB)
+    115 - Blind Spot Warning (BSW)
+    116 - Forward Collision Warning (FCW)
+    117 - Lane Departure Warning (LDW)
+    118 - Lane Keeping Assistance (LKA)
+    119 - Backup Camera
+    120 - Parking Assist
+    121 - Bus Length (feet)
+    122 - Bus Floor Configuration Type
+    123 - Bus Type
+    124 - Other Bus Info
+    125 - Custom Motorcycle Type
+    126 - Motorcycle Suspension Type
+    127 - Motorcycle Chassis Type
+    128 - Other Motorcycle Info
+    129 - Dynamic Brake Support (DBS)
+    130 - Pedestrian Automatic Emergency Braking (PAEB)
+    131 - Automatic Crash Notification (ACN) / Advanced Automatic Crash Notification (AACN)
+    132 - Daytime Running Light (DRL)
+    133 - Headlamp Light Source
+    134 - Semiautomatic Headlamp Beam Switching
+    135 - Adaptive Driving Beam (ADB)
+    136 - Rear Cross Traffic Alert
+    137 - Rear Automatic Emergency Braking
+    138 - Blind Spot Intervention (BSI)
+    139 - Lane Centering Assistance
+]
+
+
+CarMD Api for car maintaince -- add that very last cuz gonna have to pay for the api acess
+
+------------
+Start using r = response["results"]  to make loops and all easier and less work to type out
+------------
+
+geocoder to get the current long/lat for the local shop recomendation
+
+SerpApi for the google maps search integration
+--- go through the sample response to build up the website before actually pulling requests
+
+Maybe switch this to just the actual google api cuz I feel like thats more future proof

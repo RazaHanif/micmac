@@ -1,0 +1,36 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block body %}
+
+    <h2>Register</h2>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+        {% comment %} Try geting rid of bootstrap here {% endcomment %}
+
+    <form action="{% url 'register' %}" method="post" id="login_form">
+        {% csrf_token %}
+        <div class="login_item">
+            <input autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div class="login_item">
+            <input type="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="login_item">
+            <input type="password" name="password" placeholder="Password">
+        </div>
+        <div class="login_item">
+            <input type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+        <input type="submit" value="Register">
+    </form>
+
+    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+
+{% endblock %}

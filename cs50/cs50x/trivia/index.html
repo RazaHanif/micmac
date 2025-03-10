@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+        <script>
+            function mc(event)
+            {
+                var name = event.srcElement;
+                var ans = document.getElementById('mc_ans');
+                const buttons = document.getElementsByClassName('mc');
+
+                for (let i = 0; i < buttons.length; i++)
+                {
+                    buttons[i].style.backgroundColor = '#d9edff';
+                }
+
+                if (name.innerHTML == 'Toyota')
+                {
+                    name.style.backgroundColor = 'green';
+                    ans.innerHTML = 'Correct';
+                }
+                else
+                {
+                    name.style.backgroundColor = 'red';
+                    ans.innerHTML = 'Incorrect';
+                }
+            }
+
+            function question(event)
+            {
+                var ans = document.getElementById('response');
+                var out = document.getElementById('ques_ans');
+
+                ans.style.backgroundColor = 'white';
+
+                if (ans.value.toLowerCase() == 'honda')
+                {
+                    ans.style.backgroundColor = 'green';
+                    ans.style.color = 'white';
+                    out.innerHTML = 'Correct'
+                }
+                else
+                {
+                    ans.style.backgroundColor = 'red';
+                    ans.style.color = 'white';
+                    out.innerHTML = 'Incorrect'
+                }
+            }
+
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <h3>What brand makes the GT86?</h3>
+                <p id="mc_ans"></p>
+                <button onclick="mc(event)" class="mc" type="button">Subaru</button>
+                <button onclick="mc(event)" class="mc" type="button">Honda</button>
+                <button onclick="mc(event)" class="mc" type="button">Nissan</button>
+                <button onclick="mc(event)" class="mc" type="button">Toyota</button>
+                <button onclick="mc(event)" class="mc" type="button">Scion</button>
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+                <form>
+                    <h3>Which brand makes the Accord</h3>
+                    <input autocomplete="off" autofocus id="response" placeholder="Answer" type="text">
+                    <button onclick="question(event)" type="button">Check Answer</button>
+                </form>
+                <p id="ques_ans"></p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    <table class="table table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Cash</th>
+                <th>Portfolio Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{name}}</td>
+                <td>{{cash | usd}}</td>
+                <td>{{total | usd}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Stock Ticker</th>
+                <th>Shares</th>
+                <th>Current Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in share %}
+            <tr>
+                <td>{{item["stock"]}}</td>
+                <td>{{item["SUM(amount)"]}}</td>
+                <td>{{item["price"] | usd}}</td>
+                <td>{{(item["price"] * item["SUM(amount)"])| usd}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+{% endblock %}

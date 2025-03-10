@@ -1,0 +1,18 @@
+PEP8
+
+Indent = 4 spaces
+Max Line Length =
+Blank Lines between blocks of code
+Imports should all be at top of program
+
+pylint = reads code and checks for mistakes
+
+pip install pylint
+
+pycodestyle = better then pylint = will also reformat
+
+pip install pycodestyle
+
+black = is best 
+
+pip install black

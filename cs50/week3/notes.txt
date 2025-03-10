@@ -1,0 +1,99 @@
+Django can be used to make a api??
+
+using http you can have users make requests to your server
+
+http status code
+
+200 -- ok
+301 -- moved permanently
+403 -- forbidden (access not granted)
+404 -- not found
+500 -- internal server error (some issue with the server)
+
+Django is a framework
+
+to create a django project
+django-admin start project PROJECT_NAME
+
+django will then create a base folder for your project
+
+manage.py
+is used to execute commands on the project
+
+settings.py
+configure settings for the project, loaded up as default but can be changed
+
+urls.py
+table of contents for web app
+
+to run project
+python manage.py runserver
+
+
+big web apps have multiple smaller apps that are connected in a project
+search, maps, images are all apps under the google project
+
+to create a django app
+
+python manage.py startapp APP_NAME
+
+to add it to project, in settings.py add the project name to INSTALLED_APPS[]
+
+
+a django view is somehting the user sees
+
+def index(request) - http request
+
+you can create placeholder urlpatterns
+
+path("<str:name>", views.greet, name="greeting")
+
+like jinja you dont have to create new html pages you can inherit
+same as jinja 
+
+create a layout.html file with the basic {%%} struture 
+{% block <block_name> %}
+{% endblock %}
+
+and in the top of each html
+{% extends "<folder>/layout.html" %}
+
+{% block <block_name> %}
+...
+{% endblock %}
+
+When linking to other pages in the site, dont hardcode
+instead use django 
+{% url "url_name" %} -- url_name from the urls.py file
+keeps it dynamic you dont have to adjust it later
+
+to make sure you stay within your app
+in the urls page
+
+app_name="<app_name>"
+
+in the link instead of just url_name do "app_name:url_name"
+
+to prevent CSRF error
+add a csrf token in the form 
+
+just add {% csrf_token %} wiithin the form
+
+Can use django forms.Form to create forms through django 
+- check tasks/app.py
+
+Django Sessions 
+stores individual user sessions 
+
+to use sessions and initalize default tables 
+first run in terminal
+python manage.py migrate
+
+in index file check if there is a var in sessions
+then add it
+
+if "tasks" not in request.session:
+    request.session["tasks"] = []
+
+then refrene it by request.session["tasks"]
+

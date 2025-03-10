@@ -1,0 +1,22 @@
+{% extends "quote.html" %}
+
+{% block title %}
+    Stock
+{% endblock %}
+
+{% block ticker %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Stock Ticker</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{stock.name}}</td>
+                <td>{{stock.price | usd}}</td>
+            </tr>
+        </tbody>
+      </table>
+{% endblock %}

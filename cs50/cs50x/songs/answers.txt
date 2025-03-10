@@ -1,0 +1,6 @@
+Lab 7
+
+Using SQL to get the average energy, valence and danceability of the user,
+I would characterize the audio aura as a mix of Purple and Blue.
+
+This user likes mid to high energy and danceability mixed with a low valence.

@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block body %}
+   <ul>
+    {% for name in names %}
+        <li>{{name}} : {{names[name]}}</li>
+    {% endfor %}
+   </ul>
+{% endblock %}
