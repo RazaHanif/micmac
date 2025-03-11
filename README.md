@@ -1,4 +1,5 @@
 # 🧠 Raza's Learning Vault
+[![GitHub last commit](https://img.shields.io/github/last-commit/RazaHanif/micmac)](https://github.com/RazaHanif/micmac/commits/main)
 
 Welcome to my personal coding vault! 
 This folder is where I keep all the code and learning materials I've collected while studying computer science and software engineering. 
@@ -66,10 +67,6 @@ This folder will stop getting regular updates as I will be focusing on:
 This repo is not meant to be a polished product — it's raw, unfiltered learning in progress. Feel free to explore or fork anything useful.
 
 ---
-
-## Last Commit
-
-[![GitHub last commit](https://img.shields.io/github/last-commit/RazaHanif/micmac)](https://github.com/RazaHanif/micmac/commits/main)
 
 ## Connect with Me
 
