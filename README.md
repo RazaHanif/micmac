@@ -1,9 +1,10 @@
 # 🧠 Raza's Learning Vault
 [![GitHub last commit](https://img.shields.io/github/last-commit/RazaHanif/micmac)](https://github.com/RazaHanif/micmac/commits/main)
 
-Welcome to my personal coding vault! 
-This folder is where I keep all the code and learning materials I've collected while studying computer science and software engineering. 
+Welcome to my personal coding vault, 
+I called it micmac because I mainly use my MacBook to code, micmac = McMac without any cease and desist from McDonalds.
 
+This folder is where I keep all the code and learning materials I've collected while studying computer science and software engineering. 
 It's a mix of course assignments, personal projects, experiments, and useful tutorials — basically everything I've used to learn how to code.
 
 ---
