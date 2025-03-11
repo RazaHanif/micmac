@@ -13,9 +13,8 @@ It's a mix of course assignments, personal projects, experiments, and useful tut
 * [📂 Repository Summary](#️-repository-summary)
 * [🛠️ Tools & Languages](#️-tools--languages)
 * [🎓 What’s This Folder For?](#-whats-this-folder-for)
-* [🚀 Coming Soon](#-coming-soon)
+* [🚀 Coming Soon: The Next Chapter](#-coming-soon-the-next-chapter)
 * [🧾 Notes](#-notes)
-* [Last Commit](#last-commit)
 
 ---
 
@@ -51,10 +50,10 @@ This folder is a living, growing archive of:
 
 ---
 
-## 🚀 Coming Soon
+## 🚀 Coming Soon: The Next Chapter
 
-In the next few weeks (as of March 2025), I’ll be transitioning to building a full-fledged SaaS product. 
-This folder will stop getting regular updates as I will be focusing on:
+Exciting times ahead! I'm now dedicating my efforts to being a basic unemployed comp sci grad and creating an AI-powered SaaS product.
+This means that while this repository will remain as an archive of my learning journey, I'll be focusing my development time on this new venture:
 - Project planning docs
 - SaaS MVP builds
 - Backend APIs and frontend UIs
