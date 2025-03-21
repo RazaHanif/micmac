@@ -11,29 +11,38 @@ const getTasks = async (req, res) => {
 
 const createTask = async (req, res) => {
     try {
-        const task = await Task.create(req.body).exec()
-        res.status(200).json({ task })
+        const newTask = await Task.create(req.body)
+        res.status(200).json({ newTask })
     } catch (err) {
         return res.status(500).send(err)
     }
 }
 
-// gonna find by some key:value for now, later will set up so its by id
+// Forgot that all these routes below use :id
+
 const getTask = async (req, res) => {
     try {
-        // find all LIKE x
-        const task = await Task.find({ name: `/${req.body.name}/i`}).exec()
+        const { id: taskID } = req.params
+        const task = await Task.findOne({ _id: taskID })
+        if (!task) {
+            return res.status(404).json({ msg: `No task found with id : ${taskID}` })
+        }
         res.status(200).json({ task })
     } catch (err) {
         return res.status(500).send(err)
     }
 }
 
-// Used to mark a task complete
 const updateTask = async (req, res) => {
     try {
-        // Find this task and update
-        const task = await Task.findOne({name: req.body.name}).updateOne({completed: true})
+        const { id: taskID } = req.params
+        const task = await Task.findOneAndUpdate({ _id: taskID }, req.body, {
+            new: true,
+            runValidators: true
+        })
+        if (!task) {
+            return res.status(404).json({ msg: `No task found with id : ${taskID}` })
+        }       
         res.status(200).json({ task })
     } catch (err) {
         return res.status(500).send(err)
@@ -42,11 +51,14 @@ const updateTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
     try {
-        const deletedTask = await Task.deleteOne(req.body)
-        res.status(200).json({ deletedTask })
+        const { id: taskID } = req.params
+        const task = await Task.findOneAndDelete({ _id: taskID })
+        if (!task) {
+            return res.status(404).json({ msg: `No task found with id : ${taskID}` })
+        }       
+        res.status(200).json({ task })
     } catch (err) {
-        return res.status(500).send(err)
-        
+        return res.status(500).send(err)        
     }
 }
 
