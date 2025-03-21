@@ -1,44 +1,53 @@
 const Task = require('../models/Task.js')
 
-const getTasks = (req, res) => {
-    res.status(200).json({
-        success:true,
-        data: "all items"
-    })
+const getTasks = async (req, res) => {
+    try {
+        const allTasks = await Task.find({})
+        res.status(200).json({ allTasks })
+    } catch (err) {
+        return res.status(500).send(err)
+    }
 }
 
 const createTask = async (req, res) => {
     try {
-        const task = await Task.create(req.body)
+        const task = await Task.create(req.body).exec()
         res.status(200).json({ task })
     } catch (err) {
-        return res.status(400).send(err)
+        return res.status(500).send(err)
     }
-    
 }
 
-const getTask = (req, res) => {
-    const { id } = req.params 
-    res.status(200).json({
-        success:true,
-        data: `this item : ${id}`
-    })
+// gonna find by some key:value for now, later will set up so its by id
+const getTask = async (req, res) => {
+    try {
+        // find all LIKE x
+        const task = await Task.find({ name: `/${req.body.name}/i`}).exec()
+        res.status(200).json({ task })
+    } catch (err) {
+        return res.status(500).send(err)
+    }
 }
 
-const updateTask = (req, res) => {
-    const { id } = req.params 
-    res.status(200).json({
-        success:true,
-        data: `updated item : ${id}`
-    })
+// Used to mark a task complete
+const updateTask = async (req, res) => {
+    try {
+        // Find this task and update
+        const task = await Task.findOne({name: req.body.name}).updateOne({completed: true})
+        res.status(200).json({ task })
+    } catch (err) {
+        return res.status(500).send(err)
+    }
 }
 
-const deleteTask = (req, res) => {
-    const { id } = req.params 
-    res.status(200).json({
-        success:true,
-        data: `deleted item : ${id}`
-    })
+const deleteTask = async (req, res) => {
+    try {
+        const deletedTask = await Task.deleteOne(req.body)
+        res.status(200).json({ deletedTask })
+    } catch (err) {
+        return res.status(500).send(err)
+        
+    }
 }
 
 
