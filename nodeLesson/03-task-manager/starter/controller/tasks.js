@@ -2,8 +2,8 @@ const Task = require('../models/Task.js')
 
 const getTasks = async (req, res) => {
     try {
-        const allTasks = await Task.find({})
-        res.status(200).json({ allTasks })
+        const tasks = await Task.find({})
+        res.status(200).json({ tasks })
     } catch (err) {
         return res.status(500).send(err)
     }
@@ -11,8 +11,8 @@ const getTasks = async (req, res) => {
 
 const createTask = async (req, res) => {
     try {
-        const newTask = await Task.create(req.body)
-        res.status(200).json({ newTask })
+        const task = await Task.create(req.body)
+        res.status(200).json({ task })
     } catch (err) {
         return res.status(500).send(err)
     }
