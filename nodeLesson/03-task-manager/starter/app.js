@@ -3,8 +3,11 @@ const app = express()
 const connectDB = require('./db/connect.js')
 require('dotenv').config()
 const tasks = require('./routes/tasks.js')
-const port = 3000
 const notFound = require('./middleware/not-found.js')
+
+// variable port
+const port = process.env.PORT || 3000
+
 
 // middleware
 app.use(express.static('./public'))
