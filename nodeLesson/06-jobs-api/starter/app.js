@@ -3,6 +3,12 @@ require('express-async-errors');
 const express = require('express');
 const app = express();
 
+// Security packages
+const helmet = require('helmet')
+const cors = require('cors')
+const xss = require('xss-clean')
+const rateLimiter = require('express-rate-limit')
+
 // connectDB
 const connectDB = require('./db/connect')
 
@@ -17,9 +23,15 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 // Middleware
 const authMiddleware = require('./middleware/authentication')
 
-
+app.set('trust proxy', 1)
+app.use(rateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+}))
 app.use(express.json());
-// extra packages
+app.use(helmet())
+app.use(cors())
+app.use(xss())
 
 // Routes
 app.use('/api/v1/jobs', authMiddleware, jobRoute)
