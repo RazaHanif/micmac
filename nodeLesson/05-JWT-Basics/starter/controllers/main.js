@@ -3,12 +3,14 @@
 //  Mongoose Validation, Joi Auth package, custom error handling
 
 const jwt = require('jsonwebtoken')
-const CustomAPIError = require('../errors/custom-error')
+const { BadRequestError } = require('../errors')
 
 const login = async (req, res) => {
     const { username, password } = req.body
     if (!username || !password) {
-        throw new CustomAPIError('Invalid Login Credentials', 400)
+        throw new BadRequestError(
+            'Invalid Login Credentials'
+        )
     }
 
     // Dummy user id to add to jwt
@@ -28,10 +30,11 @@ const login = async (req, res) => {
 
 const dashboard = async (req, res) => {
     const num = Math.floor(Math.random() * 10000)
-    res.status(200).json({ 
-        msg: `Hello, Agent 007`, 
-        secret: `Your secure passcode is ${num}`
+    res.status(200).json({
+        msg: `Hello, ${req.user.username}!`,
+        secret: `Your passcode is ${num}`
     })
+
 }
 
 module.exports = {
