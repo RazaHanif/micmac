@@ -16,5 +16,5 @@ Events              onClick                 onPress
 Navigtion           React Router            React Navigation
 Platform            Runs in browser         Runs on iOS & Android
 
-
+Access dev menu on ios simulator with cmd+d (toggle cmd+shift+k if that doesnt work)
 
