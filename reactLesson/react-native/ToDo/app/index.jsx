@@ -3,11 +3,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import "./global.css"
 import { data } from '@/data/todo'
+import 'nativewind'
 
 const Index = () => {
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView
 
-  const styles = createStyles()
+  const styles = {
+    container
+  }
 
   return (
     <Container>
@@ -52,14 +55,5 @@ const Index = () => {
     </Container>
   );
 }
-
-function createStyles() {
-  return StyleSheet.create({
-      content: {
-        bg
-          
-      },
-    })
-  }
 
 export default Index
