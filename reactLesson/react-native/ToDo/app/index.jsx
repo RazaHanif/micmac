@@ -22,7 +22,7 @@ const Index = () => {
   }
 
   return (
-    <Container className={styles.content}>
+    <Container className={"flex-1 p-4 bg-primary"}>
       <FlatList
         data={ data }
         keyExtractor={ (item) => item.id.toString() }
@@ -36,10 +36,10 @@ const Index = () => {
           <View className={styles.card}>
             <View className={styles.task}>
               <Text className={
-                [
-                  styles.text,
-                  item.completed ? styles.completed : null
-                ]
+                `
+                 ${styles.text} 
+                 ${item.completed ? styles.completed : ''}
+                `
               }>
                 { item.title }
               </Text>
