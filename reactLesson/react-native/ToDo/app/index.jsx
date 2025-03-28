@@ -18,7 +18,7 @@ const Index = () => {
         "title": inputText,
         "completed": false
       }
-      setTasks((prevTasks) => [...prevTasks, task])
+      setTasks((prevTasks) => [task, ...prevTasks])
       setInputText("")
     }
   }
