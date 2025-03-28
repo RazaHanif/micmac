@@ -1,4 +1,4 @@
-import { Text, View, Platform, FlatList, ScrollView, Pressable} from "react-native";
+import { Text, View, Platform, FlatList, ScrollView, Pressable, TextInput} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import "./globals.css";
@@ -7,6 +7,7 @@ import { useState } from "react";
 
 const Index = () => {
   const [tasks, setTasks] = useState(data)
+  const [inputText, setInputText] = useState("")
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView
 
@@ -33,8 +34,13 @@ const Index = () => {
   return (
     <Container className={"flex-1 p-4 bg-primary"}>
       <View className="">
+        <TextInput
+          className={"border-red-500 p-10 m-10"}
+          placeholder="Add a new todo"
+          value={inputText}
+          onChangeText={setInputText}
+        />
         
-
       </View>
 
       <FlatList
