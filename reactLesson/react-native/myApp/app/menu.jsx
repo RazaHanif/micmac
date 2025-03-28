@@ -1,12 +1,30 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Appearance, Platform, SafeAreaView, FlatList } from 'react-native'
+import { Colors } from '@/constants/Colors'
+import { ScrollView } from 'react-native-gesture-handler'
 
-const menu = () => {
+const MenuScreen = () => {
+    const colorScheme = Appearance.getColorScheme()
+
+    const theme = colorScheme === 'dark' ? Colors.dark : Colors.light
+
+    const styles = createStyles(theme, colorScheme)
+
+    const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView
+
   return (
-    <View>
-      <Text>menu</Text>
-    </View>
+    <Container>
+        <FlatList
+            data={[]}
+            renderItem={({ item }) => {}}
+        />
+    </Container>
   )
 }
 
-export default menu
+function createStyles(theme, colorScheme) {
+    return StyleSheet.create({
+
+    })
+}
+
+export default MenuScreen
