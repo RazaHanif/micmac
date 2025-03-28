@@ -1,4 +1,4 @@
-import { Text, View, Image, StyleSheet, Appearance, Platform, FlatList, ScrollView, Pressable} from "react-native";
+import { Text, View, Platform, FlatList, ScrollView, Pressable} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import "./global.css"
@@ -9,25 +9,33 @@ const Index = () => {
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView
 
   const styles = {
-    container
+    content: "flex-1 p-4 bg-primary",
+    empty: "text-center text-gray-500 text-lg",
+    card: "bg-white p-4 rounded-lg shadow mb-2 flex-row justify-between",
+    task: "flex-1",
+    text: "text-lg text-text",
+    completed: "line-through text-textDim",
+    delete: "flex-shrink-0",
+    btnLink: "mx-auto",
+    btn: "bg-red-500 px-4 py-2 rounded",
+    btnText: "text-white font-bold",
   }
 
   return (
-    <Container>
+    <Container className={styles.content}>
       <FlatList
         data={ data }
         keyExtractor={ (item) => item.id.toString() }
         showsVerticalScrollIndicator={ false }
-        contentContainerStyle={ styles.content }
         ListEmptyComponent={
-          <Text style={ styles.empty }>
+          <Text className={ styles.empty }>
             No Tasks!
           </Text>
         }
         renderItem={ ({ item }) => (
-          <View style={styles.card}>
-            <View style={styles.task}>
-              <Text style={
+          <View className={styles.card}>
+            <View className={styles.task}>
+              <Text className={
                 [
                   styles.text,
                   item.completed ? styles.completed : null
@@ -36,14 +44,14 @@ const Index = () => {
                 { item.title }
               </Text>
             </View>
-            <View style={styles.delete}>
+            <View className={styles.delete}>
               <Link 
                 href="/menu" 
-                style={{ marginHorizontal: 'auto' }} 
+                className={styles.btnLink} 
                 asChild
               >
-                <Pressable style={styles.btn}>
-                  <Text style={styles.btnText}>
+                <Pressable className={styles.btn}>
+                  <Text className={styles.btnText}>
                     X
                   </Text>
                 </Pressable>
