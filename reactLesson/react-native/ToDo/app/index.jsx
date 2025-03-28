@@ -7,8 +7,15 @@ import { data } from '@/data/todo';
 const Index = () => {
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView
 
+  const deleteTask = (itemId) => {
+    console.log(itemId)
+  }
+
   return (
     <Container className={"flex-1 p-4 bg-primary"}>
+      <View>
+        <Text>Add a Task</Text>
+      </View>
       <FlatList
         data={ data }
         keyExtractor={ (item) => item.id.toString() }
@@ -30,17 +37,11 @@ const Index = () => {
               </Text>
             </View>
             <View className={"flex-shrink-0"}>
-              <Link 
-                href="#" 
-                className={"mx-auto"} 
-                asChild
-              >
-                <Pressable className={"bg-red-500 px-4 py-2 rounded"}>
-                  <Text className={"text-white font-bold"}>
-                    X
-                  </Text>
-                </Pressable>
-              </Link>
+              <Pressable className={"bg-red-500 px-4 py-2 rounded"} onPress={() => deleteTask(item.id)}>
+                <Text className={"text-white font-bold"}>
+                  X
+                </Text>
+              </Pressable>
             </View>
           </View>
         )}
