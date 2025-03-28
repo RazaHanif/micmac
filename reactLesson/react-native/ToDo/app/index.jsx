@@ -33,8 +33,10 @@ const Index = () => {
   return (
     <Container className={"flex-1 p-4 bg-primary"}>
       <View className="">
-        <Text>Add a Task</Text>
+        
+
       </View>
+
       <FlatList
         data={ data }
         keyExtractor={ (item) => item.id.toString() }
