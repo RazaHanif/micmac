@@ -1,5 +1,6 @@
-import { Text, View, Image, StyleSheet, Appearance, Platform, FlatList, ScrollView } from "react-native";
+import { Text, View, Image, StyleSheet, Appearance, Platform, FlatList, ScrollView, Pressable} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Link } from "expo-router";
 import "./global.css"
 import { data } from '@/data/todo'
 
@@ -26,24 +27,28 @@ const Index = () => {
               <Text style={
                 [
                   styles.text,
-                  
+                  item.completed ? styles.completed : null
                 ]
               }>
                 { item.title }
               </Text>
             </View>
+            <View style={styles.delete}>
+              <Link 
+                href="/menu" 
+                style={{ marginHorizontal: 'auto' }} 
+                asChild
+              >
+                <Pressable style={styles.btn}>
+                  <Text style={styles.btnText}>
+                    X
+                  </Text>
+                </Pressable>
+              </Link>
+            </View>
           </View>
         )}
       />
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text>Edit app/index.tsx to edit this screen.</Text>
-      </View>
     </Container>
   );
 }
@@ -51,6 +56,7 @@ const Index = () => {
 function createStyles() {
   return StyleSheet.create({
       content: {
+        bg
           
       },
     })
