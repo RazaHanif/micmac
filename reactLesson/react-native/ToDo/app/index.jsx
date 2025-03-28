@@ -1,25 +1,12 @@
 import { Text, View, Platform, FlatList, ScrollView, Pressable} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
-import "./global.css"
-import { data } from '@/data/todo'
-import 'nativewind'
+import "./global.css";
+import 'nativewind';
+import { data } from '@/data/todo';
 
 const Index = () => {
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView
-
-  const styles = {
-    content: "flex-1 p-4 bg-primary",
-    empty: "text-center text-gray-500 text-lg",
-    card: "bg-white p-4 rounded-lg shadow mb-2 flex-row justify-between",
-    task: "flex-1",
-    text: "text-lg text-text",
-    completed: "line-through text-textDim",
-    delete: "flex-shrink-0",
-    btnLink: "mx-auto",
-    btn: "bg-red-500 px-4 py-2 rounded",
-    btnText: "text-white font-bold",
-  }
 
   return (
     <Container className={"flex-1 p-4 bg-primary"}>
@@ -28,30 +15,29 @@ const Index = () => {
         keyExtractor={ (item) => item.id.toString() }
         showsVerticalScrollIndicator={ false }
         ListEmptyComponent={
-          <Text className={ styles.empty }>
+          <Text className={"text-center text-error text-lg"}>
             No Tasks!
           </Text>
         }
         renderItem={ ({ item }) => (
-          <View className={styles.card}>
-            <View className={styles.task}>
+          <View className={"bg-white p-4 rounded-lg shadow mb-2 flex-row justify-between"}>
+            <View className={"flex-1"}>
               <Text className={
-                `
-                 ${styles.text} 
-                 ${item.completed ? styles.completed : ''}
+                ` text-lg text-text
+                 ${item.completed ? 'line-through text-textDim' : ''}
                 `
               }>
                 { item.title }
               </Text>
             </View>
-            <View className={styles.delete}>
+            <View className={"flex-shrink-0"}>
               <Link 
-                href="/menu" 
-                className={styles.btnLink} 
+                href="#" 
+                className={"mx-auto"} 
                 asChild
               >
-                <Pressable className={styles.btn}>
-                  <Text className={styles.btnText}>
+                <Pressable className={"bg-red-500 px-4 py-2 rounded"}>
+                  <Text className={"text-white font-bold"}>
                     X
                   </Text>
                 </Pressable>
