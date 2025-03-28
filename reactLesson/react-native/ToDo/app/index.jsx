@@ -1,26 +1,25 @@
 import { Text, View, Platform, FlatList, ScrollView, Pressable, TextInput} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
 import "./globals.css";
 import { data } from '@/data/todo';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Index = () => {
-  const [tasks, setTasks] = useState(data)
+  const [tasks, setTasks] = useState([data])
   const [inputText, setInputText] = useState("")
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView
 
-  const addTask = (newTask) => {
-    const length = tasks.length()
-
-    const task = {
-      "id": length + 1,
-      "title": newTask,
-      "completed": false
+  const addTask = () => {
+    if (inputText) {
+      const length = tasks.length
+      const task = {
+        "id": length + 1,
+        "title": inputText,
+        "completed": false
+      }
+      setTasks([...tasks, task])
     }
-
-    setTasks([...tasks, task])
   }
 
   const deleteTask = (itemId) => {
@@ -33,31 +32,45 @@ const Index = () => {
 
   return (
     <Container className={"flex-1 p-4 bg-primary"}>
-      <View className="">
+      <View className={"flex-row w-full justify-between align-middle"}>
         <TextInput
-          className={"border-red-500 p-10 m-10"}
+          className={"border-solid border border-text rounded-lg p-2 my-auto flex-grow text-secondary"}
           placeholder="Add a new todo"
           value={inputText}
           onChangeText={setInputText}
         />
-        
+        <Pressable
+          className={"bg-good p-2 m-2 rounded-lg box-border border border-solid border-good"}
+          onPress={addTask}
+        >
+          <Text className={"text-secondary font-bold text-center"}>Submit</Text>
+        </Pressable>
       </View>
 
       <FlatList
         data={ data }
         keyExtractor={ (item) => item.id.toString() }
         showsVerticalScrollIndicator={ false }
+        ListHeaderComponent={
+          <View className="h-[1] bg-textDim w-[100%] rounded mx-auto my-2" />
+        }
+        ListFooterComponent={
+          <View className="h-[1] bg-textDim w-[100%] rounded mx-auto my-2" />
+        }
         ListEmptyComponent={
           <Text className={"text-center text-error text-lg"}>
             No Tasks!
           </Text>
         }
+        ItemSeparatorComponent={
+          <View className="h-1 bg-text w-[100%] rounded mx-auto mb-2" />
+        }
         renderItem={ ({ item }) => (
-          <View className={"bg-white p-4 rounded-lg shadow mb-2 flex-row justify-between"}>
+          <View className={"p-2 rounded-lg shadow mb-2 flex-row justify-between"}>
             <View className={"flex-1"}>
               <Text className={
-                ` text-lg text-text
-                 ${item.completed ? 'line-through text-textDim' : ''}
+                ` text-lg
+                 ${item.completed ? 'line-through text-textDim' : 'text-secondary'}
                 `
               }>
                 { item.title }

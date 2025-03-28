@@ -11,7 +11,7 @@ module.exports = {
         text: '#778DA9',
         textDim: '#415A77',
         error: '#c1121f',
-        good: '#588157'
+        good: '#03A900'
       }
     },
   },
