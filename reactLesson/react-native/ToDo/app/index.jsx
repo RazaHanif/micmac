@@ -5,7 +5,7 @@ import { data } from '@/data/todo';
 import { useState, useEffect } from "react";
 
 const Index = () => {
-  const [tasks, setTasks] = useState([data])
+  const [tasks, setTasks] = useState([...data])
   const [inputText, setInputText] = useState("")
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView
@@ -18,16 +18,17 @@ const Index = () => {
         "title": inputText,
         "completed": false
       }
-      setTasks([...tasks, task])
+      setTasks((prevTasks) => [...prevTasks, task])
+      setInputText("")
     }
   }
 
   const deleteTask = (itemId) => {
-    let task = tasks[itemId - 1]
-  
-    task.completed = true
-
-    setTasks([...tasks, task])
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === Number(itemId) ? { ...task, completed: true } : task
+      )
+    )
   }
 
   return (
@@ -48,8 +49,8 @@ const Index = () => {
       </View>
 
       <FlatList
-        data={ data }
-        keyExtractor={ (item) => item.id.toString() }
+        data={ tasks }
+        keyExtractor={ (item) => item.id }
         showsVerticalScrollIndicator={ false }
         ListHeaderComponent={
           <View className="h-[1] bg-textDim w-[100%] rounded mx-auto my-2" />
