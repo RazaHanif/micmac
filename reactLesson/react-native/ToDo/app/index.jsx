@@ -3,12 +3,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import "./global.css";
 import { data } from '@/data/todo';
+import TestComponent from "./TestComp";
 
 const Index = () => {
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView
 
   return (
     <Container className={"flex-1 p-4 bg-primary"}>
+      <TestComponent/>
       <FlatList
         data={ data }
         keyExtractor={ (item) => item.id.toString() }
