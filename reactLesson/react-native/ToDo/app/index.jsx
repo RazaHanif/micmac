@@ -2,7 +2,6 @@ import { Text, View, Platform, FlatList, ScrollView, Pressable} from "react-nati
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import "./global.css";
-import 'nativewind';
 import { data } from '@/data/todo';
 
 const Index = () => {
