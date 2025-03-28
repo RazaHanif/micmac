@@ -15,6 +15,8 @@ const MenuScreen = () => {
 
     const separatorComp = <View style={styles.separator} />
 
+    const footerComp = <Text style={styles.footer}>End of Menu</Text>
+
   return (
     <Container>
         <FlatList
@@ -23,6 +25,12 @@ const MenuScreen = () => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.content}
             ItemSeparatorComponent={separatorComp}
+            ListFooterComponent={footerComp}
+            ListEmptyComponent={
+                <Text style={styles.err}>
+                    No items
+                </Text>
+            }
             renderItem={({ item }) => (
                 <View style={styles.card}>
                     <View style={styles.text}>
@@ -78,6 +86,12 @@ function createStyles(theme, colorScheme) {
             fontWeight: 'bold',
             textAlign: 'center'
         },
+        err: {
+            color: 'red',
+            fontSize: 24,
+            fontWeight: 'bold',
+            textAlign: 'center'
+        },
         desc: {
             fontSize: 14,
             textAlign: 'center'
@@ -87,6 +101,10 @@ function createStyles(theme, colorScheme) {
             height: 150,
             resizeMode: 'stretch'
         },
+        footer: {
+            color : colorScheme === 'dark' ? 'papayawhip' : 'black',
+            marginHorizontal: 'auto',
+        }
     })
 }
 
