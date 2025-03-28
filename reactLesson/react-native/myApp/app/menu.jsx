@@ -34,7 +34,7 @@ const MenuScreen = () => {
             renderItem={({ item }) => (
                 <View style={styles.card}>
                     <View style={styles.text}>
-                        <Text style={styles.title}>
+                        <Text style={[styles.title, styles.desc]}>
                             { item.title }
                         </Text>
                         <Text style={styles.desc}>
@@ -69,20 +69,29 @@ function createStyles(theme, colorScheme) {
             marginBottom: 10
         },
         card: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            margin: 10,
-            padding: 10,
-            backgroundColor: 'grey',
-            borderRadius: 10
+            flexDirection: 'row',
+            width:'100%',
+            maxWidth: 600,
+            height: 100,
+            marginBottom: 10,
+            borderStyle: 'solid',
+            borderColor: colorScheme === 'dark' ? 'papayawhip' : 'black',
+            borderWidth: 1,
+            borderRadius: 20,
+            overflow: 'hidden',
+            marginHorizontal: 'auto',
+            // backgroundColor: 'grey',
         },
         text: {
-            paddingBottom: 20
+            width: '65%',
+            paddingTop: 10,
+            paddingLeft: 10,
+            paddingRight: 5,
+            flexGrow: 1
         },
         title: {
-            fontSize: 24,
+            fontSize: 18,
+            textDecorationLine: 'underline',
             fontWeight: 'bold',
             textAlign: 'center'
         },
@@ -90,16 +99,13 @@ function createStyles(theme, colorScheme) {
             color: 'red',
             fontSize: 24,
             fontWeight: 'bold',
-            textAlign: 'center'
         },
         desc: {
-            fontSize: 14,
-            textAlign: 'center'
+            color: theme.text,
         },
         img: {
-            width: 150,
-            height: 150,
-            resizeMode: 'stretch'
+            width: 100,
+            height: 100
         },
         footer: {
             color : colorScheme === 'dark' ? 'papayawhip' : 'black',

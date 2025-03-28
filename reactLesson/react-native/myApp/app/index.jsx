@@ -14,17 +14,17 @@ const app = () => {
         <Text style={styles.text}>Balzac's Coffee Roasters</Text>
 
         {/* Button  */}
-        <Link href="/contact" style={{ marginHorizontal: 'auto' }} asChild>
-          <Pressable style={styles.btn}>
-            <Text style={styles.btnText}>
-              Contact
-            </Text>
-          </Pressable>
-        </Link>
         <Link href="/menu" style={{ marginHorizontal: 'auto' }} asChild>
           <Pressable style={styles.btn}>
             <Text style={styles.btnText}>
               Menu
+            </Text>
+          </Pressable>
+        </Link>
+        <Link href="/contact" style={{ marginHorizontal: 'auto' }} asChild>
+          <Pressable style={styles.btn}>
+            <Text style={styles.btnText}>
+              Contact
             </Text>
           </Pressable>
         </Link>
@@ -75,10 +75,11 @@ const styles = StyleSheet.create({
   },
   btn: {
     height: 60,
+    width: 150,
     borderRadius: 20,
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.75)',
     padding: 6,
-    margin: 4
+    marginBottom: 50
   }
 })
