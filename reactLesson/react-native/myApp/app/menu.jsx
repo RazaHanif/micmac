@@ -13,12 +13,16 @@ const MenuScreen = () => {
 
     const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView
 
+    const separatorComp = <View style={styles.separator} />
+
   return (
     <Container>
         <FlatList
             data={MENU_ITEMS}
             keyExtractor={(item) => item.id.toString()}
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.content}
+            ItemSeparatorComponent={separatorComp}
             renderItem={({ item }) => (
                 <View style={styles.card}>
                     <View style={styles.text}>
@@ -42,6 +46,20 @@ const MenuScreen = () => {
 
 function createStyles(theme, colorScheme) {
     return StyleSheet.create({
+        content: {
+            paddingTop: 10,
+            paddingBottom: 20,
+            paddingHorizontal: 12,
+            backgroundColor: theme.background,
+        },
+        separator: {
+            height: 1,
+            backgroundColor: colorScheme === 'dark' ? 'papayawhip' : 'black',
+            width: '50%',
+            maxWidth: 300,
+            marginHorizontal: 'auto',
+            marginBottom: 10
+        },
         card: {
             display: 'flex',
             flexDirection: 'column',
