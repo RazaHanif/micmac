@@ -26,7 +26,7 @@ It gets used now days really only for me to copy the css on how to center a div.
 This repository contains a comprehensive collection of my coding learning materials, including:
 
 * **Coursework:** Projects and problem sets from Harvard's CS50x, CS50p, and CS50w courses, covering fundamental computer science concepts, Python programming, and web development.
-* **Web Development Projects:** Django and React projects, including a full-stack Twitter clone that I gave up on(`project4`) 
+* **Web Development Projects:** Django and React projects, including a full-stack Twitter clone that I gave up on `project4`
 * **Programming Fundamentals:** C-based exercises and Python projects demonstrating core programming principles, algorithms, and data structures.
 * **Database and SQL Practice:** SQL exercises and database-driven applications using SQLite.
 * **React & Node JS:** Tutorial exercises and basic code that I copy paste into my new projects.
