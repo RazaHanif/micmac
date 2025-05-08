@@ -2,11 +2,23 @@ import { Text, View, Platform, FlatList, ScrollView, Pressable, TextInput} from 
 import { SafeAreaView } from "react-native-safe-area-context";
 import "./globals.css";
 import { data } from '@/data/todo';
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useRouter } from "expo-router";
+
+import { Inter_500Medium, useFonts } from "@expo-google-fonts/inter"
 
 const Index = () => {
   const [tasks, setTasks] = useState([...data])
   const [inputText, setInputText] = useState("")
+  const router = useRouter()
+
+  const [loaded, error] = useFonts({
+    Inter_500Medium
+  })
+
+  if (!loaded && !error) {
+    return null
+  }
 
   const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView
 
@@ -31,8 +43,12 @@ const Index = () => {
     )
   }
 
+  const handlepress = (itemId) => {
+    router.push(`/todos/${itemId}`)
+  }
+
   return (
-    <Container className={"flex-1 p-4 bg-primary"}>
+    <Container className={"flex-1 p-4 bg-primary font-(Inter_500Medium)"}>
       <View className={"flex-row w-full justify-between align-middle"}>
         <TextInput
           className={"border-solid border border-text rounded-lg p-2 my-auto flex-grow text-secondary"}
@@ -69,13 +85,17 @@ const Index = () => {
         renderItem={ ({ item }) => (
           <View className={"p-2 rounded-lg shadow mb-2 flex-row justify-between"}>
             <View className={"flex-1"}>
-              <Text className={
-                ` text-lg
-                 ${item.completed ? 'line-through text-textDim' : 'text-secondary'}
-                `
-              }>
-                { item.title }
-              </Text>
+              <Pressable
+                onPress={ () => handlePress(item.id)}
+              >
+                <Text className={
+                  ` text-lg
+                  ${item.completed ? 'line-through text-textDim' : 'text-secondary'}
+                  `
+                }>
+                  { item.title }
+                </Text>
+              </Pressable>
             </View>
             <View className={"flex-shrink-0"}>
               <Pressable className={"bg-red-500 px-4 py-2 rounded"} onPress={() => deleteTask(item.id)}>
